@@ -1,10 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
+import { Link } from 'expo-router'
+
 const AuthLayout = () => {
   return (
     <View>
-      <Text>_layout</Text>
+        <Link href="/" className='text-white'>Go to onboarding</Link>
     </View>
   )
 }

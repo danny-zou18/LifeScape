@@ -12,8 +12,8 @@ const index = () => {
     <SafeAreaView >
       <ScrollView contentContainerStyle={{ height: "100%" }}>
         <View className="w-full flex-1 justify-center items-center h-full px-4">
-          <Text className="text-white">HELLO THIS IS THE ONBOARDING PAGE</Text>
-          <CustomButton title="Sign in" onPress={()=>router.push("/account") } />
+          <Text className="">HELLO THIS IS THE ONBOARDING PAGE</Text>
+          <CustomButton title="Sign in" onPress={()=>router.push("/sign-in") } />
         </View>
       </ScrollView>
     </SafeAreaView>
