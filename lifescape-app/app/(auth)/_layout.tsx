@@ -5,7 +5,7 @@ import { Stack } from "expo-router";
 
 
 
-const AuthLayout = () => {
+const AuthLayout:React.FC = () => {
   return (
     <>
       <Stack>
