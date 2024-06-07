@@ -1,11 +1,15 @@
 import {
   View,
   Text,
+  TextInput,
+  Dimensions,
+  Image,
   SafeAreaView,
   KeyboardAvoidingView,
-  TextInput,
   ActivityIndicator,
   Button,
+  TouchableHighlight,
+  ScrollView,
 } from "react-native";
 import React, { useState } from "react";
 
@@ -13,27 +17,41 @@ import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
 import { Link, useRouter } from "expo-router";
+import { FieldValues, useForm } from "react-hook-form";
 
-const SignUp:React.FC = () => {
+const SignUp: React.FC = () => {
   const [userName, set_userName] = useState<string>("");
   const [email, set_email] = useState<string>("");
   const [password, set_password] = useState<string>("");
   const [loading, set_loading] = useState<boolean>(false);
 
   const auth = FIREBASE_AUTH;
+  const win = Dimensions.get('window');
 
   const router = useRouter();
+  const {
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FieldValues>({
+    defaultValues: {
+      name: "",
+      username: "",
+      email: "",
+      password: "",
+    }
+  })
 
-  const handle_signup = async () => {
+  const submitHandler = async ({ name, username, email, password }: FieldValues) => {
+    // console.log(name, username, email, password)
     set_loading(true);
     try {
       const user = await createUserWithEmailAndPassword(auth, email, password);
-      alert("User Created");
-      console.log(user);
+      // console.log(user);
       router.replace("");
     } catch (error) {
       alert("User Creation Failed");
-      console.log(error);
+      // console.log(error);
     } finally {
       set_loading(false);
     }
@@ -42,47 +60,68 @@ const SignUp:React.FC = () => {
   return (
     <SafeAreaView className="h-full">
       <KeyboardAvoidingView behavior="padding">
-          <View className="w-full min-h-[85vh]  flex flex-col justify-center items-center px-4 my-6 bg-red-50">
-            <TextInput
-              placeholder="Username"
-              className="p-4 bg-black text-white min-w-[60%] rounded-full f"
-              onChangeText={(text) => set_userName(text)}
-              autoCapitalize="none"
-              value={userName}
-            ></TextInput>
-            <TextInput
-              placeholder="Email"
-              className="p-4 mt-2 bg-black text-white min-w-[60%] rounded-full"
-              onChangeText={(text) => set_email(text)}
-              autoCapitalize="none"
-              value={email}
-            ></TextInput>
-            <TextInput
-              placeholder="Password"
-              className="p-4 mt-2 bg-black text-white min-w-[60%] rounded-full"
-              onChangeText={(text) => set_password(text)}
-              value={password}
-              secureTextEntry={true}
-            ></TextInput>
-            <View className="flex flex-row">
-              <Text>Already have an Account?</Text>
-              <Link href="sign-in" className="ml-4">
-                Login
-              </Link>
+        <ScrollView>
+          <View className="w-full flex flex-col justify-center items-center px-4 my-6 gap-4">
+            <View>
+              <Text className="text-xl text-neutral-700 pb-1">Name</Text>
+              <TextInput
+                id="name"
+                autoCapitalize="none"
+                onChangeText={(text) => setValue('name', text)}
+                autoComplete="name"
+                className="w-[300px] h-[60px] bg-black rounded-md text-white px-3"
+              />
             </View>
+            <View>
+              <Text className="text-xl text-neutral-700 pb-1">Username</Text>
+              <TextInput
+                id="username"
+                autoCapitalize="none"
+                onChangeText={(text) => setValue('name', text)}
+                autoComplete="email"
+                className="w-[300px] h-[60px] bg-black rounded-md text-white px-3"
+              />
+            </View>
+            <View className="">
+              <Text className="text-xl text-neutral-700 pb-1">Email</Text>
+              <TextInput
+                id="email"
+                autoCapitalize="none"
+                onChangeText={(text) => setValue('email', text)}
+                autoComplete="email"
+                className="w-[300px] h-[60px] bg-black rounded-md text-white px-3"
+              />
+            </View>
+            <View>
+              <Text className="text-xl text-neutral-700 pb-1">Password</Text>
+              <TextInput
+                id="password"
+                autoCapitalize="none"
+                secureTextEntry={true}
+                onChangeText={(text) => setValue('password', text)}
+                autoComplete="current-password"
+                className="w-[300px] h-[60px] bg-black rounded-md text-white px-3"
+              />
+            </View>
+  
             {loading ? (
               <ActivityIndicator size="large" color="#0000ff" />
             ) : (
               <>
-                <Button
-                  title="Sign Up"
-                  onPress={() => {
-                    handle_signup();
-                  }}
-                ></Button>
+                <TouchableHighlight onPress={handleSubmit(submitHandler)} className="bg-[#FDFDFD] w-[225px] h-[45px] rounded-md mt-4" underlayColor="#FFFFFF">
+                  <Text className="text-black text-xl font-semibold mx-auto my-auto">Sign Up</Text>
+                </TouchableHighlight>
               </>
             )}
+  
+            <View className="flex flex-row mt-4">
+              <Text>Already have an Account?</Text>
+              <Link href="sign-in" className="ml-3">
+                Login
+              </Link>
+            </View>
           </View>
+        </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
