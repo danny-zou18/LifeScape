@@ -14,7 +14,7 @@ model testing {
 }
 
 model users {
-  id             Int      @id @default(autoincrement())
+  id             String      @id @default(cuid())
   username       String   @unique
   email          String   @unique
   emailVerified  DateTime?

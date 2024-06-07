@@ -19,7 +19,6 @@ router.post("/register", async (req, res) => {
   if (checkUsername) {
     return res.status(400).json({ error: "Username already exists" });
   }
-
   const newUser = await db.users.create({
     data: {
       id: firebaseUID,

@@ -11,7 +11,7 @@ import {
 import React, { useState, useEffect } from "react";
 
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
-import { signInWithEmailAndPassword, setPersistence, browserLocalPersistence} from "firebase/auth";
+import { signInWithEmailAndPassword} from "firebase/auth";
 
 import { useGlobalContext } from "@/context/GlobalProvider";
 

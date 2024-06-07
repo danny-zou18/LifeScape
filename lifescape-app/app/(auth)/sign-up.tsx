@@ -33,20 +33,17 @@ const SignUp: React.FC = () => {
     await createUserWithEmailAndPassword(auth, email, password)
       .then( async (userCredentials) => {
         const user = userCredentials.user;
-        // alert("User Created");
-        // console.log(user);
-        // router.replace("sign-in");
         try {
-          const response = await axios.post("http://localhost:8000/auth/register", {
-            id: user.uid,
-            username: userName,
-            email: email,
+          const response = await axios.post("http://128.113.145.204:8000/auth/register", {
             name: name,
-            firebaseToken: await user.getIdToken()
+            username: userName,
+            firebaseUID: user.uid,
+            firebaseToken: await user.getIdToken(),
+            email: email,
           })
         } catch (error) {
           console.log(error);
-        }
+        } 
       })
       .catch((error) => {
         alert("User Creation Failed");
