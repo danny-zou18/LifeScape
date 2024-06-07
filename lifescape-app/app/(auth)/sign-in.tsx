@@ -16,16 +16,16 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { Link, useRouter } from "expo-router";
 
 const SignIn:React.FC = () => {
-  const [email, set_email] = useState<string>("");
-  const [password, set_password] = useState<string>("");
-  const [loading, set_loading] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const auth = FIREBASE_AUTH;
 
   const router = useRouter();
 
   const handle_login = async () => {
-    set_loading(true);
+    setLoading(true);
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);
       console.log(user);
@@ -33,7 +33,7 @@ const SignIn:React.FC = () => {
     } catch (error) {
       console.log(error);
     } finally {
-      set_loading(false);
+      setLoading(false);
     }
   };
 
@@ -45,14 +45,14 @@ const SignIn:React.FC = () => {
             <TextInput
               placeholder="Email"
               className="p-4 bg-black text-white min-w-[60%] rounded-full"
-              onChangeText={(text) => set_email(text)}
+              onChangeText={(text) => setEmail(text)}
               autoCapitalize="none"
               value={email}
             ></TextInput>
             <TextInput
               placeholder="Password"
               className="p-4 mt-2 bg-black text-white min-w-[60%] rounded-full"
-              onChangeText={(text) => set_password(text)}
+              onChangeText={(text) => setPassword(text)}
               value={password}
               secureTextEntry={true}
             ></TextInput>

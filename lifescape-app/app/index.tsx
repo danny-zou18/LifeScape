@@ -7,6 +7,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import CustomButton from "@/components/onboarding/CustomButton";
 
+import { useGlobalContext } from "@/context/GlobalProvider";
+
 const Index:React.FC = () => {
   return (
     <SafeAreaView >

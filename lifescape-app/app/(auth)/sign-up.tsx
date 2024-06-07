@@ -15,17 +15,17 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { Link, useRouter } from "expo-router";
 
 const SignUp:React.FC = () => {
-  const [userName, set_userName] = useState<string>("");
-  const [email, set_email] = useState<string>("");
-  const [password, set_password] = useState<string>("");
-  const [loading, set_loading] = useState<boolean>(false);
+  const [userName, setUserName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const auth = FIREBASE_AUTH;
 
   const router = useRouter();
 
   const handle_signup = async () => {
-    set_loading(true);
+    setLoading(true);
     try {
       const user = await createUserWithEmailAndPassword(auth, email, password);
       alert("User Created");
@@ -35,7 +35,7 @@ const SignUp:React.FC = () => {
       alert("User Creation Failed");
       console.log(error);
     } finally {
-      set_loading(false);
+      setLoading(false);
     }
   }
 
@@ -46,21 +46,21 @@ const SignUp:React.FC = () => {
             <TextInput
               placeholder="Username"
               className="p-4 bg-black text-white min-w-[60%] rounded-full f"
-              onChangeText={(text) => set_userName(text)}
+              onChangeText={(text) => setUserName(text)}
               autoCapitalize="none"
               value={userName}
             ></TextInput>
             <TextInput
               placeholder="Email"
               className="p-4 mt-2 bg-black text-white min-w-[60%] rounded-full"
-              onChangeText={(text) => set_email(text)}
+              onChangeText={(text) => setEmail(text)}
               autoCapitalize="none"
               value={email}
             ></TextInput>
             <TextInput
               placeholder="Password"
               className="p-4 mt-2 bg-black text-white min-w-[60%] rounded-full"
-              onChangeText={(text) => set_password(text)}
+              onChangeText={(text) => setPassword(text)}
               value={password}
               secureTextEntry={true}
             ></TextInput>
