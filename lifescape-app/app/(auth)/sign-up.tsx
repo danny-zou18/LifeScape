@@ -4,6 +4,7 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
   TextInput,
+  ScrollView,
   ActivityIndicator,
   Button,
 } from "react-native";
@@ -14,7 +15,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 
 import { Link, useRouter } from "expo-router";
 
-const SignUp:React.FC = () => {
+const SignUp: React.FC = () => {
   const [userName, setUserName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -30,18 +31,19 @@ const SignUp:React.FC = () => {
       const user = await createUserWithEmailAndPassword(auth, email, password);
       alert("User Created");
       console.log(user);
-      router.replace("");
+      router.replace("sign-in");
     } catch (error) {
       alert("User Creation Failed");
       console.log(error);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return (
     <SafeAreaView className="h-full">
       <KeyboardAvoidingView behavior="padding">
+        <ScrollView>
           <View className="w-full min-h-[85vh]  flex flex-col justify-center items-center px-4 my-6 bg-red-50">
             <TextInput
               placeholder="Username"
@@ -83,6 +85,7 @@ const SignUp:React.FC = () => {
               </>
             )}
           </View>
+        </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
