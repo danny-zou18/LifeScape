@@ -8,10 +8,12 @@ import {
   Button,
   KeyboardAvoidingView,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword} from "firebase/auth";
+
+import { useGlobalContext } from "@/context/GlobalProvider";
 
 import { Link, useRouter } from "expo-router";
 
@@ -20,22 +22,27 @@ const SignIn:React.FC = () => {
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
+  const {loggedIn,setLoggedIn} = useGlobalContext();
+
   const auth = FIREBASE_AUTH;
 
   const router = useRouter();
 
   const handle_login = async () => {
     setLoading(true);
-    try {
-      const user = await signInWithEmailAndPassword(auth, email, password);
-      console.log(user);
-      router.replace("");
-    } catch (error) {
+    await signInWithEmailAndPassword(auth, email, password)
+    .then((userCredentials)=> {
+      setLoggedIn(true);
+      router.replace("home")
+      alert("User Logged In");
+    })
+    .catch((error)=> {
       console.log(error);
-    } finally {
+    })
+    .finally(()=>{
       setLoading(false);
-    }
-  };
+    })
+  }
 
   return (
     <SafeAreaView className="h-full">
@@ -69,6 +76,7 @@ const SignIn:React.FC = () => {
                 <Button title="Login" onPress={() => {handle_login()}}></Button>
               </>
             )}
+           
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

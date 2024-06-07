@@ -7,9 +7,11 @@ import { useGlobalContext } from "@/context/GlobalProvider";
 const AppLayout:React.FC = () => {
     const {loggedIn} = useGlobalContext();
 
+    const router = useRouter();
+
     useEffect(()=>{
         if(!loggedIn){
-            useRouter().push("sign-in");
+            router.replace("sign-in");
         }
     })
 

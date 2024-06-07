@@ -31,14 +31,29 @@ const GlobalContext = createContext<GlobalContextTypes>(defaultState);
 export const useGlobalContext = () => useContext(GlobalContext);
 
 const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [loggedIn, setLoggedIn] = useState<boolean>(false);
-  const [user, setUser] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [loggedIn, setLoggedIn] = useState<boolean>(defaultState.loggedIn);
+  const [user, setUser] = useState<any>(defaultState.user);
+  const [isLoading, setIsLoading] = useState<boolean>(defaultState.isLoading);
 
   useEffect(() => {
-    onAuthStateChanged(FIREBASE_AUTH, (user) => {
-      console.log(user);
+    console.log('Setting up onAuthStateChanged listener');
+    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
+      if (user) {
+        console.log('User logged in:', user);
+        setLoggedIn(true);
+        setUser(user);
+      } else {
+        console.log('User logged out');
+        setLoggedIn(false);
+        setUser(null);
+      }
     });
+
+    // Cleanup subscription on unmount
+    return () => {
+      console.log('Cleaning up onAuthStateChanged listener');
+      unsubscribe();
+    };
   }, []);
 
   return (
