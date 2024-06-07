@@ -13,7 +13,17 @@ function TabBarIcon(props: {
   export default function TabLayout() {
   
     return (
-      <Tabs>
+      <Tabs
+        screenOptions={{
+            tabBarActiveTintColor: "#FFA001",
+            tabBarInactiveTintColor: "#CDCDE0",
+            tabBarStyle: {
+                backgroundColor: "#000000",
+                borderTopWidth: 1,
+                borderTopColor: "#CDCDE0"
+            }
+        }}
+      >
         <Tabs.Screen
           name="home"
           options={{
@@ -21,13 +31,13 @@ function TabBarIcon(props: {
             tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
           }}
         />
-        {/* <Tabs.Screen
-          name="two"
+        <Tabs.Screen
+          name="overview"
           options={{
-            title: 'Tab Two',
+            title: 'Overview',
             tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
           }}
-        /> */}
+        />
       </Tabs>
     );
   }
