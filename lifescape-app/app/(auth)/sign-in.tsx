@@ -11,7 +11,7 @@ import {
 import React, { useState, useEffect } from "react";
 
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { signInWithEmailAndPassword} from "firebase/auth";
 
 import { useGlobalContext } from "@/context/GlobalProvider";
 
@@ -40,19 +40,6 @@ const SignIn:React.FC = () => {
       console.log(error);
     })
     .finally(()=>{
-      setLoading(false);
-    })
-  }
-  const handle_signout = async () => {
-    setLoading(true);
-    await signOut(auth)
-    .then(() => {
-      setLoggedIn(false);
-    })
-    .catch((error) => {
-      console.log(error);
-    })
-    .finally(()=> {
       setLoading(false);
     })
   }
@@ -89,13 +76,7 @@ const SignIn:React.FC = () => {
                 <Button title="Login" onPress={() => {handle_login()}}></Button>
               </>
             )}
-            {loading ? (
-              <ActivityIndicator size="large" color="#0000ff" />
-            ) : (
-              <>
-                <Button title="sign out" onPress={()=>handle_signout()}></Button>
-              </>
-            )}
+           
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
