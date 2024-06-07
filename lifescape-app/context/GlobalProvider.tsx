@@ -6,6 +6,8 @@ import React, {
   ReactNode,
 } from "react";
 
+import { useRouter } from "expo-router";
+
 import { onAuthStateChanged } from "firebase/auth";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 
@@ -35,13 +37,16 @@ const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<any>(defaultState.user);
   const [isLoading, setIsLoading] = useState<boolean>(defaultState.isLoading);
 
+  const router = useRouter();
+
   useEffect(() => {
     console.log('Setting up onAuthStateChanged listener');
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
       if (user) {
         console.log('User logged in:', user);
         setLoggedIn(true);
-        setUser(user);
+        setUser(user);  
+        router.replace('home');
       } else {
         console.log('User logged out');
         setLoggedIn(false);
