@@ -17,7 +17,9 @@ import {
 import React, { useState } from "react";
 
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword} from "firebase/auth";
+
+import { useGlobalContext } from "@/context/GlobalProvider";
 
 import { Link, useRouter } from "expo-router";
 
@@ -25,7 +27,7 @@ const SignIn: React.FC = () => {
   // const [email, set_email] = useState<string>("");
   // const [password, set_password] = useState<string>("");
   const [loading, set_loading] = useState<boolean>(false);
-
+  
   const auth = FIREBASE_AUTH;
   const win = Dimensions.get('window');
   const router = useRouter();
@@ -97,7 +99,6 @@ const SignIn: React.FC = () => {
                 </TouchableHighlight>
               </>
             )}
-  
             <View className="flex flex-row mt-4">
               <Text>Don't have an Account?</Text>
               <Link href="sign-up" className="ml-3">

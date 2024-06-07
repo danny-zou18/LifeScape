@@ -12,6 +12,7 @@ import {
   ScrollView,
 } from "react-native";
 import React, { useState } from "react";
+import axios from "axios";
 
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -20,10 +21,7 @@ import { Link, useRouter } from "expo-router";
 import { FieldValues, useForm } from "react-hook-form";
 
 const SignUp: React.FC = () => {
-  const [userName, set_userName] = useState<string>("");
-  const [email, set_email] = useState<string>("");
-  const [password, set_password] = useState<string>("");
-  const [loading, set_loading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const auth = FIREBASE_AUTH;
   const win = Dimensions.get('window');
