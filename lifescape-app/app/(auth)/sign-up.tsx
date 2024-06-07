@@ -9,6 +9,7 @@ import {
   Button,
 } from "react-native";
 import React, { useState } from "react";
+import axios from "axios";
 
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -16,6 +17,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { Link, useRouter } from "expo-router";
 
 const SignUp: React.FC = () => {
+  const [name, setName] = useState<string>("");
   const [userName, setUserName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -27,17 +29,32 @@ const SignUp: React.FC = () => {
 
   const handle_signup = async () => {
     setLoading(true);
-    try {
-      const user = await createUserWithEmailAndPassword(auth, email, password);
-      alert("User Created");
-      console.log(user);
-      router.replace("sign-in");
-    } catch (error) {
-      alert("User Creation Failed");
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
+
+    await createUserWithEmailAndPassword(auth, email, password)
+      .then( async (userCredentials) => {
+        const user = userCredentials.user;
+        // alert("User Created");
+        // console.log(user);
+        // router.replace("sign-in");
+        try {
+          const response = await axios.post("http://localhost:8000/auth/register", {
+            id: user.uid,
+            username: userName,
+            email: email,
+            name: name,
+            firebaseToken: await user.getIdToken()
+          })
+        } catch (error) {
+          console.log(error);
+        }
+      })
+      .catch((error) => {
+        alert("User Creation Failed");
+        console.log(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -46,8 +63,15 @@ const SignUp: React.FC = () => {
         <ScrollView>
           <View className="w-full min-h-[85vh]  flex flex-col justify-center items-center px-4 my-6 bg-red-50">
             <TextInput
-              placeholder="Username"
+              placeholder="Full Name"
               className="p-4 bg-black text-white min-w-[60%] rounded-full f"
+              onChangeText={(text) => setName(text)}
+              autoCapitalize="none"
+              value={name}
+            ></TextInput>
+            <TextInput
+              placeholder="Username"
+              className="p-4 mt-2 bg-black text-white min-w-[60%] rounded-full f"
               onChangeText={(text) => setUserName(text)}
               autoCapitalize="none"
               value={userName}
