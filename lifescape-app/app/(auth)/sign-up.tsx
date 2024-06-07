@@ -61,6 +61,13 @@ const SignUp: React.FC = () => {
     <SafeAreaView className="h-full">
       <KeyboardAvoidingView behavior="padding">
         <ScrollView>
+          <View className="p-8 relative" style={{ width: win.width, height: win.width }}>
+            {/* lifescape image  */}
+            <Image
+              source={require('../.././assets/images/LifeScape.png')}
+              className="w-full h-full"
+            />
+          </View>
           <View className="w-full flex flex-col justify-center items-center px-4 my-6 gap-4">
             <View>
               <Text className="text-xl text-neutral-700 pb-1">Name</Text>
