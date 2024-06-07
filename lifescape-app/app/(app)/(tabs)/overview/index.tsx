@@ -34,6 +34,15 @@ const Overview = () => {
         setIsSigningIn(false);
       });
   };
+  const goToAccount = () =>{
+    router.replace("/overview/acocunt")
+  };
+
+
+  const goToAccount = () => {
+    // Navigate to the "Account" tab
+    // Implementation depends on your navigation system
+  };
 
   return (
     <View>
@@ -47,7 +56,13 @@ const Overview = () => {
             onPress={() => {
               handleSignOut();
             }}
-          ></Button>
+          />
+          <Button
+          title = "Account"
+          onPress = {() => {
+            goToAccount();
+          }}
+          />
         </>
       )}
     </View>
