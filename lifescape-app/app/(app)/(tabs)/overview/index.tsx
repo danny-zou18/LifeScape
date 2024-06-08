@@ -1,10 +1,10 @@
-import { View, Text, ActivityIndicator, Button } from "react-native";
+import { View, Text, ActivityIndicator, Button, StyleSheet } from "react-native";
 import React, { useState } from "react";
 
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { signOut } from "firebase/auth";
 
-import { useRouter } from "expo-router";
+import { useRouter, Link } from "expo-router";
 
 import { useGlobalContext } from "@/context/GlobalProvider";
 
@@ -37,36 +37,57 @@ const Overview = () => {
   const goToAccount = () =>{
     router.replace("/overview/acocunt")
   };
-
-
-  const goToAccount = () => {
-    // Navigate to the "Account" tab
-    // Implementation depends on your navigation system
-  };
-
+  
   return (
-    <View>
-      <Text>Overview</Text>
+    <View style={styles.container}>
+      <View style={styles.topButtonContainer}>
+        <Link href="/overview/account" style={styles.button}>
+          <Text style={styles.buttonText}>Account</Text>
+        </Link>
+      </View>
+      <Text style={styles.text}>Overview</Text>
       {isSigningIn ? (
         <ActivityIndicator size="large" color="#0000ff" />
       ) : (
-        <>
+        <View style={styles.bottomButtonContainer}>
           <Button
             title="Sign Out"
             onPress={() => {
               handleSignOut();
             }}
           />
-          <Button
-          title = "Account"
-          onPress = {() => {
-            goToAccount();
-          }}
-          />
-        </>
+        </View>
       )}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'space-between',
+    padding: 20,
+  },
+  topButtonContainer: {
+    alignItems: 'center',
+  },
+  button: {
+    padding: 10,
+    backgroundColor: '#FFA001',
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  text: {
+    textAlign: 'center',
+    fontSize: 20,
+    marginVertical: 20,
+  },
+  bottomButtonContainer: {
+    alignItems: 'center',
+  },
+});
 
 export default Overview;
