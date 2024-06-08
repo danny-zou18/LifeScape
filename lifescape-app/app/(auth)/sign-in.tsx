@@ -26,7 +26,7 @@ import { Link, useRouter } from "expo-router";
 const SignIn: React.FC = () => {
   // const [email, set_email] = useState<string>("");
   // const [password, set_password] = useState<string>("");
-  const [loading, set_loading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   
   const auth = FIREBASE_AUTH;
   const win = Dimensions.get('window');
@@ -44,7 +44,7 @@ const SignIn: React.FC = () => {
 
   const submitHandler = async ({ email, password }: FieldValues) => {
     // console.log(email, password)
-    set_loading(true);
+    setLoading(true);
     await signInWithEmailAndPassword(auth, email, password)
     .then((userCredentials)=> {
       ;

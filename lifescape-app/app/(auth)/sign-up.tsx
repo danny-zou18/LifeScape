@@ -42,13 +42,13 @@ const SignUp: React.FC = () => {
   
   const submitHandler = async ({ name, username, email, password }: FieldValues) => {
     // console.log(name, username, email, password)
-    set_loading(true);
+    setLoading(true);
     try {
       const response = await axios.post(
         "http://128.113.145.204:8000/auth/register",
         {
           name: name,
-          username: userName,
+          username: username,
           email: email,
           password: password,
         }
