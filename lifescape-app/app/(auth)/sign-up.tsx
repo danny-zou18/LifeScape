@@ -17,7 +17,7 @@ import axios from "axios";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
-import { Link, useRouter } from "expo-router";
+import { Link} from "expo-router";
 import { FieldValues, useForm } from "react-hook-form";
 
 const SignUp: React.FC = () => {
@@ -26,7 +26,6 @@ const SignUp: React.FC = () => {
   const auth = FIREBASE_AUTH;
   const win = Dimensions.get('window');
 
-  const router = useRouter();
   const {
     setValue,
     handleSubmit,
@@ -98,7 +97,7 @@ const SignUp: React.FC = () => {
               <TextInput
                 id="username"
                 autoCapitalize="none"
-                onChangeText={(text) => setValue('name', text)}
+                onChangeText={(text) => setValue('username', text)}
                 autoComplete="email"
                 className="w-[300px] h-[60px] bg-black rounded-md text-white px-3"
               />
