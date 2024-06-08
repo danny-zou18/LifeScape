@@ -45,7 +45,13 @@ const SignUp: React.FC = () => {
           console.log(error);
         });
     } catch (error) {
-      console.log(error);
+      if (axios.isAxiosError(error)) {
+        // AxiosError type will have a response property
+        console.log(error.response?.data);
+      } else {
+        // Handle other error types if needed
+        console.log(error);
+      }
     } finally {
       setLoading(false);
     }
