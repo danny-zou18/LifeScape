@@ -1,16 +1,21 @@
-// Overview/OverviewScreen.tsx
 import React from 'react';
-import { View, Text } from 'react-native';
 import { Stack } from 'expo-router';
 
-const OverviewScreen = () => {
-   
-
-    return (
-        <Stack>
-            <Stack.Screen name = "Account"/>
-        </Stack>
-    );
-};
-
-export default OverviewScreen;
+export default function OverviewLayout() {
+  return (
+    <Stack>
+      <Stack.Screen name="index" 
+      options={{ 
+        headerShown: false
+         }} 
+         />
+      <Stack.Screen name="account" 
+      options={{ 
+        title: 'Account',
+        headerBackTitle: 'Overview',
+      }} 
+        
+        />
+    </Stack>
+  );
+}
