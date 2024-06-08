@@ -2,13 +2,19 @@ import {
   View,
   Text,
   SafeAreaView,
-  ScrollView,
   TextInput,
   ActivityIndicator,
-  Button,
   KeyboardAvoidingView,
+  Image,
+  Dimensions,
+  TouchableHighlight,
+  ScrollView,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import {
+  useForm,
+  FieldValues,
+} from "react-hook-form";
+import React, { useState } from "react";
 
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { signInWithEmailAndPassword} from "firebase/auth";
@@ -17,19 +23,28 @@ import { useGlobalContext } from "@/context/GlobalProvider";
 
 import { Link, useRouter } from "expo-router";
 
-const SignIn:React.FC = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
-
-  const {loggedIn,setLoggedIn} = useGlobalContext();
-
+const SignIn: React.FC = () => {
+  // const [email, set_email] = useState<string>("");
+  // const [password, set_password] = useState<string>("");
+  const [loading, set_loading] = useState<boolean>(false);
+  
   const auth = FIREBASE_AUTH;
-
+  const win = Dimensions.get('window');
   const router = useRouter();
+  const {
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FieldValues>({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  })
 
-  const handle_login = async () => {
-    setLoading(true);
+  const submitHandler = async ({ email, password }: FieldValues) => {
+    // console.log(email, password)
+    set_loading(true);
     await signInWithEmailAndPassword(auth, email, password)
     .then((userCredentials)=> {
       ;
@@ -46,35 +61,51 @@ const SignIn:React.FC = () => {
     <SafeAreaView className="h-full">
       <KeyboardAvoidingView behavior="padding">
         <ScrollView>
-          <View className="w-full min-h-[85vh]  flex flex-col justify-center items-center px-4 my-6 bg-red-500">
-            <TextInput
-              placeholder="Email"
-              className="p-4 bg-black text-white min-w-[60%] rounded-full"
-              onChangeText={(text) => setEmail(text)}
-              autoCapitalize="none"
-              value={email}
-            ></TextInput>
-            <TextInput
-              placeholder="Password"
-              className="p-4 mt-2 bg-black text-white min-w-[60%] rounded-full"
-              onChangeText={(text) => setPassword(text)}
-              value={password}
-              secureTextEntry={true}
-            ></TextInput>
-            <View className="flex flex-row">
-              <Text>Don't have an Account?</Text>
-              <Link href="sign-up" className="ml-4">
-                Sign up
-              </Link>
+          <View className="p-8 relative" style={{ width: win.width, height: win.width }}>
+            {/* lifescape image  */}
+            <Image
+              source={require('../.././assets/images/LifeScape.png')}
+              className="w-full h-full"
+            />
+          </View>
+          <View className="w-full flex flex-col justify-center items-center px-4 my-6 gap-4">
+            <View className="">
+              <Text className="text-xl text-neutral-700 pb-1">Email</Text>
+              <TextInput
+                id="email"
+                autoCapitalize="none"
+                onChangeText={(text) => setValue('email', text)}
+                autoComplete="email"
+                className="w-[300px] h-[60px] bg-black rounded-md text-white px-3"
+              />
             </View>
+            <View>
+              <Text className="text-xl text-neutral-700 pb-1">Password</Text>
+              <TextInput
+                id="password"
+                autoCapitalize="none"
+                secureTextEntry={true}
+                onChangeText={(text) => setValue('password', text)}
+                autoComplete="current-password"
+                className="w-[300px] h-[60px] bg-black rounded-md text-white px-3"
+              />
+            </View>
+  
             {loading ? (
               <ActivityIndicator size="large" color="#0000ff" />
             ) : (
               <>
-                <Button title="Login" onPress={() => {handle_login()}}></Button>
+                <TouchableHighlight onPress={handleSubmit(submitHandler)} className="bg-[#FDFDFD] w-[225px] h-[45px] rounded-md mt-4" underlayColor="#FFFFFF">
+                  <Text className="text-black text-xl font-semibold mx-auto my-auto">Login</Text>
+                </TouchableHighlight>
               </>
             )}
-           
+            <View className="flex flex-row mt-4">
+              <Text>Don't have an Account?</Text>
+              <Link href="sign-up" className="ml-3">
+                Sign up
+              </Link>
+            </View>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
