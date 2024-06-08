@@ -38,7 +38,6 @@ const SignUp: React.FC = () => {
             name: name,
             username: userName,
             firebaseUID: user.uid,
-            firebaseToken: await user.getIdToken(),
             email: email,
           })
         } catch (error) {

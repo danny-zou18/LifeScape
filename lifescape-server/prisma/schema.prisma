@@ -19,6 +19,5 @@ model users {
   email          String   @unique
   emailVerified  DateTime?
   name           String
-  firebaseToken  String   @unique 
   createdAt      DateTime @default(now())
 }

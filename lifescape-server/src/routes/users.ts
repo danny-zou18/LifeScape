@@ -3,12 +3,8 @@ import { db } from "../utils/db.server";
 
 const router = express.Router();
 
-router.post("/login", async (req, res) => {
-  
-});
-
 router.post("/register", async (req, res) => {
-  const { name, username, firebaseUID, firebaseToken, email} = req.body;
+  const { name, username, firebaseUID, email} = req.body;
   
   const checkUsername = await db.users.findUnique({
     where: {
@@ -25,7 +21,6 @@ router.post("/register", async (req, res) => {
       username: username,
       email: email,
       name: name,
-      firebaseToken: firebaseToken,
     }
   })
   res.json({ message: "User Registered Successfully!", success: true, newUser: newUser });

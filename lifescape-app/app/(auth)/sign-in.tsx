@@ -32,9 +32,7 @@ const SignIn:React.FC = () => {
     setLoading(true);
     await signInWithEmailAndPassword(auth, email, password)
     .then((userCredentials)=> {
-      setLoggedIn(true);
-      router.replace("home")
-      alert("User Logged In");
+      ;
     })
     .catch((error)=> {
       console.log(error);

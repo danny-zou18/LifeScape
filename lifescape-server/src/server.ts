@@ -1,7 +1,17 @@
 const express = require("express");
 import { Request, Response, NextFunction } from "express";
+
 const cors = require("cors");
+
+import * as admin from "firebase-admin";
+import credentials from "../credentials.json";
+
 import { userRouter } from "./routes/users";
+
+
+admin.initializeApp({
+  credential: admin.credential.cert(<admin.ServiceAccount>credentials),
+});
 
 const app = express();
 const port = 8000;
