@@ -12,7 +12,7 @@ import React, { useState } from "react";
 import axios from "axios";
 
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 import { Link, useRouter } from "expo-router";
 
@@ -29,28 +29,26 @@ const SignUp: React.FC = () => {
 
   const handle_signup = async () => {
     setLoading(true);
-
-    await createUserWithEmailAndPassword(auth, email, password)
-      .then( async (userCredentials) => {
-        const user = userCredentials.user;
-        try {
-          const response = await axios.post("http://128.113.145.204:8000/auth/register", {
-            name: name,
-            username: userName,
-            firebaseUID: user.uid,
-            email: email,
-          })
-        } catch (error) {
+    try {
+      const response = await axios.post(
+        "http://128.113.145.204:8000/auth/register",
+        {
+          name: name,
+          username: userName,
+          email: email,
+          password: password,
+        }
+      );
+      await signInWithEmailAndPassword(auth, email, password)
+        .then((userCredentials) => {})
+        .catch((error) => {
           console.log(error);
-        } 
-      })
-      .catch((error) => {
-        alert("User Creation Failed");
-        console.log(error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+        });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
