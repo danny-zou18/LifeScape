@@ -45,15 +45,16 @@ const SignIn: React.FC = () => {
   const submitHandler = async ({ email, password }: FieldValues) => {
     // console.log(email, password)
     set_loading(true);
-    try {
-      const user = await signInWithEmailAndPassword(auth, email, password);
-      // console.log(user);
-      router.replace("");
-    } catch (error) {
-      // console.log(error);
-    } finally {
-      set_loading(false);
-    }
+    await signInWithEmailAndPassword(auth, email, password)
+    .then((userCredentials)=> {
+      ;
+    })
+    .catch((error)=> {
+      console.log(error);
+    })
+    .finally(()=>{
+      setLoading(false);
+    })
   }
 
   return (

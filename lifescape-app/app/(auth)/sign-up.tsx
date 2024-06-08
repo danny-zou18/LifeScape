@@ -15,7 +15,7 @@ import React, { useState } from "react";
 import axios from "axios";
 
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 import { Link, useRouter } from "expo-router";
 import { FieldValues, useForm } from "react-hook-form";
@@ -39,19 +39,35 @@ const SignUp: React.FC = () => {
       password: "",
     }
   })
-
+  
   const submitHandler = async ({ name, username, email, password }: FieldValues) => {
     // console.log(name, username, email, password)
     set_loading(true);
     try {
-      const user = await createUserWithEmailAndPassword(auth, email, password);
-      // console.log(user);
-      router.replace("");
+      const response = await axios.post(
+        "http://128.113.145.204:8000/auth/register",
+        {
+          name: name,
+          username: userName,
+          email: email,
+          password: password,
+        }
+      );
+      await signInWithEmailAndPassword(auth, email, password)
+        .then((userCredentials) => {})
+        .catch((error) => {
+          console.log(error);
+        });
     } catch (error) {
-      alert("User Creation Failed");
-      // console.log(error);
+      if (axios.isAxiosError(error)) {
+        // AxiosError type will have a response property
+        console.log(error.response?.data);
+      } else {
+        // Handle other error types if needed
+        console.log(error);
+      }
     } finally {
-      set_loading(false);
+      setLoading(false);
     }
   }
 

@@ -14,11 +14,10 @@ model testing {
 }
 
 model users {
-  id             Int      @id @default(autoincrement())
+  id             String      @id @default(cuid())
   username       String   @unique
   email          String   @unique
   emailVerified  DateTime?
   name           String
-  firebaseToken  String   @unique 
   createdAt      DateTime @default(now())
 }
