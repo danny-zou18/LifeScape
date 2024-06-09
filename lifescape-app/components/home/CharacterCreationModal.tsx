@@ -8,23 +8,56 @@ import {
   TextInput,
 } from "react-native";
 import React, { useState } from "react";
+import axios from "axios";
+
+import { useGlobalContext } from "@/context/GlobalProvider";
 
 interface CharacterCreationModalProps {
   isOpen: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const CharacterCreationModal: React.FC<CharacterCreationModalProps> = ({
   isOpen,
   setOpen,
+  isLoading,
+  setIsLoading,
 }) => {
+  const { user, setUserCharacter } = useGlobalContext();
+
   const [characterName, setCharacterName] = useState<string>("");
 
-    const handle_creation = () => {
-        console.log(characterName);
-        
+  const handle_creation = async () => {
+    setIsLoading(true);
+    console.log(characterName);
+    try {
+      const response = await axios.post(
+        `http://128.113.145.204:8000/character/create/${user.uid}`,
+        {
+          name: characterName,
+        },
+        {
+          headers: {
+            Authorization: await user.getIdToken(),
+          },
+        }
+      );
+        setUserCharacter(response.data.character);
+        console.log("Character Created, ", response.data.character);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        // AxiosError type will have a response property
+        console.log(error.response?.data);
+      } else {
+        // Handle other error types if needed
+        console.log(error);
+      }
+    } finally {
+      setIsLoading(false);
+      setOpen(false);
     }
-
-
+  };
   return (
     <View>
       <Text>Plase make a character</Text>
@@ -53,6 +86,7 @@ const CharacterCreationModal: React.FC<CharacterCreationModalProps> = ({
           <TouchableHighlight
             className="bg-[#FDFDFD] w-[225px] h-[45px] rounded-md mt-4"
             underlayColor="#FFFFFF"
+            onPress={() => handle_creation()}
           >
             <Text className="text-black text-xl font-semibold mx-auto my-auto">
               Create Character

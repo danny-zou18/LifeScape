@@ -11,6 +11,7 @@ import React, { useState, useEffect } from "react";
 import { useGlobalContext } from "@/context/GlobalProvider";
 
 import CharacterCreationModal from "@/components/home/CharacterCreationModal";
+import { isLoaded } from "expo-font";
 
 
 const Home = () => {  
@@ -18,14 +19,14 @@ const Home = () => {
   const [characterCreationModalVisible, setCharacterCreationModalVisible] =
     useState<boolean>(false);
 
-  const { userCharacter, setUserCharacter } = useGlobalContext();
+  const { userCharacter } = useGlobalContext();
 
   return (
     <SafeAreaView>
       {userCharacter ? (
         <Text>{userCharacter.name}</Text>
       ) : (
-        <CharacterCreationModal isOpen={characterCreationModalVisible} setOpen={setCharacterCreationModalVisible} />
+        <CharacterCreationModal isOpen={characterCreationModalVisible} setOpen={setCharacterCreationModalVisible} isLoading={loading} setIsLoading={setLoading}  />
       )}
     </SafeAreaView>
   );
