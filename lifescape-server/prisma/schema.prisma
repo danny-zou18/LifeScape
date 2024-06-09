@@ -24,20 +24,70 @@ model users {
 }
 
 model Character {
-  id         Int    @id @default(autoincrement())
-  name       String @unique
-  level      Int    @default(1)
-  experience Int    @default(0)
-  health     Int    @default(100)
-  mana       Int    @default(50)
-  energy     Int    @default(100)
-  Strength   Int    @default(10)
-  Defense    Int    @default(10)
-  Dexterity  Int    @default(10)
-  Agility    Int    @default(10)
-  Vitality   Int    @default(10)
-  Endurance  Int    @default(10)
-  Will       Int    @default(10)
-  Owner      users  @relation(fields: [OwnerId], references: [id])
-  OwnerId    String @unique
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  level      Int       @default(1)
+  class      Class?    @default(NONE)
+  subclass   Subclass? @default(NONE)
+  experience Int       @default(0)
+  health     Int       @default(100)
+  mana       Int       @default(50)
+  energy     Int       @default(100)
+
+  Strength  Int @default(10)
+  Defense   Int @default(10)
+  Dexterity Int @default(10)
+  Agility   Int @default(10)
+  Vitality  Int @default(10)
+  Endurance Int @default(10)
+  Will      Int @default(10)
+
+  Owner   users  @relation(fields: [OwnerId], references: [id])
+  OwnerId String @unique
+}
+
+
+enum Class {
+  NONE
+  WARRIOR
+  MAGE
+  ROGUE
+  RANGER
+  CLERIC
+  ASSASSIN
+}
+
+enum Subclass {
+  NONE
+
+  BERSERKER
+  PALADIN
+  GUARDIAN
+  DESTROYER
+  SLAYER
+
+  SORCERER
+  SUMMONER
+  ELEMENTALIST
+  NECROMANCER
+  ALCHEMIST
+
+  THIEF
+
+  SHARPSHOOTER
+  GUNSLINGER
+  ARTILLERIST
+
+  PRIEST
+  MONK
+  DRUID
+  SHAMAN
+  BARD
+
+  NINJA
+  SOULREAPER
+  SHADOWHUNTER
+  DEATHBLADE
+  NIGHTSTALKER
 }
