@@ -11,6 +11,7 @@ import React, { useState, useEffect } from "react";
 
 import { useGlobalContext } from "@/context/GlobalProvider";
 
+import CharacterOverview from "@/components/home/CharacterOverview";
 import CharacterCreationModal from "@/components/home/CharacterCreationModal";
 
 const Home = () => {  
@@ -23,9 +24,7 @@ const Home = () => {
   return (
     <SafeAreaView>
       {userCharacter ? (
-        <View className="bg-red-300 flex flex-row h-[17vh] p-5">
-            <Text>Hello</Text>
-        </View>
+        <CharacterOverview />
       ) : (
         <CharacterCreationModal isOpen={characterCreationModalVisible} setOpen={setCharacterCreationModalVisible} isLoading={loading} setIsLoading={setLoading}  />
       )}
