@@ -55,7 +55,7 @@ const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         setLoggedIn(true);
         setUser(user);
         try {
-          const response = await axios.get(`http://128.113.145.204:8000/character/${user.uid}`, {
+          const response = await axios.get(`http://128.113.145.204:8000/character/get/${user.uid}`, {
             headers: {
               "Authorization": await user.getIdToken(),
             }

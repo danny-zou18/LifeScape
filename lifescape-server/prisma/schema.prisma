@@ -25,7 +25,7 @@ model users {
 
 model Character {
   id   Int    @id @default(autoincrement())
-  name String @unique
+  name String 
 
   level      Int       @default(1)
   class      Class?    @default(NONE)
