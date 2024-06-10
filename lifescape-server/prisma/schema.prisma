@@ -28,6 +28,7 @@ model Character {
   name String 
 
   level      Int       @default(1)
+  gold       Int       @default(0)
   class      Class?    @default(NONE)
   subclass   Subclass? @default(NONE)
   experience Int       @default(0)
