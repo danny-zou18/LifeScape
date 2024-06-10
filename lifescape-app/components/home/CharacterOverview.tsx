@@ -71,21 +71,39 @@ const CharacterOverview = () => {
                 className={`bg-red-400 h-full rounded-l-full rounded-r-lg flex items-center justify-center`}
               ></View>
             </View>
-          </View>
-          <View className="h-[33%]">
-            <View className="min-w-full h-[35%] bg-white rounded-full overflow-hidden">
-            <View
-              style={{ width: manaPercentage }}
-              className={`bg-blue-400 h-full rounded-l-full rounded-r-lg flex items-center justify-center`}
-            ></View>
+            <View className="flex flex-row justify-between">
+              <Text className="text-xs">
+                {userCharacter.health} / {userCharacter.maxHealth}
+              </Text>
+              <Text className="text-[.8rem]">Health</Text>
             </View>
           </View>
           <View className="h-[33%]">
             <View className="min-w-full h-[35%] bg-white rounded-full overflow-hidden">
-            <View
-              style={{ width: energyPercentage }}
-              className={`bg-yellow-200 h-full rounded-l-full rounded-r-lg flex items-center justify-center`}
-            ></View>
+              <View
+                style={{ width: manaPercentage }}
+                className={`bg-blue-400 h-full rounded-l-full rounded-r-lg flex items-center justify-center`}
+              ></View>
+            </View>
+            <View className="flex flex-row justify-between">
+              <Text className="text-xs">
+                {userCharacter.mana} / {userCharacter.maxMana}
+              </Text>
+              <Text className="text-[.8rem]">Mana</Text>
+            </View>
+          </View>
+          <View className="h-[33%]">
+            <View className="min-w-full h-[35%] bg-white rounded-full overflow-hidden">
+              <View
+                style={{ width: energyPercentage }}
+                className={`bg-yellow-200 h-full rounded-l-full rounded-r-lg flex items-center justify-center`}
+              ></View>
+            </View>
+            <View className="flex flex-row justify-between">
+              <Text className="text-xs">
+                {userCharacter.energy} / {userCharacter.maxEnergy}
+              </Text>
+              <Text className="text-[.8rem]">Energy</Text>
             </View>
           </View>
         </View>
