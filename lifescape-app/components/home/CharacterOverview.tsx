@@ -19,13 +19,16 @@ const CharacterOverview = () => {
             uri: "https://media1.tenor.com/m/sepKXIenuG0AAAAC/cat-meme-cat-meme-face.gif",
           }}
         />
-        <View className="absolute bottom-[-.5rem] left-1 z-10 bg-transparent overflow-hidden flex flex-row">
+        <View className={`absolute bottom-[-.5rem] z-10 bg-transparent flex flex-row ${userCharacter.experience >= 10 ? 'left-0' : 'left-1'}`}>
           <View className="bg-red-50 px-[0.4rem] rounded-full">
-          <Text className="text-xs ">{userCharacter.level}</Text>
+            <Text className="text-xs ">{userCharacter.level}</Text>
           </View>
-          <View className="bg-red-50 ml-1 min-w-[78%] max-h-[90%] rounded-full "></View>
+          <View className="bg-red-50 ml-1 mt-[0.06rem] min-w-[76%] max-h-[90%] rounded-full ">
+            <View className="bg-green-50 min-w-[50%] h-full rounded-full flex items-center justify-center">
+              <Text className="text-xs">{userCharacter.experience}</Text>
+            </View>
+          </View>
         </View>
-        
       </View>
     </View>
   );
