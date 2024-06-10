@@ -19,8 +19,8 @@ const CharacterOverview = () => {
             uri: "https://media1.tenor.com/m/sepKXIenuG0AAAAC/cat-meme-cat-meme-face.gif",
           }}
         />
-        <View className="absolute bottom-[-.5rem] left-2 z-10 bg-white px-2 rounded-full">
-          <Text className="text-xs">{userCharacter.name}</Text>
+        <View className="absolute bottom-[-.5rem] left-5 z-10 bg-white px-2 rounded-full">
+          <Text className="text-xs">{userCharacter.level}</Text>
         </View>
       </View>
     </View>
