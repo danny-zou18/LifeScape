@@ -8,23 +8,31 @@ import cat from "../../constants/Images.ts";
 const CharacterOverview = () => {
   const { userCharacter } = useGlobalContext();
 
-  const calculateExpPercentage = (
-    current: number,
-    nextLevel: number
-  ): string => {
+  const calculatePercentage = (current: number, nextLevel: number): string => {
     if (nextLevel === 0) return "0%";
     const percentage = (current / nextLevel) * 100;
     return `${percentage}%`;
   };
 
   const expPercentage = useMemo(
-    () => calculateExpPercentage(userCharacter.experience, 20),
+    () => calculatePercentage(userCharacter.experience, 20),
     [userCharacter.experience]
   );
-
+  const healthPercentage = useMemo(
+    () => calculatePercentage(userCharacter.health, userCharacter.maxHealth),
+    [userCharacter.health]
+  );
+  const manaPercentage = useMemo(
+    () => calculatePercentage(userCharacter.mana, userCharacter.maxMana),
+    [userCharacter.mana]
+  );
+  const energyPercentage = useMemo(
+    () => calculatePercentage(userCharacter.energy, userCharacter.maxEnergy),
+    [userCharacter.energy]
+  );
   return (
-    <View className="bg-red-300 flex flex-row h-[17vh] p-4 pl-5">
-      <View className="w-[35%] h-[95%] relative mt-auto mb-auto">
+    <View className="bg-red-300 flex flex-row h-[17vh] p-3">
+      <View className="w-[37%] h-[95%] relative mt-auto mb-auto">
         <View className="absolute top-[-.5rem] left-2 z-10 bg-white px-2 rounded-full">
           <Text className="text-xs">{userCharacter.name}</Text>
         </View>
@@ -54,16 +62,31 @@ const CharacterOverview = () => {
           </View>
         </View>
       </View>
-      <View className="ml-2 w-full bg-blue-200 flex flex-col">
-        <View className="bg-red-200 p-1 h-[85%]">
-          <View>
-            <Text>Health</Text>
+      <View className="ml-2 max-w-[62%] bg-blue-200 flex flex-col">
+        <View className="bg-red-200 p-1 max-h-[70%]">
+          <View className="h-[33%]">
+            <View className="min-w-full h-[35%] bg-white rounded-full overflow-hidden">
+              <View
+                style={{ width: healthPercentage }}
+                className={`bg-red-400 h-full rounded-l-full rounded-r-lg flex items-center justify-center`}
+              ></View>
+            </View>
           </View>
-          <View>
-            <Text>Health</Text>
+          <View className="h-[33%]">
+            <View className="min-w-full h-[35%] bg-white rounded-full overflow-hidden">
+            <View
+              style={{ width: manaPercentage }}
+              className={`bg-blue-400 h-full rounded-l-full rounded-r-lg flex items-center justify-center`}
+            ></View>
+            </View>
           </View>
-          <View>
-            <Text>Health</Text>
+          <View className="h-[33%]">
+            <View className="min-w-full h-[35%] bg-white rounded-full overflow-hidden">
+            <View
+              style={{ width: energyPercentage }}
+              className={`bg-yellow-200 h-full rounded-l-full rounded-r-lg flex items-center justify-center`}
+            ></View>
+            </View>
           </View>
         </View>
       </View>
