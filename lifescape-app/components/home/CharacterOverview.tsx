@@ -44,10 +44,10 @@ const CharacterOverview = () => {
         />
         <View
           className={`absolute bottom-[-.5rem] z-10 bg-transparent flex flex-row ${
-            userCharacter.experience >= 100
-              ? "left-[-1rem]"
-              : userCharacter.experience >= 10
-              ? "left-0"
+            userCharacter.level >= 100
+              ? "left-[-.3rem]"
+              : userCharacter.level >= 10
+              ? "left-[.2rem]"
               : "left-1"
           }`}
         >
@@ -132,6 +132,18 @@ const CharacterOverview = () => {
                 <Text className="text-[.8rem]">Energy</Text>
               </View>
             </View>
+          </View>
+        </View>
+        <View className="h-[30%] p-1">
+          <View className="w-fullflex flex-row items-center">
+            <View className="h-8">
+              <Image
+                source={require("../../assets/images/pixil-frame-0.png")}
+                resizeMode="contain"
+                style={{ flex: 1, aspectRatio: 1 }}
+              />
+            </View>
+            <Text>{userCharacter.gold}</Text>
           </View>
         </View>
       </View>
