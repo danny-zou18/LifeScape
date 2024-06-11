@@ -1,113 +1,145 @@
 import {
   View,
   Text,
+  TextInput,
+  Dimensions,
+  Image,
   SafeAreaView,
   KeyboardAvoidingView,
-  TextInput,
-  ScrollView,
   ActivityIndicator,
   Button,
+  TouchableHighlight,
+  ScrollView,
 } from "react-native";
 import React, { useState } from "react";
 import axios from "axios";
 
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
-import { Link, useRouter } from "expo-router";
+import { Link} from "expo-router";
+import { FieldValues, useForm } from "react-hook-form";
 
 const SignUp: React.FC = () => {
-  const [name, setName] = useState<string>("");
-  const [userName, setUserName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
   const auth = FIREBASE_AUTH;
+  const win = Dimensions.get('window');
 
-  const router = useRouter();
-
-  const handle_signup = async () => {
+  const {
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FieldValues>({
+    defaultValues: {
+      name: "",
+      username: "",
+      email: "",
+      password: "",
+    }
+  })
+  
+  const submitHandler = async ({ name, username, email, password }: FieldValues) => {
+    // console.log(name, username, email, password)
     setLoading(true);
-
-    await createUserWithEmailAndPassword(auth, email, password)
-      .then( async (userCredentials) => {
-        const user = userCredentials.user;
-        // alert("User Created");
-        // console.log(user);
-        // router.replace("sign-in");
-        try {
-          const response = await axios.post("http://localhost:8000/auth/register", {
-            id: user.uid,
-            username: userName,
-            email: email,
-            name: name,
-            firebaseToken: await user.getIdToken()
-          })
-        } catch (error) {
-          console.log(error);
+    try {
+      const response = await axios.post(
+        "http://128.113.145.204:8000/auth/register",
+        {
+          name: name,
+          username: username,
+          email: email,
+          password: password,
         }
-      })
-      .catch((error) => {
-        alert("User Creation Failed");
+      );
+      await signInWithEmailAndPassword(auth, email, password)
+        .then((userCredentials) => {})
+        .catch((error) => {
+          console.log(error);
+        });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        // AxiosError type will have a response property
+        console.log(error.response?.data);
+      } else {
+        // Handle other error types if needed
         console.log(error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <SafeAreaView className="h-full">
       <KeyboardAvoidingView behavior="padding">
         <ScrollView>
-          <View className="w-full min-h-[85vh]  flex flex-col justify-center items-center px-4 my-6 bg-red-50">
-            <TextInput
-              placeholder="Full Name"
-              className="p-4 bg-black text-white min-w-[60%] rounded-full f"
-              onChangeText={(text) => setName(text)}
-              autoCapitalize="none"
-              value={name}
-            ></TextInput>
-            <TextInput
-              placeholder="Username"
-              className="p-4 mt-2 bg-black text-white min-w-[60%] rounded-full f"
-              onChangeText={(text) => setUserName(text)}
-              autoCapitalize="none"
-              value={userName}
-            ></TextInput>
-            <TextInput
-              placeholder="Email"
-              className="p-4 mt-2 bg-black text-white min-w-[60%] rounded-full"
-              onChangeText={(text) => setEmail(text)}
-              autoCapitalize="none"
-              value={email}
-            ></TextInput>
-            <TextInput
-              placeholder="Password"
-              className="p-4 mt-2 bg-black text-white min-w-[60%] rounded-full"
-              onChangeText={(text) => setPassword(text)}
-              value={password}
-              secureTextEntry={true}
-            ></TextInput>
-            <View className="flex flex-row">
-              <Text>Already have an Account?</Text>
-              <Link href="sign-in" className="ml-4">
-                Login
-              </Link>
+          <View className="p-8 relative" style={{ width: win.width, height: win.width }}>
+            {/* lifescape image  */}
+            <Image
+              source={require('../.././assets/images/LifeScape.png')}
+              className="w-full h-full"
+            />
+          </View>
+          <View className="w-full flex flex-col justify-center items-center px-4 my-6 gap-4">
+            <View>
+              <Text className="text-xl text-neutral-700 pb-1">Name</Text>
+              <TextInput
+                id="name"
+                autoCapitalize="none"
+                onChangeText={(text) => setValue('name', text)}
+                autoComplete="name"
+                className="w-[300px] h-[60px] bg-black rounded-md text-white px-3"
+              />
             </View>
+            <View>
+              <Text className="text-xl text-neutral-700 pb-1">Username</Text>
+              <TextInput
+                id="username"
+                autoCapitalize="none"
+                onChangeText={(text) => setValue('username', text)}
+                autoComplete="email"
+                className="w-[300px] h-[60px] bg-black rounded-md text-white px-3"
+              />
+            </View>
+            <View className="">
+              <Text className="text-xl text-neutral-700 pb-1">Email</Text>
+              <TextInput
+                id="email"
+                autoCapitalize="none"
+                onChangeText={(text) => setValue('email', text)}
+                autoComplete="email"
+                className="w-[300px] h-[60px] bg-black rounded-md text-white px-3"
+              />
+            </View>
+            <View>
+              <Text className="text-xl text-neutral-700 pb-1">Password</Text>
+              <TextInput
+                id="password"
+                autoCapitalize="none"
+                secureTextEntry={true}
+                onChangeText={(text) => setValue('password', text)}
+                autoComplete="current-password"
+                className="w-[300px] h-[60px] bg-black rounded-md text-white px-3"
+              />
+            </View>
+  
             {loading ? (
               <ActivityIndicator size="large" color="#0000ff" />
             ) : (
               <>
-                <Button
-                  title="Sign Up"
-                  onPress={() => {
-                    handle_signup();
-                  }}
-                ></Button>
+                <TouchableHighlight onPress={handleSubmit(submitHandler)} className="bg-[#FDFDFD] w-[225px] h-[45px] rounded-md mt-4" underlayColor="#FFFFFF">
+                  <Text className="text-black text-xl font-semibold mx-auto my-auto">Sign Up</Text>
+                </TouchableHighlight>
               </>
             )}
+  
+            <View className="flex flex-row mt-4">
+              <Text>Already have an Account?</Text>
+              <Link href="sign-in" className="ml-3">
+                Login
+              </Link>
+            </View>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
