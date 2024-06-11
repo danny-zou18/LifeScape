@@ -19,9 +19,7 @@ import React, { useState } from "react";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { signInWithEmailAndPassword} from "firebase/auth";
 
-import { useGlobalContext } from "@/context/GlobalProvider";
-
-import { Link, useRouter } from "expo-router";
+import { Link } from "expo-router";
 
 const SignIn: React.FC = () => {
   // const [email, set_email] = useState<string>("");
@@ -30,7 +28,6 @@ const SignIn: React.FC = () => {
   
   const auth = FIREBASE_AUTH;
   const win = Dimensions.get('window');
-  const router = useRouter();
   const {
     setValue,
     handleSubmit,
