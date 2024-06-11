@@ -5,14 +5,14 @@ import {
   Button,
   Modal,
   SafeAreaView,
+  Image
 } from "react-native";
 import React, { useState, useEffect } from "react";
 
 import { useGlobalContext } from "@/context/GlobalProvider";
 
+import CharacterOverview from "@/components/home/CharacterOverview";
 import CharacterCreationModal from "@/components/home/CharacterCreationModal";
-import { isLoaded } from "expo-font";
-
 
 const Home = () => {  
   const [loading, setLoading] = useState<boolean>(false);
@@ -24,7 +24,7 @@ const Home = () => {
   return (
     <SafeAreaView>
       {userCharacter ? (
-        <Text>{userCharacter.name}</Text>
+        <CharacterOverview />
       ) : (
         <CharacterCreationModal isOpen={characterCreationModalVisible} setOpen={setCharacterCreationModalVisible} isLoading={loading} setIsLoading={setLoading}  />
       )}

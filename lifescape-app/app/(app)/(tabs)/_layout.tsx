@@ -29,13 +29,15 @@ function TabBarIcon(props: {
           options={{
             title: 'Home',
             tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+           
           }}
         />
         <Tabs.Screen
           name="overview"
           options={{
             title: 'Overview',
-            tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+            tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />
+            
           }}
         />
       </Tabs>
