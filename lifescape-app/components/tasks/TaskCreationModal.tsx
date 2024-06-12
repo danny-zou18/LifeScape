@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   ScrollView,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
@@ -24,11 +25,14 @@ const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
   isOpen,
   setOpen,
 }) => {
+  const [loading, setLoading] = useState<boolean>(false);
+
   const [date, setDate] = useState(new Date());
 
   const onChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     if (selectedDate) {
       setValue("dueDate", selectedDate);
+      console.log(selectedDate.toLocaleString());
     }
   };
 
@@ -43,6 +47,15 @@ const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
       dueDate: new Date(),
     },
   });
+
+  const submitHandler = async ({
+    title,
+    description,
+    dueDate,
+  }: FieldValues) => {
+    setLoading(true);
+    
+  };
 
   return (
     <Modal
@@ -104,14 +117,20 @@ const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
                 />
               </View>
             </View>
-            <TouchableHighlight
-              className="bg-[#000000] w-[225px] h-[45px] rounded-md mt-10"
-              underlayColor="#FFFFFF"
-            >
-              <Text className="text-white text-xl font-semibold mx-auto my-auto">
-                Create Task
-              </Text>
-            </TouchableHighlight>
+            {loading ? (
+              <ActivityIndicator size="large" color="#0000ff" />
+            ) : (
+              <>
+                <TouchableHighlight
+                  className="bg-[#000000] w-[225px] h-[45px] rounded-md mt-10"
+                  underlayColor="#FFFFFF"
+                >
+                  <Text className="text-white text-xl font-semibold mx-auto my-auto">
+                    Create Task
+                  </Text>
+                </TouchableHighlight>
+              </>
+            )}
           </View>
         </ScrollView>
       </SafeAreaView>
