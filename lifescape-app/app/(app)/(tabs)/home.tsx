@@ -26,7 +26,7 @@ const Home = () => {
   return (
     <SafeAreaView>
       {userCharacter ? (
-        <View>
+        <View className="flex items-center">
           <CharacterOverview />
           <TaskWrapper />
         </View>

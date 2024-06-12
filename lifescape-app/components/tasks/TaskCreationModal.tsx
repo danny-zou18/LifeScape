@@ -11,8 +11,9 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
-
 import axios from "axios";
+
+import { Task } from "@/types/db_types";
 
 import DateTimePicker, {
   DateTimePickerEvent,
@@ -23,11 +24,15 @@ import { useGlobalContext } from "@/context/GlobalProvider";
 interface TaskCreationModalProps {
   isOpen: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  tasks: Task[];
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
 }
 
 const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
   isOpen,
   setOpen,
+  tasks,
+  setTasks
 }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const { user, userCharacter } = useGlobalContext();
@@ -71,6 +76,7 @@ const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
       );
       if (response.status === 201) {
         console.log("Task created successfully");
+        setTasks([...tasks, response.data]);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
