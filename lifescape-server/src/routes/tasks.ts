@@ -41,4 +41,28 @@ router.post("/create/:userId/:characterId", async (req, res) => {
     });
 });
 
+router.get("/get/:userId/:characterId", async (req, res) => {
+  const authToken = req.headers.authorization;
+  const { userId, characterId } = req.params;
+  try {
+    const authUser = await auth().verifyIdToken(authToken as string);
+    if (authUser.uid !== userId) {
+      res.status(403).json({ error: "Unauthorized" });
+    }
+  } catch (e) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  await db.task.findMany({
+    where: {
+      CharacterId: parseInt(characterId),
+    },
+  }).then((tasks) => {
+    return res.json({sucess: true, tasks: tasks});
+  }).catch((error) => {
+    console.log(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  });
+});
+
 export { router as tasksRouter };
