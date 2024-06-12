@@ -21,6 +21,15 @@ import DateTimePicker, {
 
 import { useGlobalContext } from "@/context/GlobalProvider";
 
+const roundToNextHour = (date: Date): Date => {
+  const roundedDate = new Date(date);
+  roundedDate.setMinutes(0);
+  roundedDate.setSeconds(0);
+  roundedDate.setMilliseconds(0);
+  roundedDate.setHours(roundedDate.getHours() + 1);
+  return roundedDate;
+};
+
 interface TaskCreationModalProps {
   isOpen: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -37,7 +46,7 @@ const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
   const [loading, setLoading] = useState<boolean>(false);
   const { user, userCharacter } = useGlobalContext();
 
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(roundToNextHour(new Date()));
 
   const onChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     if (selectedDate) {
