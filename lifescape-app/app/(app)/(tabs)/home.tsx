@@ -14,6 +14,8 @@ import { useGlobalContext } from "@/context/GlobalProvider";
 import CharacterOverview from "@/components/home/CharacterOverview";
 import CharacterCreationModal from "@/components/home/CharacterCreationModal";
 
+import TaskWrapper from "@/components/home/TaskWrapper";
+
 const Home = () => {  
   const [loading, setLoading] = useState<boolean>(false);
   const [characterCreationModalVisible, setCharacterCreationModalVisible] =
@@ -24,7 +26,10 @@ const Home = () => {
   return (
     <SafeAreaView>
       {userCharacter ? (
-        <CharacterOverview />
+        <View>
+          <CharacterOverview />
+          <TaskWrapper />
+        </View>
       ) : (
         <CharacterCreationModal isOpen={characterCreationModalVisible} setOpen={setCharacterCreationModalVisible} isLoading={loading} setIsLoading={setLoading}  />
       )}
