@@ -12,9 +12,13 @@ import {
 import React, { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 
+import axios from "axios";
+
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
+
+import { useGlobalContext } from "@/context/GlobalProvider";
 
 interface TaskCreationModalProps {
   isOpen: boolean;
@@ -26,13 +30,14 @@ const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
   setOpen,
 }) => {
   const [loading, setLoading] = useState<boolean>(false);
+  const { user, userCharacter } = useGlobalContext();
 
   const [date, setDate] = useState(new Date());
 
   const onChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     if (selectedDate) {
       setValue("dueDate", selectedDate);
-      console.log(selectedDate.toLocaleString());
+      setDate(selectedDate);
     }
   };
 
@@ -54,7 +59,28 @@ const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
     dueDate,
   }: FieldValues) => {
     setLoading(true);
-    
+    try {
+      const response = await axios.post(
+        `http://128.113.145.204:8000/tasks/create/${user.uid}/${userCharacter.id}`,
+        { title, description, dueDate },
+        {
+          headers: {
+            Authorization: await user.getIdToken(),
+          }
+        }
+      );
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        // AxiosError type will have a response property
+        console.log(error.response?.data);
+      } else {
+        // Handle other error types if needed
+        console.log(error);
+      }
+    } finally {
+      setLoading(false);
+      setOpen(false);
+    }
   };
 
   return (
@@ -124,6 +150,7 @@ const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
                 <TouchableHighlight
                   className="bg-[#000000] w-[225px] h-[45px] rounded-md mt-10"
                   underlayColor="#FFFFFF"
+                  onPress={handleSubmit(submitHandler)}
                 >
                   <Text className="text-white text-xl font-semibold mx-auto my-auto">
                     Create Task
