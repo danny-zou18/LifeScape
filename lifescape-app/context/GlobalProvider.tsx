@@ -12,7 +12,6 @@ import { useRouter } from "expo-router";
 import { onAuthStateChanged } from "firebase/auth";
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 
-
 interface GlobalContextTypes {
   loggedIn: boolean;
   setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
@@ -52,17 +51,22 @@ const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     console.log("Setting up onAuthStateChanged listener");
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, async (user) => {
       if (user) {
-        console.log("User logged in:", user); 
+        console.log("User logged in:", user);
         setLoggedIn(true);
         setUser(user);
         try {
-          const response = await axios.get(`http://128.113.145.204:8000/character/get/${user.uid}`, {
-            headers: {
-              "Authorization": await user.getIdToken(),
+          const response = await axios.get(
+            `http://128.113.145.204:8000/character/get/${user.uid}`,
+            {
+              headers: {
+                Authorization: await user.getIdToken(),
+              },
             }
-          });
-          setUserCharacter(response.data);
-          console.log("Character fetched: ", response.data);
+          );
+          if (response.status === 200) {
+            setUserCharacter(response.data);
+            console.log("Character fetched: ", response.data);
+          }
         } catch (error) {
           if (axios.isAxiosError(error)) {
             // AxiosError type will have a response property

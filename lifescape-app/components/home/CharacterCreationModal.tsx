@@ -43,7 +43,9 @@ const CharacterCreationModal: React.FC<CharacterCreationModalProps> = ({
           },
         }
       );
-        setUserCharacter(response.data.character);
+      if (response.status === 201) {
+        setUserCharacter(response.data);
+      }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         // AxiosError type will have a response property

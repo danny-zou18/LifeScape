@@ -95,3 +95,5 @@ enum Subclass {
   DEATHBLADE = "DEATHBLADE",
   NIGHTSTALKER = "NIGHTSTALKER",
 }
+
+export { User, Character, Task }

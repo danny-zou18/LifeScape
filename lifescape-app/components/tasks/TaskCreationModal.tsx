@@ -69,6 +69,9 @@ const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
           }
         }
       );
+      if (response.status === 201) {
+        console.log("Task created successfully");
+      }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         // AxiosError type will have a response property

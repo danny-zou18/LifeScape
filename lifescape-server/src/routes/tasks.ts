@@ -33,7 +33,7 @@ router.post("/create/:userId/:characterId", async (req, res) => {
       },
     })
     .then((task) => {
-      return res.json({ success: true, task: task });
+      return res.status(201).json(task);
     })
     .catch((error) => {
       console.log(error);
@@ -58,7 +58,7 @@ router.get("/get/:userId/:characterId", async (req, res) => {
       CharacterId: parseInt(characterId),
     },
   }).then((tasks) => {
-    return res.json({sucess: true, tasks: tasks});
+    return res.status(200).json(tasks);
   }).catch((error) => {
     console.log(error);
     return res.status(500).json({ error: "Internal Server Error" });
