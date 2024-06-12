@@ -9,6 +9,7 @@ import {
   TextInput,
 } from "react-native";
 import React, { useState } from "react";
+import { FieldValues, useForm } from "react-hook-form";
 
 import DateTimePicker, {
   DateTimePickerEvent,
@@ -27,9 +28,21 @@ const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
 
   const onChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     if (selectedDate) {
-      setDate(selectedDate);
+      setValue("dueDate", selectedDate);
     }
   };
+
+  const {
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FieldValues>({
+    defaultValues: {
+      title: "",
+      description: "",
+      dueDate: new Date(),
+    },
+  });
 
   return (
     <Modal
@@ -46,11 +59,11 @@ const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
         <ScrollView className="h-full">
           <View className="flex items-center justify-center mt-5">
             <View>
-              <Text className="ml-2 text-md text-neutral-700 pb-1">Name</Text>
+              <Text className="ml-2 text-md text-neutral-700 pb-1">Title</Text>
               <TextInput
-                id="name"
+                id="title"
                 autoCapitalize="none"
-                // onChangeText={(text) => setValue('name', text)}
+                onChangeText={(text) => setValue("title", text)}
                 autoComplete="name"
                 className="w-[300px] h-[50px] bg-black rounded-lg text-white px-3"
               />
@@ -60,9 +73,9 @@ const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
                 Description
               </Text>
               <TextInput
-                id="name"
+                id="description"
                 autoCapitalize="none"
-                // onChangeText={(text) => setValue('name', text)}
+                onChangeText={(text) => setValue("description", text)}
                 autoComplete="name"
                 className="w-[300px] h-[50px] bg-black rounded-lg text-white px-3"
                 numberOfLines={2}
@@ -74,6 +87,7 @@ const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
               </Text>
               <View className="w-full h-[50px] bg-black rounded-lg text-white px-3 flex flex-row justify-center items-center">
                 <DateTimePicker
+                  id="dueDate"
                   value={date}
                   mode="date"
                   display="default"
@@ -81,6 +95,7 @@ const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
                   minimumDate={new Date()}
                 />
                 <DateTimePicker
+                  id="dueDate"
                   value={date}
                   mode="time"
                   display="default"
@@ -89,6 +104,14 @@ const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
                 />
               </View>
             </View>
+            <TouchableHighlight
+              className="bg-[#000000] w-[225px] h-[45px] rounded-md mt-10"
+              underlayColor="#FFFFFF"
+            >
+              <Text className="text-white text-xl font-semibold mx-auto my-auto">
+                Create Task
+              </Text>
+            </TouchableHighlight>
           </View>
         </ScrollView>
       </SafeAreaView>
