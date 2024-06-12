@@ -41,12 +41,13 @@ const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
   isOpen,
   setOpen,
   tasks,
-  setTasks
+  setTasks,
 }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const { user, userCharacter } = useGlobalContext();
 
   const [date, setDate] = useState(roundToNextHour(new Date()));
+  const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
 
   const onChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     if (selectedDate) {
@@ -73,6 +74,11 @@ const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
     dueDate,
   }: FieldValues) => {
     setLoading(true);
+
+    if (!showDatePicker) {
+      dueDate = null;
+    }
+
     try {
       const response = await axios.post(
         `http://128.113.145.204:8000/tasks/create/${user.uid}/${userCharacter.id}`,
@@ -80,7 +86,7 @@ const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
         {
           headers: {
             Authorization: await user.getIdToken(),
-          }
+          },
         }
       );
       if (response.status === 201) {
@@ -101,6 +107,11 @@ const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
     }
   };
 
+  const onCancel = () => {
+    setOpen(false);
+    setShowDatePicker(false);
+  }
+
   return (
     <Modal
       animationType="slide"
@@ -111,7 +122,7 @@ const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
     >
       <SafeAreaView>
         <View className="flex flex-row">
-          <Button title="Cancel" onPress={() => setOpen(false)}></Button>
+          <Button title="Cancel" onPress={() => onCancel()}></Button>
         </View>
         <ScrollView className="h-full">
           <View className="flex items-center justify-center mt-5">
@@ -143,22 +154,38 @@ const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
                 Due Date
               </Text>
               <View className="w-full h-[50px] bg-black rounded-lg text-white px-3 flex flex-row justify-center items-center">
-                <DateTimePicker
-                  id="dueDate"
-                  value={date}
-                  mode="date"
-                  display="default"
-                  onChange={onChange}
-                  minimumDate={new Date()}
-                />
-                <DateTimePicker
-                  id="dueDate"
-                  value={date}
-                  mode="time"
-                  display="default"
-                  onChange={onChange}
-                  minimumDate={new Date()}
-                />
+                {showDatePicker ? (
+                  <View className="flex flex-row justify-center items-center">
+                    <DateTimePicker
+                      id="dueDate"
+                      value={date}
+                      mode="date"
+                      display="default"
+                      onChange={onChange}
+                      minimumDate={new Date()}
+                    />
+                    <DateTimePicker
+                      id="dueDate"
+                      value={date}
+                      mode="time"
+                      display="default"
+                      onChange={onChange}
+                      minimumDate={new Date()}
+                    />
+                  </View>
+                ) : (
+                  <View>
+                    <TouchableHighlight
+                      className="bg-[#000000] w-[225px]  rounded-md "
+                      underlayColor="#FFFFFF"
+                      onPress={() => setShowDatePicker(true)}
+                    >
+                      <Text className="text-white text-xl font-semibold mx-auto my-auto">
+                        Select Date
+                      </Text>
+                    </TouchableHighlight>
+                  </View>
+                )}
               </View>
             </View>
             {loading ? (

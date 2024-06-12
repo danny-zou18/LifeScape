@@ -13,8 +13,8 @@ const DisplayTasks = ({ tasks }: { tasks: Task[] }) => {
   return (
     <View>
       <Text>DisplayTasks</Text>
-      {tasks.map((task) => (
-        <IndividualTasks task={task} />
+      {tasks.map((task, index) => (
+        <IndividualTasks task={task} key={index} />
       ))}
     </View>
   );
