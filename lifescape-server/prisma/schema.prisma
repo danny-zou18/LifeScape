@@ -59,6 +59,7 @@ model Task {
   description String?
 
   createdAt DateTime @default(now())
+  dueDate   DateTime?
   completed Boolean  @default(false)
 
   experienceReward Int?
