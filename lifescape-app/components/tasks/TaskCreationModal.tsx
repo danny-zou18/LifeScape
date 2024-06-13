@@ -13,12 +13,11 @@ import React, { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import axios from "axios";
 
-import { Task } from "@/types/db_types";
-
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 
+import { useTaskContext } from "@/context/TaskProvider";
 import { useGlobalContext } from "@/context/GlobalProvider";
 
 const roundToNextHour = (date: Date): Date => {
@@ -30,19 +29,11 @@ const roundToNextHour = (date: Date): Date => {
   return roundedDate;
 };
 
-interface TaskCreationModalProps {
-  isOpen: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  tasks: Task[];
-  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
-}
 
-const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
-  isOpen,
-  setOpen,
-  tasks,
-  setTasks,
-}) => {
+
+const TaskCreationModal: React.FC = () => {
+  const { tasks, setTasks, taskCreationOpen, setTaskCreationOpen } = useTaskContext();
+
   const [loading, setLoading] = useState<boolean>(false);
   const { user, userCharacter } = useGlobalContext();
 
@@ -103,7 +94,7 @@ const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
       }
     } finally {
       setLoading(false);
-      setOpen(false);
+      setTaskCreationOpen(false);
       setShowDatePicker(false);
       setValue("title", "");
       setValue("description", "");
@@ -111,7 +102,7 @@ const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
   };
 
   const onCancel = () => {
-    setOpen(false);
+    setTaskCreationOpen(false);
     setShowDatePicker(false);
     setValue("title", "");
     setValue("description", "");
@@ -120,9 +111,9 @@ const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
   return (
     <Modal
       animationType="slide"
-      visible={isOpen}
+      visible={taskCreationOpen}
       onRequestClose={() => {
-        setOpen(false);
+        setTaskCreationOpen(false);
       }}
     >
       <SafeAreaView>

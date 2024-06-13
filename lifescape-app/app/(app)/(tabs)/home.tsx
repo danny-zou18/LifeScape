@@ -14,6 +14,7 @@ import { useGlobalContext } from "@/context/GlobalProvider";
 import CharacterOverview from "@/components/home/CharacterOverview";
 import CharacterCreationModal from "@/components/home/CharacterCreationModal";
 
+import TaskProvider from "@/context/TaskProvider";
 import TaskWrapper from "@/components/home/TaskWrapper";
 
 const Home = () => {  
@@ -28,7 +29,9 @@ const Home = () => {
       {userCharacter ? (
         <View className="flex items-center">
           <CharacterOverview />
-          <TaskWrapper />
+          <TaskProvider>
+            <TaskWrapper />
+          </TaskProvider>
         </View>
       ) : (
         <CharacterCreationModal isOpen={characterCreationModalVisible} setOpen={setCharacterCreationModalVisible} isLoading={loading} setIsLoading={setLoading}  />
