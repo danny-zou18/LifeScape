@@ -63,7 +63,7 @@ model Task {
   dueDate   DateTime?
   completed Boolean   @default(false)
 
-  difficultyRank   DifficultyRank @default(F)
+  difficultyRank DifficultyRank @default(F)
 
   experienceReward Int?
   goldReward       Int?
@@ -88,11 +88,13 @@ model Habit {
   createdAt DateTime @default(now())
   streak    Int      @default(0)
 
-  repeat Repeat @default(DAILY)
+  repeat         Repeat @default(DAILY)
+  completionGoalWeekly Int?
+  completionGoalMonthly Int?
 
   quitting Boolean @default(false)
 
-  difficultyRank   DifficultyRank @default(F)
+  difficultyRank DifficultyRank @default(F)
 
   experienceReward Int?
   goldReward       Int?
