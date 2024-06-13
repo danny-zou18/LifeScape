@@ -104,13 +104,18 @@ const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
     } finally {
       setLoading(false);
       setOpen(false);
+      setShowDatePicker(false);
+      setValue("title", "");
+      setValue("description", "");
     }
   };
 
   const onCancel = () => {
     setOpen(false);
     setShowDatePicker(false);
-  }
+    setValue("title", "");
+    setValue("description", "");
+  };
 
   return (
     <Modal

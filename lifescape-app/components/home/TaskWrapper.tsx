@@ -28,7 +28,6 @@ const TaskWrapper: React.FC = () => {
         );
         if (response.status === 200) {
           setTasks(response.data);
-          console.log(response.data);
         }
       } catch (error) {
         if (axios.isAxiosError(error)) {

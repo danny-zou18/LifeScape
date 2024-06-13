@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, FlatList } from "react-native";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -13,9 +13,12 @@ const DisplayTasks = ({ tasks }: { tasks: Task[] }) => {
   return (
     <View>
       <Text>DisplayTasks</Text>
-      {tasks.map((task, index) => (
-        <IndividualTasks task={task} key={index} />
-      ))}
+      <FlatList 
+        data={tasks}
+        renderItem={({item}) => {
+            return <IndividualTasks task={item} />
+        }}
+        />
     </View>
   );
 };

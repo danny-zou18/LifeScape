@@ -1,14 +1,26 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { View, Text } from "react-native";
+import React from "react";
 
-import { Task } from '@/types/db_types'
+import { Task } from "@/types/db_types";
 
-const IndividualTasks = ({task}:{task: Task}) => {
+import { Swipeable } from "react-native-gesture-handler";
+
+const IndividualTasks = ({ task }: { task: Task }) => {
+    const rightSwipe = () => {
+        return (
+            <View>
+                <Text>Delete</Text>
+            </View>
+        )
+    }
+
   return (
-    <View className='bg-red-100'>
-      <Text>{task.title}</Text>
-    </View>
-  )
-}
+    <Swipeable renderRightActions={rightSwipe}>
+      <View className="bg-red-100 mt-1 p-4 rounded-lg">
+        <Text>{task.title}</Text>
+      </View>
+    </Swipeable>
+  );
+};
 
-export default IndividualTasks
+export default IndividualTasks;
