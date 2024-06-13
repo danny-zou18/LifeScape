@@ -119,7 +119,7 @@ model Routine {
 
   createdAt DateTime @default(now())
 
-  daysOfWeek              String[]
+  daysOfWeek              Int[]
   startTimeOfDayInMinutes Int?
   endTimeofDayInMinutes   Int?
 
