@@ -18,6 +18,7 @@ const DisplayTasks = ({ tasks }: { tasks: Task[] }) => {
         renderItem={({item}) => {
             return <IndividualTasks task={item} />
         }}
+        ItemSeparatorComponent={() => <View className="h-1"></View>}
         />
     </View>
   );
