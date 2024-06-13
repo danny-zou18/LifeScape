@@ -12,7 +12,8 @@ import {
   ScrollView,
 } from "react-native";
 import React, { useState } from "react";
-import axios from "axios";
+import {isAxiosError} from "axios";
+import api from "@/api/axios";
 
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -48,8 +49,8 @@ const SignUp: React.FC = () => {
     // console.log(name, username, email, password)
     setLoading(true);
     try {
-      const response = await axios.post(
-        "http://128.113.145.204:8000/auth/register",
+      const response = await api.post(
+        "/auth/register",
         {
           name: name,
           username: username,
@@ -63,7 +64,7 @@ const SignUp: React.FC = () => {
           console.log(error);
         });
     } catch (error) {
-      if (axios.isAxiosError(error)) {
+      if (isAxiosError(error)) {
         // AxiosError type will have a response property
         console.log(error.response?.data);
       } else {

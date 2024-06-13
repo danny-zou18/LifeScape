@@ -8,7 +8,8 @@ import {
   TextInput,
 } from "react-native";
 import React, { useState } from "react";
-import axios from "axios";
+import {isAxiosError} from "axios";
+import api from "@/api/axios";
 
 import { useGlobalContext } from "@/context/GlobalProvider";
 
@@ -32,8 +33,8 @@ const CharacterCreationModal: React.FC<CharacterCreationModalProps> = ({
     setIsLoading(true);
     console.log(characterName);
     try {
-      const response = await axios.post(
-        `http://128.113.145.204:8000/character/create/${user.uid}`,
+      const response = await api.post(
+        `/character/create/${user.uid}`,
         {
           name: characterName,
         },
@@ -47,7 +48,7 @@ const CharacterCreationModal: React.FC<CharacterCreationModalProps> = ({
         setUserCharacter(response.data);
       }
     } catch (error) {
-      if (axios.isAxiosError(error)) {
+      if (isAxiosError(error)) {
         // AxiosError type will have a response property
         console.log(error.response?.data);
       } else {

@@ -5,7 +5,8 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-import axios from "axios";
+import {isAxiosError} from "axios";
+import api from "@/api/axios";
 
 import { useGlobalContext } from "./GlobalProvider";
 
@@ -39,8 +40,8 @@ const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await axios.get(
-          `http://128.113.145.204:8000/tasks/get/${user.uid}/${userCharacter.id}`,
+        const response = await api.get(
+          `/tasks/get/${user.uid}/${userCharacter.id}`,
           {
             headers: {
               Authorization: await user.getIdToken(),
@@ -51,7 +52,7 @@ const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
           setTasks(response.data);
         }
       } catch (error) {
-        if (axios.isAxiosError(error)) {
+        if (isAxiosError(error)) {
           console.log(error.response?.data);
         } else {
           console.log(error);
