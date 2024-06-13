@@ -39,9 +39,13 @@ const Home = () => {
           <CharacterOverview />
           <View className="w-[95vw]">
            <ViewSelectionBtns currentView={currentlyOpen} setCurrentView={setCurrentlyOpen}/>
-            <TaskProvider>
-              <TaskWrapper />
-            </TaskProvider>
+            {currentlyOpen === "tasks" && (
+              <TaskProvider>
+                <TaskWrapper />
+              </TaskProvider>
+            )}
+            {currentlyOpen === "habits" && <HabitWrapper />}
+            {currentlyOpen === "routine" && <RoutineWrapper />}
           </View>
         </View>
       ) : (
