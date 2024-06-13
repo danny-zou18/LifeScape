@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, Animated } from "react-native";
 import React from "react";
-import axios from "axios";
+import {isAxiosError} from "axios";
+import api from "@/api/axios";
 import { useGlobalContext } from "@/context/GlobalProvider";
 
 import { Task } from "@/types/db_types";
@@ -17,8 +18,8 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({ task, setTasks }) => 
 
   const handleDeleteTask = async () => {
     try {
-      const response = await axios.delete(
-        `http://128.113.145.204:8000/tasks/delete/${user.uid}/${userCharacter.id}/${task.id}`,
+      const response = await api.delete(
+        `/tasks/delete/${user.uid}/${userCharacter.id}/${task.id}`,
         {
           headers: {
             Authorization: await user.getIdToken(),
@@ -30,7 +31,7 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({ task, setTasks }) => 
         setTasks((prev) => prev.filter((t) => t.id !== task.id));
       }
     } catch (error) {
-      if (axios.isAxiosError(error)) {
+      if (isAxiosError(error)) {
         console.log(error.response?.data);
       } else {
         console.log(error);

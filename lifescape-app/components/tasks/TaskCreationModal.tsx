@@ -11,7 +11,8 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
-import axios from "axios";
+import {isAxiosError} from "axios";
+import api from "@/api/axios";
 
 import DateTimePicker, {
   DateTimePickerEvent,
@@ -28,8 +29,6 @@ const roundToNextHour = (date: Date): Date => {
   roundedDate.setHours(roundedDate.getHours() + 1);
   return roundedDate;
 };
-
-
 
 const TaskCreationModal: React.FC = () => {
   const { tasks, setTasks, taskCreationOpen, setTaskCreationOpen } = useTaskContext();
@@ -71,8 +70,8 @@ const TaskCreationModal: React.FC = () => {
     }
 
     try {
-      const response = await axios.post(
-        `http://128.113.145.204:8000/tasks/create/${user.uid}/${userCharacter.id}`,
+      const response = await api.post(
+        `/tasks/create/${user.uid}/${userCharacter.id}`,
         { title, description, dueDate },
         {
           headers: {
@@ -85,7 +84,7 @@ const TaskCreationModal: React.FC = () => {
         setTasks([...tasks, response.data]);
       }
     } catch (error) {
-      if (axios.isAxiosError(error)) {
+      if (isAxiosError(error)) {
         // AxiosError type will have a response property
         console.log(error.response?.data);
       } else {
