@@ -133,7 +133,7 @@ const TaskCreationModal: React.FC = () => {
             </View>
             <View className="mt-5">
               <Text className="ml-2 text-md text-neutral-700 pb-1">
-                Description
+                Notes
               </Text>
               <TextInput
                 id="description"

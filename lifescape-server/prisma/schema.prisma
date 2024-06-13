@@ -47,9 +47,10 @@ model Character {
   Endurance Int @default(10)
   Will      Int @default(10)
 
-  Owner   users  @relation(fields: [OwnerId], references: [id])
-  OwnerId String @unique
+  Owner   users   @relation(fields: [OwnerId], references: [id])
+  OwnerId String  @unique
   Tasks   Task[]
+  Habits  Habit[]
 }
 
 model Task {
@@ -58,9 +59,40 @@ model Task {
   title       String
   description String?
 
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
   dueDate   DateTime?
-  completed Boolean  @default(false)
+  completed Boolean   @default(false)
+
+  difficultyRank   DifficultyRank @default(F)
+
+  experienceReward Int?
+  goldReward       Int?
+  StrengthReward   Int?
+  DefenseReward    Int?
+  DexterityReward  Int?
+  AgilityReward    Int?
+  VitalityReward   Int?
+  EnduranceReward  Int?
+  WillReward       Int?
+
+  Character   Character @relation(fields: [CharacterId], references: [id])
+  CharacterId Int
+}
+
+model Habit {
+  id Int @id @default(autoincrement())
+
+  title       String
+  description String?
+
+  createdAt DateTime @default(now())
+  streak    Int      @default(0)
+
+  repeat Repeat @default(DAILY)
+
+  quitting Boolean @default(false)
+
+  difficultyRank   DifficultyRank @default(F)
 
   experienceReward Int?
   goldReward       Int?
@@ -118,4 +150,22 @@ enum Subclass {
   SHADOWHUNTER
   DEATHBLADE
   NIGHTSTALKER
+}
+
+enum DifficultyRank {
+  F
+  E
+  D
+  C
+  B
+  A
+  S
+  SS
+  SSS
+}
+
+enum Repeat {
+  DAILY
+  WEEKLY
+  MONTHLY
 }
