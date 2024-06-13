@@ -12,7 +12,7 @@ const TaskWrapper: React.FC = () => {
     useTaskContext();
 
   return (
-    <View className="w-[95vw]">
+    <View>
       <TaskCreationModal />
       <CreateTaskBtn />
       <DisplayTasks />

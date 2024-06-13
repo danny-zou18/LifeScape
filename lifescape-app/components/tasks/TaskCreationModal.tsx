@@ -49,6 +49,7 @@ const TaskCreationModal: React.FC = () => {
   const {
     setValue,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
@@ -95,16 +96,14 @@ const TaskCreationModal: React.FC = () => {
       setLoading(false);
       setTaskCreationOpen(false);
       setShowDatePicker(false);
-      setValue("title", "");
-      setValue("description", "");
+      reset();
     }
   };
 
   const onCancel = () => {
     setTaskCreationOpen(false);
     setShowDatePicker(false);
-    setValue("title", "");
-    setValue("description", "");
+    reset();
   };
 
   return (
@@ -133,7 +132,7 @@ const TaskCreationModal: React.FC = () => {
             </View>
             <View className="mt-5">
               <Text className="ml-2 text-md text-neutral-700 pb-1">
-                Description
+                Notes
               </Text>
               <TextInput
                 id="description"
