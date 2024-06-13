@@ -25,7 +25,7 @@ model users {
 
 model Character {
   id   Int    @id @default(autoincrement())
-  name String 
+  name String
 
   level      Int       @default(1)
   gold       Int       @default(0)
@@ -49,8 +49,32 @@ model Character {
 
   Owner   users  @relation(fields: [OwnerId], references: [id])
   OwnerId String @unique
+  Tasks   Task[]
 }
 
+model Task {
+  id Int @id @default(autoincrement())
+
+  title       String
+  description String?
+
+  createdAt DateTime @default(now())
+  dueDate   DateTime?
+  completed Boolean  @default(false)
+
+  experienceReward Int?
+  goldReward       Int?
+  StrengthReward   Int?
+  DefenseReward    Int?
+  DexterityReward  Int?
+  AgilityReward    Int?
+  VitalityReward   Int?
+  EnduranceReward  Int?
+  WillReward       Int?
+
+  Character   Character @relation(fields: [CharacterId], references: [id])
+  CharacterId Int
+}
 
 enum Class {
   NONE
