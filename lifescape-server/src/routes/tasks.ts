@@ -70,7 +70,7 @@ router.get("/get/:userId/:characterId", async (req, res) => {
 
 export { router as tasksRouter };
 
-router.post("/delete/:userId/:characterId/:taskId", async (req, res) => {
+router.delete("/delete/:userId/:characterId/:taskId", async (req, res) => {
   const authToken = req.headers.authorization;
   const { userId, characterId, taskId } = req.params;
   try {

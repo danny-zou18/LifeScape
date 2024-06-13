@@ -7,7 +7,12 @@ import IndividualTasks from "./IndividualTasks";
 
 import { useGlobalContext } from "@/context/GlobalProvider";
 
-const DisplayTasks = ({ tasks }: { tasks: Task[] }) => {
+interface DisplayTasksProps {
+    tasks: Task[];
+    setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+}
+
+const DisplayTasks: React.FC<DisplayTasksProps> = ({ tasks, setTasks }) => {
   const { user, userCharacter } = useGlobalContext();
 
   return (
@@ -16,7 +21,7 @@ const DisplayTasks = ({ tasks }: { tasks: Task[] }) => {
       <FlatList 
         data={tasks}
         renderItem={({item}) => {
-            return <IndividualTasks task={item} />
+            return <IndividualTasks task={item} setTasks={setTasks}/>
         }}
         ItemSeparatorComponent={() => <View className="h-1"></View>}
         />

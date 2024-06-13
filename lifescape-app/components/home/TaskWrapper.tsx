@@ -49,7 +49,7 @@ const TaskWrapper: React.FC = () => {
         setTasks={setTasks}
       />
       <CreateTaskBtn setOpen={setTaskCreationOpen}  />
-      <DisplayTasks tasks={tasks}/>
+      <DisplayTasks tasks={tasks} setTasks={setTasks}/>
     </View>
   );
 };
