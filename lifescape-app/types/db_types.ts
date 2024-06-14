@@ -35,6 +35,7 @@ interface Character {
   OwnerId: string;
   Tasks: Task[]; // Assuming Task is another type/interface
   Habits: Habit[]; // Assuming Habit is another type/interface
+  Routine: Routine[]; // Assuming Routine is another type/interface
 }
 
 interface Task {
@@ -86,6 +87,34 @@ interface Habit {
   DefenseReward?: number | null;
   DexterityReward?: number | null;
   AgilityReward?: number | null;
+  VitalityReward?: number | null;
+  EnduranceReward?: number | null;
+  WillReward?: number | null;
+
+  Character: Character; // Assuming Character is another type/interface
+  CharacterId: number;
+}
+
+interface Routine {
+  id: number;
+
+  title: string;
+  description?: string | null;
+
+  createdAt: Date;
+
+  daysOfWeek: number[];
+  startTimeOfDayInMinutes?: number | null;
+  endTimeofDayInMinutes?: number | null;
+
+  difficultyRank: DifficultyRank;
+
+  experienceReward?: number | null;
+  goldReward?: number | null;
+  StrengthReward?: number | null;
+  DefenseReward?: number | null;
+  DexterityReward?: number | null;
+  AgilityReward?: number | null; 
   VitalityReward?: number | null;
   EnduranceReward?: number | null;
   WillReward?: number | null;
