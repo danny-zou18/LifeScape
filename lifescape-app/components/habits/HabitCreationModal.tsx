@@ -25,6 +25,7 @@ const HabitCreationModal = () => {
   const { user, userCharacter } = useGlobalContext();
 
   const [quitting, setQuitting] = useState<boolean>(false);
+  const [repeat, setRepeat] = useState<string>("DAILY");
 
   const {
     setValue,
@@ -35,10 +36,8 @@ const HabitCreationModal = () => {
     defaultValues: {
       title: "",
       description: "",
-      repeat: "DAILY",
       completionGoalWeekly: null,
       completionGoalMonthly: null,
-      quitting: false,
       difficulty: "E",
     },
   });
@@ -46,14 +45,6 @@ const HabitCreationModal = () => {
   const onCancel = () => {
     setHabitCreationOpen(false);
     reset();
-  };
-  const onQuittingFalse = () => {
-    setQuitting(false);
-    setValue("quitting", false);
-  };
-  const onQuittingTrue = () => {
-    setQuitting(true);
-    setValue("quitting", true);
   };
 
   return (
@@ -97,18 +88,56 @@ const HabitCreationModal = () => {
               </Text>
               <View className="flex flex-row justify-between bg-gray-400 w-full h-[50px] rounded-lg p-1">
                 <TouchableHighlight
-                  className={`flex items-center justify-center h-full bg-${!quitting ? "[#b93df2]" : "[#e1abf740]"} w-[49.5%] rounded-md `}
-                  onPress={onQuittingFalse}
-                  underlayColor="#b93df2"
+                  className={`flex items-center justify-center h-full bg-${
+                    !quitting ? "[#b93df2]" : "[#e1abf740]"
+                  } w-[49.5%] rounded-md transition-all duration-200`}
+                  onPress={() => setQuitting(false)}
+                  underlayColor="#b93df200"
                 >
                   <Text>Positive</Text>
                 </TouchableHighlight>
                 <TouchableHighlight
-                  className={`flex items-center justify-center h-full bg-${quitting ? "[#b93df2]" : "[#e1abf740]"} w-[49.5%] rounded-md`}
-                  onPress={onQuittingTrue}
-                  underlayColor="#b93df2"
+                  className={`flex items-center justify-center h-full bg-${
+                    quitting ? "[#b93df2]" : "[#e1abf740]"
+                  } w-[49.5%] rounded-md transition-all duration-200`}
+                  onPress={() => setQuitting(true)}
+                  underlayColor="#b93df200"
                 >
                   <Text>Negative</Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+            <View className="mt-4 w-[85%]">
+              <Text className="ml-2 text-md text-neutral-700 pb-1">
+                Repeats?
+              </Text>
+              <View className="flex flex-row justify-between bg-gray-400 w-full h-[40px] rounded-lg p-1">
+                <TouchableHighlight
+                  className={`flex items-center justify-center h-full bg-${
+                    repeat === "DAILY" ? "[#b93df2]" : "[#e1abf740]"
+                  } w-[32.7%] rounded-md transition-all duration-200`}
+                  onPress={() => setRepeat("DAILY")}
+                  underlayColor="#b93df200"
+                >
+                  <Text>Daily</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  className={`flex items-center justify-center h-full bg-${
+                    repeat === "WEEKLY" ? "[#b93df2]" : "[#e1abf740]"
+                  } w-[32.7%] rounded-md transition-all duration-200`}
+                  onPress={() => setRepeat("WEEKLY")}
+                  underlayColor="#b93df200"
+                >
+                  <Text>Weekly</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  className={`flex items-center justify-center h-full bg-${
+                    repeat === "MONTHLY" ? "[#b93df2]" : "[#e1abf740]"
+                  } w-[32.7%] rounded-md transition-all duration-200`}
+                  onPress={() => setRepeat("MONTHLY")}
+                  underlayColor="#b93df200"
+                >
+                  <Text>Monthly</Text>
                 </TouchableHighlight>
               </View>
             </View>
