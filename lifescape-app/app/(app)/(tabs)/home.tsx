@@ -19,6 +19,7 @@ import CharacterCreationModal from "@/components/home/CharacterCreationModal";
 import TaskProvider from "@/context/TaskProvider";
 import TaskWrapper from "@/components/home/TaskWrapper";
 
+import HabitProvider from "@/context/HabitProvider";
 import HabitWrapper from "@/components/home/HabitWrapper";
 
 import RoutineWrapper from "@/components/home/RoutineWrapper";
@@ -44,7 +45,11 @@ const Home = () => {
                 <TaskWrapper />
               </TaskProvider>
             )}
-            {currentlyOpen === "habits" && <HabitWrapper />}
+            {currentlyOpen === "habits" && (
+              <HabitProvider>
+                <HabitWrapper />
+              </HabitProvider>
+            )}
             {currentlyOpen === "routine" && <RoutineWrapper />}
           </View>
         </View>
