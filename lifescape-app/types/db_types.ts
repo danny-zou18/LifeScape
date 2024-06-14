@@ -10,6 +10,7 @@ interface User {
 interface Character {
   id: number;
   name: string;
+
   level: number;
   gold: number;
   class: Class | null;
@@ -21,6 +22,7 @@ interface Character {
   maxMana: number;
   energy: number;
   maxEnergy: number;
+
   Strength: number;
   Defense: number;
   Dexterity: number;
@@ -28,18 +30,25 @@ interface Character {
   Vitality: number;
   Endurance: number;
   Will: number;
+
   Owner: User; // Assuming User is another type/interface
   OwnerId: string;
   Tasks: Task[]; // Assuming Task is another type/interface
+  Habits: Habit[]; // Assuming Habit is another type/interface
 }
 
 interface Task {
   id: number;
+
   title: string;
   description?: string | null;
+
   createdAt: Date;
   dueDate?: Date | null;
   completed: boolean;
+
+  difficultyRank: DifficultyRank;
+
   experienceReward?: number | null;
   goldReward?: number | null;
   StrengthReward?: number | null;
@@ -49,6 +58,38 @@ interface Task {
   VitalityReward?: number | null;
   EnduranceReward?: number | null;
   WillReward?: number | null;
+
+  Character: Character; // Assuming Character is another type/interface
+  CharacterId: number;
+}
+
+interface Habit {
+  id: number;
+
+  title: string;
+  description?: string | null;
+
+  createdAt: Date;
+  streak: number;
+
+  repeat: Repeat;
+  completionGoalWeekly?: number | null;
+  completionGoalMonthly?: number | null;
+  
+  quitting: boolean;
+
+  difficultyRank: DifficultyRank;
+
+  experienceReward?: number | null;
+  goldReward?: number | null;
+  StrengthReward?: number | null;
+  DefenseReward?: number | null;
+  DexterityReward?: number | null;
+  AgilityReward?: number | null;
+  VitalityReward?: number | null;
+  EnduranceReward?: number | null;
+  WillReward?: number | null;
+
   Character: Character; // Assuming Character is another type/interface
   CharacterId: number;
 }
@@ -105,7 +146,7 @@ enum DifficultyRank {
   A = "A",
   S = "S",
   SS = "SS",
-  SSS = "SSS"
+  SSS = "SSS",
 }
 
 enum Repeat {
@@ -114,4 +155,4 @@ enum Repeat {
   MONTHLY = "MONTHLY",
 }
 
-export { User, Character, Task }
+export { User, Character, Task };
