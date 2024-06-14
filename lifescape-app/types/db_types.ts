@@ -96,4 +96,22 @@ enum Subclass {
   NIGHTSTALKER = "NIGHTSTALKER",
 }
 
+enum DifficultyRank {
+  F = "F",
+  E = "E",
+  D = "D",
+  C = "C",
+  B = "B",
+  A = "A",
+  S = "S",
+  SS = "SS",
+  SSS = "SSS"
+}
+
+enum Repeat {
+  DAILY = "DAILY",
+  WEEKLY = "WEEKLY",
+  MONTHLY = "MONTHLY",
+}
+
 export { User, Character, Task }
