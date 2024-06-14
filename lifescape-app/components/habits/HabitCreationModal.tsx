@@ -47,6 +47,15 @@ const HabitCreationModal = () => {
     setHabitCreationOpen(false);
     reset();
   };
+  const onQuittingFalse = () => {
+    setQuitting(false);
+    setValue("quitting", false);
+  };
+  const onQuittingTrue = () => {
+    setQuitting(true);
+    setValue("quitting", true);
+  };
+
   return (
     <Modal
       animationType="slide"
@@ -86,10 +95,21 @@ const HabitCreationModal = () => {
               <Text className="ml-2 text-md text-neutral-700 pb-1">
                 Controls
               </Text>
-              <View className="flex flex-row bg-red-200 w-full h-[50px] rounded-lg p-1">
-                <View>
-                    
-                </View>
+              <View className="flex flex-row justify-between bg-gray-400 w-full h-[50px] rounded-lg p-1">
+                <TouchableHighlight
+                  className={`flex items-center justify-center h-full bg-${!quitting ? "[#b93df2]" : "[#e1abf740]"} w-[49.5%] rounded-md `}
+                  onPress={onQuittingFalse}
+                  underlayColor="#b93df2"
+                >
+                  <Text>Positive</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  className={`flex items-center justify-center h-full bg-${quitting ? "[#b93df2]" : "[#e1abf740]"} w-[49.5%] rounded-md`}
+                  onPress={onQuittingTrue}
+                  underlayColor="#b93df2"
+                >
+                  <Text>Negative</Text>
+                </TouchableHighlight>
               </View>
             </View>
           </View>
