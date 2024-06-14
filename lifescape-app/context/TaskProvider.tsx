@@ -5,7 +5,7 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-import {isAxiosError} from "axios";
+import { isAxiosError } from "axios";
 import api from "@/api/axios";
 
 import { useGlobalContext } from "./GlobalProvider";
@@ -60,7 +60,7 @@ const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       }
     };
     fetchTasks();
-  }, [tasks]);
+  }, [user, userCharacter, tasks]);
 
   return (
     <TaskContext.Provider
