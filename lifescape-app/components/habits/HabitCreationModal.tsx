@@ -17,6 +17,8 @@ import api from "@/api/axios";
 import { useHabitContext } from "@/context/HabitProvider";
 import { useGlobalContext } from "@/context/GlobalProvider";
 
+import { Repeat, DifficultyRank } from "@/types/db_types";
+
 const HabitCreationModal = () => {
   const { habits, setHabits, habitCreationOpen, setHabitCreationOpen } =
     useHabitContext();
@@ -25,7 +27,10 @@ const HabitCreationModal = () => {
   const { user, userCharacter } = useGlobalContext();
 
   const [quitting, setQuitting] = useState<boolean>(false);
-  const [repeat, setRepeat] = useState<string>("DAILY");
+  const [repeat, setRepeat] = useState<Repeat>(Repeat.DAILY);
+  const [goalCompletionWeekly, setGoalCompletionWeekly] = useState<number>(0);
+  const [goalCompletionMonthly, setGoalCompletionMonthly] = useState<number>(0);
+  const [difficulty, setDifficulty] = useState<DifficultyRank>(DifficultyRank.E);
 
   const {
     setValue,
@@ -36,9 +41,6 @@ const HabitCreationModal = () => {
     defaultValues: {
       title: "",
       description: "",
-      completionGoalWeekly: null,
-      completionGoalMonthly: null,
-      difficulty: "E",
     },
   });
 
@@ -116,7 +118,7 @@ const HabitCreationModal = () => {
                   className={`flex items-center justify-center h-full bg-${
                     repeat === "DAILY" ? "[#b93df2]" : "[#e1abf740]"
                   } w-[32.7%] rounded-md transition-all duration-200`}
-                  onPress={() => setRepeat("DAILY")}
+                  onPress={() => setRepeat(Repeat.DAILY)}
                   underlayColor="#b93df200"
                 >
                   <Text>Daily</Text>
@@ -125,7 +127,7 @@ const HabitCreationModal = () => {
                   className={`flex items-center justify-center h-full bg-${
                     repeat === "WEEKLY" ? "[#b93df2]" : "[#e1abf740]"
                   } w-[32.7%] rounded-md transition-all duration-200`}
-                  onPress={() => setRepeat("WEEKLY")}
+                  onPress={() => setRepeat(Repeat.WEEKLY)}
                   underlayColor="#b93df200"
                 >
                   <Text>Weekly</Text>
@@ -134,12 +136,32 @@ const HabitCreationModal = () => {
                   className={`flex items-center justify-center h-full bg-${
                     repeat === "MONTHLY" ? "[#b93df2]" : "[#e1abf740]"
                   } w-[32.7%] rounded-md transition-all duration-200`}
-                  onPress={() => setRepeat("MONTHLY")}
+                  onPress={() => setRepeat(Repeat.MONTHLY)}
                   underlayColor="#b93df200"
                 >
                   <Text>Monthly</Text>
                 </TouchableHighlight>
               </View>
+              { repeat === Repeat.WEEKLY && (
+                <View className="w-full bg-red-200 h-[35px] rounded-lg flex flex-row items-center p-2 justify-between">
+                    <Text>Weekly Completion Goal</Text>
+                    <TextInput 
+                        className="w-[40px] h-full rounded-md px-2 bg-black text-white"
+                        keyboardType="numeric"
+                        onChangeText={(text) => setGoalCompletionWeekly(parseInt(text))}
+                        textAlign="right"
+                    />
+                </View>
+              )}{ repeat === Repeat.MONTHLY && (
+                <View className="w-full bg-red-200 h-[35px] rounded-lg flex flex-row items-center p-2 justify-between">
+                    <Text>Monthly Completion Goal</Text>
+                    <TextInput 
+                        className="w-[30px]"
+                        keyboardType="numeric"
+                        onChangeText={(text) => setGoalCompletionMonthly(parseInt(text))}
+                    />
+                </View>
+              )}
             </View>
           </View>
         </ScrollView>

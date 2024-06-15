@@ -184,4 +184,4 @@ enum Repeat {
   MONTHLY = "MONTHLY",
 }
 
-export { User, Character, Task, Habit, Routine };
+export { User, Character, Task, Habit, Routine, Class, Subclass, DifficultyRank, Repeat};
