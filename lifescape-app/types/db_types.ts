@@ -74,7 +74,7 @@ interface Habit {
   streak: number;
 
   repeat: Repeat;
-  currentCompletions?: number | null;
+  currentCompletions: number;
   completionGoalWeekly?: number | null;
   completionGoalMonthly?: number | null;
   

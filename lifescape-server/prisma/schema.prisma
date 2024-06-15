@@ -90,6 +90,7 @@ model Habit {
   streak    Int      @default(0)
 
   repeat                Repeat @default(DAILY)
+  currentCompletions    Int   @default(0)
   completionGoalWeekly  Int?
   completionGoalMonthly Int?
 
