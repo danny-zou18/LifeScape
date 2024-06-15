@@ -33,8 +33,12 @@ router.post("/create/:userId/:characterId", async (req, res) => {
         title: title,
         description: description,
         repeat: repeat,
-        completionGoalWeekly: completionGoalWeekly ? parseInt(completionGoalWeekly) : null,
-        completionGoalMonthly: completionGoalMonthly ? parseInt(completionGoalMonthly) : null,
+        completionGoalWeekly: completionGoalWeekly
+          ? parseInt(completionGoalWeekly)
+          : null,
+        completionGoalMonthly: completionGoalMonthly
+          ? parseInt(completionGoalMonthly)
+          : null,
         quitting: quitting,
         difficultyRank: difficultyRank,
         Character: {
@@ -50,6 +54,33 @@ router.post("/create/:userId/:characterId", async (req, res) => {
     .catch((error) => {
       console.log(error);
       res.status(400).json({ error: "Habit Creation Failed" });
+    });
+});
+
+router.get("/get/:userId/:characterId", async (req, res) => {
+  const authToken = req.headers.authorization;
+  const { userId, characterId } = req.params;
+  try {
+    const authUser = await auth().verifyIdToken(authToken as string);
+    if (authUser.uid !== userId) {
+      res.status(403).json({ error: "Unauthorized" });
+    }
+  } catch (e) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  await db.habit
+    .findMany({
+      where: {
+        CharacterId: parseInt(characterId),
+      },
+    })
+    .then((habits) => {
+      return res.status(200).json(habits);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(400).json({ error: "Failed to get habits" });
     });
 });
 
