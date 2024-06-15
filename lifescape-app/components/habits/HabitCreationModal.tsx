@@ -19,6 +19,8 @@ import { useGlobalContext } from "@/context/GlobalProvider";
 
 import { Repeat, DifficultyRank } from "@/types/db_types";
 
+import AntDesign from "@expo/vector-icons/AntDesign";
+
 const HabitCreationModal = () => {
   const { habits, setHabits, habitCreationOpen, setHabitCreationOpen } =
     useHabitContext();
@@ -28,8 +30,8 @@ const HabitCreationModal = () => {
 
   const [quitting, setQuitting] = useState<boolean>(false);
   const [repeat, setRepeat] = useState<Repeat>(Repeat.DAILY);
-  const [goalCompletionWeekly, setGoalCompletionWeekly] = useState<number>(0);
-  const [goalCompletionMonthly, setGoalCompletionMonthly] = useState<number>(0);
+  const [goalCompletionWeekly, setGoalCompletionWeekly] = useState<number>(1);
+  const [goalCompletionMonthly, setGoalCompletionMonthly] = useState<number>(1);
   const [difficulty, setDifficulty] = useState<DifficultyRank>(
     DifficultyRank.E
   );
@@ -50,6 +52,27 @@ const HabitCreationModal = () => {
     setHabitCreationOpen(false);
     reset();
   };
+
+  const onMinusWeeklyGoal = () => {
+    if (goalCompletionWeekly > 1) {
+      setGoalCompletionWeekly(goalCompletionWeekly - 1);
+    }
+  }
+  const onPlusWeeklyGoal = () => {
+    if (goalCompletionWeekly < 6) {
+      setGoalCompletionWeekly(goalCompletionWeekly + 1);
+    }
+  }
+  const onMinusMonthlyGoal = () => {
+    if (goalCompletionMonthly > 1) {
+      setGoalCompletionMonthly(goalCompletionMonthly - 1);
+    }
+  }
+  const onPlusMonthlyGoal = () => {
+    if (goalCompletionMonthly < 29) {
+      setGoalCompletionMonthly(goalCompletionMonthly + 1);
+    }
+  }
 
   return (
     <Modal
@@ -145,32 +168,38 @@ const HabitCreationModal = () => {
                 </TouchableHighlight>
               </View>
               {repeat === Repeat.WEEKLY && (
-                <View className="w-full bg-red-200 h-[35px] rounded-lg flex flex-row items-center p-2 justify-between">
+                <View className="w-full bg-red-200 h-[40px] rounded-lg flex flex-row items-center p-2 justify-between">
                   <Text>Weekly Completion Goal</Text>
-                  <TextInput
-                    className="w-[40px] h-full rounded-md px-2 bg-black text-white"
-                    keyboardType="numeric"
-                    onChangeText={(text) =>
-                      setGoalCompletionWeekly(parseInt(text))
-                    }
-                    textAlign="right"
-                  />
+                  <View className="flex flex-row h-full items-center gap-2">
+                    <AntDesign name="minus" size={26} color="black" onPress={onMinusWeeklyGoal} />
+                    <TextInput
+                      className="w-[35px] h-full rounded-md px-2 bg-black text-white"
+                      keyboardType="numeric"
+                      value={goalCompletionWeekly.toString()}
+                      editable={false}
+                      textAlign="center"
+                    />
+                    <AntDesign name="plus" size={26} color="black" onPress={onPlusWeeklyGoal} />
+                  </View>
                 </View>
               )}
               {repeat === Repeat.MONTHLY && (
-                <View className="w-full bg-red-200 h-[35px] rounded-lg flex flex-row items-center p-2 justify-between">
+                <View className="w-full bg-red-200 h-[40px] rounded-lg flex flex-row items-center p-2 justify-between">
                   <Text>Monthly Completion Goal</Text>
-                  <TextInput
-                    className="w-[30px]"
-                    keyboardType="numeric"
-                    onChangeText={(text) =>
-                      setGoalCompletionMonthly(parseInt(text))
-                    }
-                  />
+                  <View className="flex flex-row h-full items-center gap-2">
+                    <AntDesign name="minus" size={26} color="black" onPress={onMinusMonthlyGoal} />
+                    <TextInput
+                      className="w-[35px] h-full rounded-md px-2 bg-black text-white"
+                      keyboardType="numeric"
+                      value={goalCompletionMonthly.toString()}
+                      editable={false}
+                      textAlign="center"
+                    />
+                    <AntDesign name="plus" size={26} color="black" onPress={onPlusMonthlyGoal} />
+                  </View>
                 </View>
               )}
             </View>
-        
           </View>
         </ScrollView>
       </SafeAreaView>
