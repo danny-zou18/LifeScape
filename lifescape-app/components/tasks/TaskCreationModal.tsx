@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
-import {isAxiosError} from "axios";
+import { isAxiosError } from "axios";
 import api from "@/api/axios";
 
 import DateTimePicker, {
@@ -31,7 +31,8 @@ const roundToNextHour = (date: Date): Date => {
 };
 
 const TaskCreationModal: React.FC = () => {
-  const { tasks, setTasks, taskCreationOpen, setTaskCreationOpen } = useTaskContext();
+  const { tasks, setTasks, taskCreationOpen, setTaskCreationOpen } =
+    useTaskContext();
 
   const [loading, setLoading] = useState<boolean>(false);
   const { user, userCharacter } = useGlobalContext();
@@ -39,7 +40,7 @@ const TaskCreationModal: React.FC = () => {
   const [date, setDate] = useState(roundToNextHour(new Date()));
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
 
-  const onChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
+  const onDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     if (selectedDate) {
       setValue("dueDate", selectedDate);
       setDate(selectedDate);
@@ -83,6 +84,9 @@ const TaskCreationModal: React.FC = () => {
       if (response.status === 201) {
         console.log("Task created successfully");
         setTasks([...tasks, response.data]);
+        setTaskCreationOpen(false);
+        setShowDatePicker(false);
+        reset();
       }
     } catch (error) {
       if (isAxiosError(error)) {
@@ -94,9 +98,6 @@ const TaskCreationModal: React.FC = () => {
       }
     } finally {
       setLoading(false);
-      setTaskCreationOpen(false);
-      setShowDatePicker(false);
-      reset();
     }
   };
 
@@ -120,30 +121,28 @@ const TaskCreationModal: React.FC = () => {
         </View>
         <ScrollView className="h-full">
           <View className="flex items-center justify-center mt-5">
-            <View>
+            <View className="w-[85%]">
               <Text className="ml-2 text-md text-neutral-700 pb-1">Title</Text>
               <TextInput
                 id="title"
                 autoCapitalize="none"
                 onChangeText={(text) => setValue("title", text)}
                 autoComplete="name"
-                className="w-[300px] h-[50px] bg-black rounded-lg text-white px-3"
+                className="w-full h-[50px] bg-black rounded-lg text-white px-3"
               />
             </View>
-            <View className="mt-5">
-              <Text className="ml-2 text-md text-neutral-700 pb-1">
-                Notes
-              </Text>
+            <View className="mt-5 w-[85%]">
+              <Text className="ml-2 text-md text-neutral-700 pb-1">Notes</Text>
               <TextInput
                 id="description"
                 autoCapitalize="none"
                 onChangeText={(text) => setValue("description", text)}
                 autoComplete="name"
-                className="w-[300px] h-[50px] bg-black rounded-lg text-white px-3"
+                className="w-full h-[50px] bg-black rounded-lg text-white px-3"
                 numberOfLines={2}
               />
             </View>
-            <View className="mt-5 flex w-[300px]">
+            <View className="mt-5 flex w-[85%]">
               <Text className="ml-2 text-md text-neutral-700 pb-1">
                 Due Date
               </Text>
@@ -155,7 +154,7 @@ const TaskCreationModal: React.FC = () => {
                       value={date}
                       mode="date"
                       display="default"
-                      onChange={onChange}
+                      onChange={onDateChange}
                       minimumDate={new Date()}
                     />
                     <DateTimePicker
@@ -163,7 +162,7 @@ const TaskCreationModal: React.FC = () => {
                       value={date}
                       mode="time"
                       display="default"
-                      onChange={onChange}
+                      onChange={onDateChange}
                       minimumDate={new Date()}
                     />
                   </View>

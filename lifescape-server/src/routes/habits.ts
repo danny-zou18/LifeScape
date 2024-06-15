@@ -17,14 +17,30 @@ router.post("/create/:userId/:characterId", async (req, res) => {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
-  const { title, description, dueDate } = req.body;
+  const {
+    title,
+    description,
+    repeat,
+    completionGoalWeekly,
+    completionGoalMonthly,
+    quitting,
+    difficultyRank,
+  } = req.body;
 
-  await db.task
+  await db.habit
     .create({
       data: {
         title: title,
         description: description,
-        dueDate: dueDate,
+        repeat: repeat,
+        completionGoalWeekly: completionGoalWeekly
+          ? parseInt(completionGoalWeekly)
+          : null,
+        completionGoalMonthly: completionGoalMonthly
+          ? parseInt(completionGoalMonthly)
+          : null,
+        quitting: quitting,
+        difficultyRank: difficultyRank,
         Character: {
           connect: {
             id: parseInt(characterId),
@@ -32,12 +48,12 @@ router.post("/create/:userId/:characterId", async (req, res) => {
         },
       },
     })
-    .then((task) => {
-      return res.status(201).json(task);
+    .then((habit) => {
+      return res.status(201).json(habit);
     })
     .catch((error) => {
       console.log(error);
-      res.status(400).json({ error: "Task Creation Failed" });
+      res.status(400).json({ error: "Habit Creation Failed" });
     });
 });
 
@@ -53,26 +69,24 @@ router.get("/get/:userId/:characterId", async (req, res) => {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
-  await db.task
+  await db.habit
     .findMany({
       where: {
         CharacterId: parseInt(characterId),
       },
     })
-    .then((tasks) => {
-      return res.status(200).json(tasks);
+    .then((habits) => {
+      return res.status(200).json(habits);
     })
     .catch((error) => {
       console.log(error);
-      return res.status(500).json({ error: "Internal Server Error" });
+      res.status(400).json({ error: "Failed to get habits" });
     });
 });
 
-export { router as tasksRouter };
-
-router.delete("/delete/:userId/:taskId", async (req, res) => {
+router.delete("/delete/:userId/:habitId", async (req, res) => {
   const authToken = req.headers.authorization;
-  const { userId, taskId } = req.params;
+  const { userId, habitId } = req.params;
   try {
     const authUser = await auth().verifyIdToken(authToken as string);
     if (authUser.uid !== userId) {
@@ -81,18 +95,19 @@ router.delete("/delete/:userId/:taskId", async (req, res) => {
   } catch (e) {
     return res.status(401).json({ error: "Unauthorized" });
   }
-
-  await db.task
+  await db.habit
     .delete({
       where: {
-        id: parseInt(taskId),
+        id: parseInt(habitId),
       },
     })
     .then(() => {
-      return res.status(200).json({ message: "Task deleted successfully" });
+      return res.status(200).json({ success: "Habit deleted" });
     })
     .catch((error) => {
       console.log(error);
-      return res.status(500).json({ error: "Internal Server Error" });
+      res.status(400).json({ error: "Failed to delete habit" });
     });
 });
+
+export { router as habitsRouter };
