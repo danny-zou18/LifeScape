@@ -53,7 +53,7 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({
     });
     return (
       <TouchableOpacity activeOpacity={0.6} onPress={() => handleDeleteTask()}>
-        <View className="bg-[#fc4949] flex items-center justify-center h-full w-[70px] rounded-lg">
+        <View className="bg-[#fc4949] flex items-center justify-center h-full w-[70px]">
           <Animated.Text
             className="text-white font-bold text-lg"
             style={{ transform: [{ scale: scale }] }}
@@ -65,7 +65,7 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({
     );
   };
   return (
-    <Swipeable renderRightActions={rightSwipe}>
+    <Swipeable renderRightActions={rightSwipe} overshootRight={false}>
       {habit.description ? (
         <View>
           <View className="bg-red-100 p-4 py-3 rounded-lg overflow-hidden flex flex-row justify-between items-end">
