@@ -8,8 +8,7 @@ import { useTaskContext } from "@/context/TaskProvider";
 const DisplayTasks: React.FC = () => {
     const { tasks, setTasks } = useTaskContext();
   return (
-    <View>
-      <Text>DisplayTasks</Text>
+    <View  className='h-full mt-4'>
       <FlatList 
         data={tasks}
         renderItem={({item}) => {

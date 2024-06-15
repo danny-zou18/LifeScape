@@ -10,8 +10,7 @@ const DisplayHabits = () => {
     const { habits, setHabits } = useHabitContext()
 
   return (
-    <View>
-      <Text>DisplayHabits</Text>
+    <View className='h-full mt-4'>
         <FlatList 
             data={habits}
             renderItem={({item}) => {
