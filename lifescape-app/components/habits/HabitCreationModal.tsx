@@ -30,7 +30,9 @@ const HabitCreationModal = () => {
   const [repeat, setRepeat] = useState<Repeat>(Repeat.DAILY);
   const [goalCompletionWeekly, setGoalCompletionWeekly] = useState<number>(0);
   const [goalCompletionMonthly, setGoalCompletionMonthly] = useState<number>(0);
-  const [difficulty, setDifficulty] = useState<DifficultyRank>(DifficultyRank.E);
+  const [difficulty, setDifficulty] = useState<DifficultyRank>(
+    DifficultyRank.E
+  );
 
   const {
     setValue,
@@ -142,27 +144,33 @@ const HabitCreationModal = () => {
                   <Text>Monthly</Text>
                 </TouchableHighlight>
               </View>
-              { repeat === Repeat.WEEKLY && (
+              {repeat === Repeat.WEEKLY && (
                 <View className="w-full bg-red-200 h-[35px] rounded-lg flex flex-row items-center p-2 justify-between">
-                    <Text>Weekly Completion Goal</Text>
-                    <TextInput 
-                        className="w-[40px] h-full rounded-md px-2 bg-black text-white"
-                        keyboardType="numeric"
-                        onChangeText={(text) => setGoalCompletionWeekly(parseInt(text))}
-                        textAlign="right"
-                    />
+                  <Text>Weekly Completion Goal</Text>
+                  <TextInput
+                    className="w-[40px] h-full rounded-md px-2 bg-black text-white"
+                    keyboardType="numeric"
+                    onChangeText={(text) =>
+                      setGoalCompletionWeekly(parseInt(text))
+                    }
+                    textAlign="right"
+                  />
                 </View>
-              )}{ repeat === Repeat.MONTHLY && (
+              )}
+              {repeat === Repeat.MONTHLY && (
                 <View className="w-full bg-red-200 h-[35px] rounded-lg flex flex-row items-center p-2 justify-between">
-                    <Text>Monthly Completion Goal</Text>
-                    <TextInput 
-                        className="w-[30px]"
-                        keyboardType="numeric"
-                        onChangeText={(text) => setGoalCompletionMonthly(parseInt(text))}
-                    />
+                  <Text>Monthly Completion Goal</Text>
+                  <TextInput
+                    className="w-[30px]"
+                    keyboardType="numeric"
+                    onChangeText={(text) =>
+                      setGoalCompletionMonthly(parseInt(text))
+                    }
+                  />
                 </View>
               )}
             </View>
+        
           </View>
         </ScrollView>
       </SafeAreaView>
