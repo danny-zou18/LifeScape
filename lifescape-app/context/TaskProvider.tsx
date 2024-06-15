@@ -60,7 +60,7 @@ const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       }
     };
     fetchTasks();
-  }, [user, userCharacter, tasks]);
+  }, [user, userCharacter]);
 
   return (
     <TaskContext.Provider

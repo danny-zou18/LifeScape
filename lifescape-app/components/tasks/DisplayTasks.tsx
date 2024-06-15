@@ -1,11 +1,9 @@
 import { View, Text, FlatList } from "react-native";
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
 
 import IndividualTasks from "./IndividualTasks";
 
 import { useTaskContext } from "@/context/TaskProvider";
-import { useGlobalContext } from "@/context/GlobalProvider";
 
 const DisplayTasks: React.FC = () => {
     const { tasks, setTasks } = useTaskContext();
