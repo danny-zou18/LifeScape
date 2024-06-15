@@ -20,6 +20,7 @@ import { useGlobalContext } from "@/context/GlobalProvider";
 import { Repeat, DifficultyRank } from "@/types/db_types";
 
 import AntDesign from "@expo/vector-icons/AntDesign";
+import DifficultySelection from "../general/DifficultySelection";
 
 const HabitCreationModal = () => {
   const { habits, setHabits, habitCreationOpen, setHabitCreationOpen } =
@@ -47,32 +48,96 @@ const HabitCreationModal = () => {
       description: "",
     },
   });
+  const submitHandler = async ({ title, description }: FieldValues) => {
+    setLoading(true);
+
+    const quittingDup: boolean = quitting;
+    const repeatDup: Repeat = repeat;
+    let goalCompletionWeeklyDup: number | null = goalCompletionWeekly;
+    let goalCompletionMonthlyDup: number | null = goalCompletionMonthly;
+    const difficultyRankDup: DifficultyRank = difficulty;
+
+    if (repeatDup === Repeat.DAILY) {
+      goalCompletionWeeklyDup = null;
+      goalCompletionMonthlyDup = null;
+    } else if (repeatDup === Repeat.WEEKLY) {
+      goalCompletionMonthlyDup = null;
+    } else if (repeatDup === Repeat.MONTHLY) {
+      goalCompletionWeeklyDup = null;
+    }
+
+    try {
+      const response = await api.post(
+        `/habits/create/${user.uid}/${userCharacter.id}`,
+        {
+          title,
+          description,
+          quitting: quittingDup,
+          repeat: repeatDup,
+          completionGoalWeekly: goalCompletionWeeklyDup,
+          completionGoalMonthly: goalCompletionMonthlyDup,
+          difficultyRank: difficultyRankDup,
+        },
+        {
+          headers: {
+            Authorization: await user.getIdToken(),
+          },
+        }
+      );
+
+      if (response.status === 201) {
+        console.log("Habit created successfully", response.data);
+        setHabits([...habits, response.data]);
+        setHabitCreationOpen(false);
+        setHabitCreationOpen(false);
+        reset();
+        setQuitting(false);
+        setRepeat(Repeat.DAILY);
+        setGoalCompletionWeekly(1);
+        setGoalCompletionMonthly(1);
+        setDifficulty(DifficultyRank.E);
+      }
+    } catch (error) {
+      if (isAxiosError(error)) {
+        console.log(error.response?.data);
+      } else {
+        console.log(error);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const onCancel = () => {
     setHabitCreationOpen(false);
     reset();
+    setQuitting(false);
+    setRepeat(Repeat.DAILY);
+    setGoalCompletionWeekly(1);
+    setGoalCompletionMonthly(1);
+    setDifficulty(DifficultyRank.E);
   };
 
   const onMinusWeeklyGoal = () => {
     if (goalCompletionWeekly > 1) {
       setGoalCompletionWeekly(goalCompletionWeekly - 1);
     }
-  }
+  };
   const onPlusWeeklyGoal = () => {
     if (goalCompletionWeekly < 6) {
       setGoalCompletionWeekly(goalCompletionWeekly + 1);
     }
-  }
+  };
   const onMinusMonthlyGoal = () => {
     if (goalCompletionMonthly > 1) {
       setGoalCompletionMonthly(goalCompletionMonthly - 1);
     }
-  }
+  };
   const onPlusMonthlyGoal = () => {
     if (goalCompletionMonthly < 29) {
       setGoalCompletionMonthly(goalCompletionMonthly + 1);
     }
-  }
+  };
 
   return (
     <Modal
@@ -171,7 +236,12 @@ const HabitCreationModal = () => {
                 <View className="w-full bg-red-200 h-[40px] rounded-lg flex flex-row items-center p-2 justify-between">
                   <Text>Weekly Completion Goal</Text>
                   <View className="flex flex-row h-full items-center gap-2">
-                    <AntDesign name="minus" size={26} color="black" onPress={onMinusWeeklyGoal} />
+                    <AntDesign
+                      name="minus"
+                      size={26}
+                      color="black"
+                      onPress={onMinusWeeklyGoal}
+                    />
                     <TextInput
                       className="w-[35px] h-full rounded-md px-2 bg-black text-white"
                       keyboardType="numeric"
@@ -179,7 +249,12 @@ const HabitCreationModal = () => {
                       editable={false}
                       textAlign="center"
                     />
-                    <AntDesign name="plus" size={26} color="black" onPress={onPlusWeeklyGoal} />
+                    <AntDesign
+                      name="plus"
+                      size={26}
+                      color="black"
+                      onPress={onPlusWeeklyGoal}
+                    />
                   </View>
                 </View>
               )}
@@ -187,7 +262,12 @@ const HabitCreationModal = () => {
                 <View className="w-full bg-red-200 h-[40px] rounded-lg flex flex-row items-center p-2 justify-between">
                   <Text>Monthly Completion Goal</Text>
                   <View className="flex flex-row h-full items-center gap-2">
-                    <AntDesign name="minus" size={26} color="black" onPress={onMinusMonthlyGoal} />
+                    <AntDesign
+                      name="minus"
+                      size={26}
+                      color="black"
+                      onPress={onMinusMonthlyGoal}
+                    />
                     <TextInput
                       className="w-[35px] h-full rounded-md px-2 bg-black text-white"
                       keyboardType="numeric"
@@ -195,11 +275,35 @@ const HabitCreationModal = () => {
                       editable={false}
                       textAlign="center"
                     />
-                    <AntDesign name="plus" size={26} color="black" onPress={onPlusMonthlyGoal} />
+                    <AntDesign
+                      name="plus"
+                      size={26}
+                      color="black"
+                      onPress={onPlusMonthlyGoal}
+                    />
                   </View>
                 </View>
               )}
             </View>
+            <DifficultySelection
+              difficulty={difficulty}
+              setDifficulty={setDifficulty}
+            />
+            {loading ? (
+              <ActivityIndicator size="large" color="#0000ff" />
+            ) : (
+              <>
+                <TouchableHighlight
+                  className="bg-[#000000] w-[225px] h-[45px] rounded-md mt-10"
+                  underlayColor="#FFFFFF"
+                  onPress={handleSubmit(submitHandler)}
+                >
+                  <Text className="text-white text-xl font-semibold mx-auto my-auto">
+                    Create Habit
+                  </Text>
+                </TouchableHighlight>
+              </>
+            )}
           </View>
         </ScrollView>
       </SafeAreaView>

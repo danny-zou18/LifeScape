@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
-import {isAxiosError} from "axios";
+import { isAxiosError } from "axios";
 import api from "@/api/axios";
 
 import DateTimePicker, {
@@ -31,7 +31,8 @@ const roundToNextHour = (date: Date): Date => {
 };
 
 const TaskCreationModal: React.FC = () => {
-  const { tasks, setTasks, taskCreationOpen, setTaskCreationOpen } = useTaskContext();
+  const { tasks, setTasks, taskCreationOpen, setTaskCreationOpen } =
+    useTaskContext();
 
   const [loading, setLoading] = useState<boolean>(false);
   const { user, userCharacter } = useGlobalContext();
@@ -83,6 +84,9 @@ const TaskCreationModal: React.FC = () => {
       if (response.status === 201) {
         console.log("Task created successfully");
         setTasks([...tasks, response.data]);
+        setTaskCreationOpen(false);
+        setShowDatePicker(false);
+        reset();
       }
     } catch (error) {
       if (isAxiosError(error)) {
@@ -94,9 +98,6 @@ const TaskCreationModal: React.FC = () => {
       }
     } finally {
       setLoading(false);
-      setTaskCreationOpen(false);
-      setShowDatePicker(false);
-      reset();
     }
   };
 
@@ -131,9 +132,7 @@ const TaskCreationModal: React.FC = () => {
               />
             </View>
             <View className="mt-5 w-[85%]">
-              <Text className="ml-2 text-md text-neutral-700 pb-1">
-                Notes
-              </Text>
+              <Text className="ml-2 text-md text-neutral-700 pb-1">Notes</Text>
               <TextInput
                 id="description"
                 autoCapitalize="none"
