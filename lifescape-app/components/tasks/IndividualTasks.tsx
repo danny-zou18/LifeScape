@@ -14,12 +14,12 @@ interface IndividualTasksProps {
 }
 
 const IndividualTasks: React.FC<IndividualTasksProps> = ({ task, setTasks }) => {
-  const { user, userCharacter } = useGlobalContext();
+  const { user } = useGlobalContext();
 
   const handleDeleteTask = async () => {
     try {
       const response = await api.delete(
-        `/tasks/delete/${user.uid}/${userCharacter.id}/${task.id}`,
+        `/tasks/delete/${user.uid}/${task.id}`,
         {
           headers: {
             Authorization: await user.getIdToken(),
@@ -45,7 +45,7 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({ task, setTasks }) => 
   ) => {
     const scale = dragX.interpolate({
       inputRange: [-100, 0],
-      outputRange: [1, 0],
+      outputRange: [1, .5],
       extrapolate: "clamp",
     });
     return (

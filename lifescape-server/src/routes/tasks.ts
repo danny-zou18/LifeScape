@@ -70,9 +70,9 @@ router.get("/get/:userId/:characterId", async (req, res) => {
 
 export { router as tasksRouter };
 
-router.delete("/delete/:userId/:characterId/:taskId", async (req, res) => {
+router.delete("/delete/:userId/:taskId", async (req, res) => {
   const authToken = req.headers.authorization;
-  const { userId, characterId, taskId } = req.params;
+  const { userId, taskId } = req.params;
   try {
     const authUser = await auth().verifyIdToken(authToken as string);
     if (authUser.uid !== userId) {

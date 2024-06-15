@@ -84,4 +84,30 @@ router.get("/get/:userId/:characterId", async (req, res) => {
     });
 });
 
+router.delete("/delete/:userId/:habitId", async (req, res) => {
+  const authToken = req.headers.authorization;
+  const { userId, habitId } = req.params;
+  try {
+    const authUser = await auth().verifyIdToken(authToken as string);
+    if (authUser.uid !== userId) {
+      res.status(403).json({ error: "Unauthorized" });
+    }
+  } catch (e) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  await db.habit
+    .delete({
+      where: {
+        id: parseInt(habitId),
+      },
+    })
+    .then(() => {
+      return res.status(200).json({ success: "Habit deleted" });
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(400).json({ error: "Failed to delete habit" });
+    });
+});
+
 export { router as habitsRouter };

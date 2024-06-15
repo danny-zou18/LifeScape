@@ -14,7 +14,30 @@ interface IndividualHabitsProps {
 }
 
 const IndividualHabits: React.FC<IndividualHabitsProps> = ({habit, setHabits}) => {
-    const { user, userCharacter } = useGlobalContext();
+    const { user } = useGlobalContext();
+
+    const handleDeleteTask = async () => {
+        try {
+          const response = await api.delete(
+            `/habits/delete/${user.uid}/${habit.id}`,
+            {
+              headers: {
+                Authorization: await user.getIdToken(),
+              },
+            }
+          );
+          if (response.status === 200) {
+            console.log("Task deleted successfully");
+            setHabits((prev) => prev.filter((t) => t.id !== habit.id));
+          }
+        } catch (error) {
+          if (isAxiosError(error)) {
+            console.log(error.response?.data);
+          } else {
+            console.log(error);
+          }
+        }
+      };
 
     const rightSwipe = (
         progress: ReturnType<Animated.Value["interpolate"]>,
@@ -22,7 +45,7 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({habit, setHabits}) =
       ) => {
         const scale = dragX.interpolate({
           inputRange: [-100, 0],
-          outputRange: [1, 0],
+          outputRange: [1, .5],
           extrapolate: "clamp",
         });
         return (
