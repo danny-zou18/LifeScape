@@ -67,15 +67,31 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({
   return (
     <Swipeable renderRightActions={rightSwipe}>
       {habit.description ? (
-        <View className="bg-red-100 p-4 py-3 rounded-lg overflow-hidden">
-          <Text>{habit.title}</Text>
-          <Text className="text-sm mt-1 text-neutral-500">
-            {habit.description}
-          </Text>
+        <View>
+          <View className="bg-red-100 p-4 py-3 rounded-lg overflow-hidden flex flex-row justify-between items-end">
+            <View>
+              <Text>{habit.title}</Text>
+              <Text className="text-sm mt-1 text-neutral-500">
+                {habit.description}
+              </Text>
+            </View>
+            <View className="flex flex-row gap-4 items-center">
+              <Text>{habit.difficultyRank}</Text>
+              <Text>
+                {habit.streak}{" "}
+                {habit.completionGoalWeekly
+                  ? `/ ${habit.completionGoalWeekly}`
+                  : ""}
+                {habit.completionGoalMonthly
+                  ? `/ ${habit.completionGoalMonthly}`
+                  : ""}
+              </Text>
+            </View>
+          </View>
         </View>
       ) : (
         <View className="bg-red-100 p-4 py-5 rounded-lg overflow-hidden">
-            <Text>{habit.title}</Text>
+          <Text>{habit.title}</Text>
         </View>
       )}
     </Swipeable>
