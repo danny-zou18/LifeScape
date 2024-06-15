@@ -77,21 +77,43 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({
             </View>
             <View className="flex flex-row gap-4 items-center">
               <Text>{habit.difficultyRank}</Text>
-              <Text>
-                {habit.streak}{" "}
-                {habit.completionGoalWeekly
-                  ? `/ ${habit.completionGoalWeekly}`
-                  : ""}
-                {habit.completionGoalMonthly
-                  ? `/ ${habit.completionGoalMonthly}`
-                  : ""}
-              </Text>
+              <Text>{habit.streak}</Text>
+              {habit.completionGoalWeekly || habit.completionGoalMonthly ? (
+                <Text>
+                  {habit.currentCompletions}{" "}
+                  {habit.completionGoalWeekly
+                    ? `/ ${habit.completionGoalWeekly}`
+                    : ""}
+                  {habit.completionGoalMonthly
+                    ? `/ ${habit.completionGoalMonthly}`
+                    : ""}
+                </Text>
+              ) : null}
             </View>
           </View>
         </View>
       ) : (
-        <View className="bg-red-100 p-4 py-5 rounded-lg overflow-hidden">
-          <Text>{habit.title}</Text>
+        <View>
+          <View className="bg-red-100 p-4 py-5 rounded-lg overflow-hidden flex flex-row justify-between items-end">
+            <View>
+              <Text>{habit.title}</Text>
+            </View>
+            <View className="flex flex-row gap-4 items-center">
+              <Text>{habit.difficultyRank}</Text>
+              <Text>{habit.streak}</Text>
+              {habit.completionGoalWeekly || habit.completionGoalMonthly ? (
+                <Text>
+                  {habit.currentCompletions}{" "}
+                  {habit.completionGoalWeekly
+                    ? `/ ${habit.completionGoalWeekly}`
+                    : ""}
+                  {habit.completionGoalMonthly
+                    ? `/ ${habit.completionGoalMonthly}`
+                    : ""}
+                </Text>
+              ) : null}
+            </View>
+          </View>
         </View>
       )}
     </Swipeable>
