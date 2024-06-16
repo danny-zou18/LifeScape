@@ -22,6 +22,7 @@ import TaskWrapper from "@/components/home/TaskWrapper";
 import HabitProvider from "@/context/HabitProvider";
 import HabitWrapper from "@/components/home/HabitWrapper";
 
+import RoutineProvider from "@/context/RoutineProvider";
 import RoutineWrapper from "@/components/home/RoutineWrapper";
 
 const Home = () => {
@@ -39,7 +40,10 @@ const Home = () => {
         <View className="flex items-center">
           <CharacterOverview />
           <View className="w-[95vw]">
-           <ViewSelectionBtns currentView={currentlyOpen} setCurrentView={setCurrentlyOpen}/>
+            <ViewSelectionBtns
+              currentView={currentlyOpen}
+              setCurrentView={setCurrentlyOpen}
+            />
             {currentlyOpen === "tasks" && (
               <TaskProvider>
                 <TaskWrapper />
@@ -50,7 +54,11 @@ const Home = () => {
                 <HabitWrapper />
               </HabitProvider>
             )}
-            {currentlyOpen === "routine" && <RoutineWrapper />}
+            {currentlyOpen === "routine" && (
+              <RoutineProvider>
+                <RoutineWrapper />
+              </RoutineProvider>
+            )}
           </View>
         </View>
       ) : (
