@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   ScrollView,
   TextInput,
+  Dimensions,
   ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
@@ -24,6 +25,9 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 
+const { width: screenWidth } = Dimensions.get('window');
+
+
 const RoutineCreationModal = () => {
   const { routines, setRoutines, routineCreationOpen, setRoutineCreationOpen } =
     useRoutineContext();
@@ -32,8 +36,10 @@ const RoutineCreationModal = () => {
   const { user, userCharacter } = useGlobalContext();
 
   const [daysOfWeek, setDaysOfWeek] = useState<number[]>([]);
-  const [startTimeOfDay, setStartTimeOfDay] = useState<Date>(new Date());
-  const [endTimeOfDay, setEndTimeOfDay] = useState<Date>(new Date());
+  const [startTimeOfDayInMinutes, setStartTimeOfDayInMinutes] =
+    useState<number>(-1);
+  const [endTimeOfDayInMinutes, setEndTimeOfDayInMinutes] =
+    useState<number>(-1);
   const [difficulty, setDifficulty] = useState<DifficultyRank>(
     DifficultyRank.E
   );
@@ -54,6 +60,10 @@ const RoutineCreationModal = () => {
     setRoutineCreationOpen(false);
     reset();
   };
+
+  const BoxWidth = (screenWidth * 81) / 100;
+
+  const calculatedWidth = (BoxWidth * 13.3) / 100;
   return (
     <Modal
       animationType="slide"
@@ -86,6 +96,125 @@ const RoutineCreationModal = () => {
                 className="h-[50px] bg-black rounded-lg text-white px-3"
                 numberOfLines={2}
               />
+            </View>
+            <View className="mt-5 w-[85%]">
+              <Text className="ml-2 text-md text-neutral-700 pb-1">
+                Days of Week
+              </Text>
+              <View className="flex flex-row justify-between p-1 py-3 bg-gray-400 rounded-lg  w-full">
+                <TouchableHighlight
+                  className={`flex items-center justify-center w-[13.3%] bg-${
+                    daysOfWeek.includes(1) ? "[#b93df2]" : "[#e1abf740]"
+                  } rounded-full`}
+                  style={{height: calculatedWidth}}
+                  onPress={() =>
+                    setDaysOfWeek(
+                      daysOfWeek.includes(1)
+                        ? daysOfWeek.filter((day) => day !== 1)
+                        : [...daysOfWeek, 1]
+                    )
+                  }
+                  underlayColor="#b93df200"
+                >
+                  <Text>Sun</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  className={`flex items-center justify-center w-[13.3%] bg-${
+                    daysOfWeek.includes(2) ? "[#b93df2]" : "[#e1abf740]"
+                  } rounded-full`}
+                  style={{height: calculatedWidth}}
+                  onPress={() =>
+                    setDaysOfWeek(
+                      daysOfWeek.includes(2)
+                        ? daysOfWeek.filter((day) => day !== 2)
+                        : [...daysOfWeek, 2]
+                    )
+                  }
+                  underlayColor="#b93df200"
+                >
+                  <Text>M</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  className={`flex items-center justify-center w-[13.3%] bg-${
+                    daysOfWeek.includes(3) ? "[#b93df2]" : "[#e1abf740]"
+                  } rounded-full`}
+                  style={{height: calculatedWidth}}
+                  onPress={() =>
+                    setDaysOfWeek(
+                      daysOfWeek.includes(3)
+                        ? daysOfWeek.filter((day) => day !== 3)
+                        : [...daysOfWeek, 3]
+                    )
+                  }
+                  underlayColor="#b93df200"
+                >
+                  <Text>T</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  className={`flex items-center justify-center w-[13.3%] bg-${
+                    daysOfWeek.includes(4) ? "[#b93df2]" : "[#e1abf740]"
+                  } rounded-full`}
+                  style={{height: calculatedWidth}}
+                  onPress={() =>
+                    setDaysOfWeek(
+                      daysOfWeek.includes(4)
+                        ? daysOfWeek.filter((day) => day !== 4)
+                        : [...daysOfWeek, 4]
+                    )
+                  }
+                  underlayColor="#b93df200"
+                >
+                  <Text>W</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  className={`flex items-center justify-center w-[13.3%] bg-${
+                    daysOfWeek.includes(5) ? "[#b93df2]" : "[#e1abf740]"
+                  } rounded-full`}
+                  style={{height: calculatedWidth}}
+                  onPress={() =>
+                    setDaysOfWeek(
+                      daysOfWeek.includes(5)
+                        ? daysOfWeek.filter((day) => day !== 5)
+                        : [...daysOfWeek, 5]
+                    )
+                  }
+                  underlayColor="#b93df200"
+                >
+                  <Text>T</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  className={`flex items-center justify-center w-[13.3%] bg-${
+                    daysOfWeek.includes(6) ? "[#b93df2]" : "[#e1abf740]"
+                  } rounded-full`}
+                  style={{height: calculatedWidth}}
+                  onPress={() =>
+                    setDaysOfWeek(
+                      daysOfWeek.includes(6)
+                        ? daysOfWeek.filter((day) => day !== 6)
+                        : [...daysOfWeek, 6]
+                    )
+                  }
+                  underlayColor="#b93df200"
+                >
+                  <Text>F</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  className={`flex items-center justify-center w-[13.3%] bg-${
+                    daysOfWeek.includes(7) ? "[#b93df2]" : "[#e1abf740]"
+                  } rounded-full`}
+                  style={{height: calculatedWidth}}
+                  onPress={() =>
+                    setDaysOfWeek(
+                      daysOfWeek.includes(7)
+                        ? daysOfWeek.filter((day) => day !== 7)
+                        : [...daysOfWeek, 7]
+                    )
+                  }
+                  underlayColor="#b93df200"
+                >
+                  <Text>Sat</Text>
+                </TouchableHighlight>
+              </View>
             </View>
           </View>
         </ScrollView>
