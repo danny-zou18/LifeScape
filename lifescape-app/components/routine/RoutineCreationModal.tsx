@@ -66,6 +66,20 @@ const RoutineCreationModal = () => {
     reset();
   };
 
+  const onStartTimeChange = (
+    event: DateTimePickerEvent,
+    selectedDate?: Date
+  ) => {
+    if (selectedDate) {
+      setStartTimeOfDay(selectedDate);
+    }
+  };
+  const onEndTimeChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
+    if (selectedDate) {
+      setEndTimeOfDay(selectedDate);
+    }
+  };
+
   const BoxWidth = (screenWidth * 81) / 100;
 
   const calculatedWidth = (BoxWidth * 13.3) / 100;
@@ -230,6 +244,7 @@ const RoutineCreationModal = () => {
                         display="default"
                         value={startTimeOfDay}
                         maximumDate={endTimeOfDay}
+                        onChange={onStartTimeChange}
                       />
                     </View>
                     <View className="bg-red-400 h-[45px] flex flex-row items-center p-2 justify-between">
@@ -239,6 +254,7 @@ const RoutineCreationModal = () => {
                         display="default"
                         value={endTimeOfDay}
                         minimumDate={startTimeOfDay}
+                        onChange={onEndTimeChange}
                       />
                     </View>
                   </View>
