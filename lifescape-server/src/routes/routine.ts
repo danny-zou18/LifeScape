@@ -27,6 +27,17 @@ router.post("/create/:userId/:characterId", async (req, res) => {
     difficultyRank,
   } = req.body;
 
+  const available = await isTimeslotAvailable(
+    daysOfWeek,
+    startTimeOfDayInMinutes,
+    endTimeOfDayInMinutes,
+    parseInt(characterId)
+  );
+
+  if (!available) {
+    return res.status(400).json({ error: "Timeslot is not available" });
+  }
+
   await db.routine
     .create({
       data: {
