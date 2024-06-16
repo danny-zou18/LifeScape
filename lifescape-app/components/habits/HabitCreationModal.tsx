@@ -143,9 +143,7 @@ const HabitCreationModal = () => {
     <Modal
       animationType="slide"
       visible={habitCreationOpen}
-      onRequestClose={() => {
-        setHabitCreationOpen(false);
-      }}
+      onRequestClose={onCancel}
     >
       <SafeAreaView>
         <View className="flex flex-row">
