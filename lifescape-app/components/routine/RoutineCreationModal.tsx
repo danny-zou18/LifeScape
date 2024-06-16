@@ -11,7 +11,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
-import { FieldValues, useForm } from "react-hook-form";
+import { FieldValues, set, useForm } from "react-hook-form";
 import { isAxiosError } from "axios";
 import api from "@/api/axios";
 
@@ -19,8 +19,8 @@ import { useRoutineContext } from "@/context/RoutineProvider";
 import { useGlobalContext } from "@/context/GlobalProvider";
 
 import { DifficultyRank } from "@/types/db_types";
-import HabitCreationModal from "../habits/HabitCreationModal";
 
+import DifficultySelection from "../general/DifficultySelection";
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
@@ -45,6 +45,7 @@ const RoutineCreationModal = () => {
   const [endTimeOfDay, setEndTimeOfDay] = useState<Date>(
     new Date(0, 0, 0, 0, 0, 0, 0)
   );
+  const [showEndTimeOfDayPicker, setShowEndTimeOfDayPicker] = useState<boolean>(false);
   const [difficulty, setDifficulty] = useState<DifficultyRank>(
     DifficultyRank.E
   );
@@ -64,6 +65,11 @@ const RoutineCreationModal = () => {
   const onCancel = () => {
     setRoutineCreationOpen(false);
     reset();
+    setDaysOfWeek([]);
+    setStartTimeOfDay(new Date(0, 0, 0, 0, 0, 0, 0));
+    setEndTimeOfDay(new Date(0, 0, 0, 0, 0, 0, 0));
+    setDifficulty(DifficultyRank.E);
+    setShowEndTimeOfDayPicker(false);
   };
 
   const onStartTimeChange = (
@@ -249,18 +255,48 @@ const RoutineCreationModal = () => {
                     </View>
                     <View className="bg-red-400 h-[45px] flex flex-row items-center p-2 justify-between">
                       <Text>End Time</Text>
-                      <DateTimePicker
+                      {showEndTimeOfDayPicker ? (
+                        <DateTimePicker
                         mode="time"
                         display="default"
                         value={endTimeOfDay}
                         minimumDate={startTimeOfDay}
                         onChange={onEndTimeChange}
                       />
+                      ) : (
+                        <TouchableHighlight
+                        className="bg-[#000000] rounded-md p-2 h-full"
+                        underlayColor="#FFFFFF"
+                        onPress={() => setShowEndTimeOfDayPicker(true)}
+                        >
+                            <Text className="text-white">Select End Time</Text>
+                        </TouchableHighlight>
+                      )}
+                      
                     </View>
                   </View>
                 ) : null}
               </View>
             </View>
+            <DifficultySelection
+              difficulty={difficulty}
+              setDifficulty={setDifficulty}
+            />
+            {loading ? (
+              <ActivityIndicator size="large" color="#0000ff" />
+            ) : (
+              <>
+                <TouchableHighlight
+                  className="bg-[#000000] w-[225px] h-[45px] rounded-md mt-10"
+                  underlayColor="#FFFFFF"
+                //   onPress={handleSubmit(submitHandler)}
+                >
+                  <Text className="text-white text-xl font-semibold mx-auto my-auto">
+                    Add to Routine
+                  </Text>
+                </TouchableHighlight>
+              </>
+            )}
           </View>
         </ScrollView>
       </SafeAreaView>
