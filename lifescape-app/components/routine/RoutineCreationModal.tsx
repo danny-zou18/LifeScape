@@ -39,10 +39,7 @@ const RoutineCreationModal = () => {
   const { user, userCharacter } = useGlobalContext();
 
   const [daysOfWeek, setDaysOfWeek] = useState<number[]>([]);
-  //   const [startTimeOfDayInMinutes, setStartTimeOfDayInMinutes] =
-  //     useState<number>(-1);
-  //   const [endTimeOfDayInMinutes, setEndTimeOfDayInMinutes] =
-  //     useState<number>(-1);
+
   const [startTimeOfDay, setStartTimeOfDay] = useState<Date>(
     new Date(0, 0, 0, 0, 0, 0, 0)
   );
@@ -110,6 +107,8 @@ const RoutineCreationModal = () => {
       } else {
         console.log(error);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
