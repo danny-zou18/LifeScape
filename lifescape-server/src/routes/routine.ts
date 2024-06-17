@@ -77,22 +77,27 @@ router.get("/get/:userId/:characterId", async (req, res) => {
   }
 
   const currentDay = new Date().getDay() + 1;
-  
-  await db.routine.findMany({
-    where: {
-      CharacterId: parseInt(characterId),
-      daysOfWeek: {
-        has: currentDay,
-      },
-    },
-  }).then((routines) => {
-    return res.status(200).json(routines);
-  }).catch((error) => {
-    console.log(error);
-    res.status(400).json({ error: "Routine Fetch Failed" });
-  });
 
-})
+  await db.routine
+    .findMany({
+      where: {
+        CharacterId: parseInt(characterId),
+        daysOfWeek: {
+          has: currentDay,
+        },
+      },
+      orderBy: {
+        startTimeOfDayInMinutes: "asc", // Sort by startTimeOfDayInMinutes in ascending order
+      },
+    })
+    .then((routines) => {
+      return res.status(200).json(routines);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(400).json({ error: "Routine Fetch Failed" });
+    });
+});
 
 async function isTimeslotAvailable(
   daysOfWeek: number[],
