@@ -63,6 +63,37 @@ router.post("/create/:userId/:characterId", async (req, res) => {
     });
 });
 
+router.get("/get/:userId/:characterId", async (req, res) => {
+  const authToken = req.headers.authorization;
+  const { userId, characterId } = req.params;
+
+  try {
+    const authUser = await auth().verifyIdToken(authToken as string);
+    if (authUser.uid !== userId) {
+      res.status(403).json({ error: "Unauthorized" });
+    }
+  } catch (e) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  const currentDay = new Date().getDay() + 1;
+  
+  await db.routine.findMany({
+    where: {
+      CharacterId: parseInt(characterId),
+      daysOfWeek: {
+        has: currentDay,
+      },
+    },
+  }).then((routines) => {
+    return res.status(200).json(routines);
+  }).catch((error) => {
+    console.log(error);
+    res.status(400).json({ error: "Routine Fetch Failed" });
+  });
+
+})
+
 async function isTimeslotAvailable(
   daysOfWeek: number[],
   startTime: number,
