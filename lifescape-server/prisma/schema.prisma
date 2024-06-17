@@ -121,8 +121,8 @@ model Routine {
   createdAt DateTime @default(now())
 
   daysOfWeek              Int[]
-  startTimeOfDayInMinutes Int?
-  endTimeOfDayInMinutes   Int?
+  startTimeOfDayInMinutes Int
+  endTimeOfDayInMinutes   Int
 
   difficultyRank DifficultyRank @default(F)
 

@@ -44,12 +44,8 @@ router.post("/create/:userId/:characterId", async (req, res) => {
         title: title,
         description: description,
         daysOfWeek: daysOfWeek,
-        startTimeOfDayInMinutes: startTimeOfDayInMinutes
-          ? parseInt(startTimeOfDayInMinutes)
-          : null,
-        endTimeOfDayInMinutes: endTimeOfDayInMinutes
-          ? parseInt(endTimeOfDayInMinutes)
-          : null,
+        startTimeOfDayInMinutes: startTimeOfDayInMinutes,
+        endTimeOfDayInMinutes: endTimeOfDayInMinutes,
         difficultyRank: difficultyRank,
         Character: {
           connect: {
