@@ -37,31 +37,31 @@ const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   const { user, userCharacter } = useGlobalContext();
 
-  // useEffect(() => {
-  //   const fetchRoutines = async () => {
-  //     try {
-  //       const response = await api.get(
-  //         `/routines/get/${user.uid}/${userCharacter.id}`,
-  //         {
-  //           headers: {
-  //             Authorization: await user.getIdToken(),
-  //           },
-  //         }
-  //       );
-  //       if (response.status === 200) {
-  //         setRoutines(response.data);
-  //         console.log(response.data);
-  //       }
-  //     } catch (error) {
-  //       if (isAxiosError(error)) {
-  //         console.log(error.response?.data);
-  //       } else {
-  //         console.log(error);
-  //       }
-  //     }
-  //   };
-  //   fetchRoutines();
-  // }, [user, userCharacter]);
+  useEffect(() => {
+    const fetchRoutines = async () => {
+      try {
+        const response = await api.get(
+          `/routine/get/${user.uid}/${userCharacter.id}`,
+          {
+            headers: {
+              Authorization: await user.getIdToken(),
+            },
+          }
+        );
+        if (response.status === 200) {
+          setRoutines(response.data);
+          console.log(response.data);
+        }
+      } catch (error) {
+        if (isAxiosError(error)) {
+          console.log(error.response?.data);
+        } else {
+          console.log(error);
+        }
+      }
+    };
+    fetchRoutines();
+  }, [user, userCharacter]);
 
   return (
     <RoutineContext.Provider
