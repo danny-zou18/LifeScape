@@ -28,8 +28,8 @@ import DateTimePicker, {
 const { width: screenWidth } = Dimensions.get("window");
 
 const timeToMinutes = (time: Date): number => {
-    return time.getHours() * 60 + time.getMinutes();
-}
+  return time.getHours() * 60 + time.getMinutes();
+};
 
 const RoutineCreationModal = () => {
   const { routines, setRoutines, routineCreationOpen, setRoutineCreationOpen } =
@@ -49,8 +49,6 @@ const RoutineCreationModal = () => {
   const [endTimeOfDay, setEndTimeOfDay] = useState<Date>(
     new Date(0, 0, 0, 0, 0, 0, 0)
   );
-  const [showEndTimeOfDayPicker, setShowEndTimeOfDayPicker] =
-    useState<boolean>(false);
   const [difficulty, setDifficulty] = useState<DifficultyRank>(
     DifficultyRank.E
   );
@@ -72,33 +70,47 @@ const RoutineCreationModal = () => {
   const submitHandler = async ({ title, description }: FieldValues) => {
     setLoading(true);
 
-    let startTimeOfDayInMinutes: number | null = timeToMinutes(startTimeOfDay);
-    let endTimeOfDayInMinutes: number | null = timeToMinutes(endTimeOfDay);
+    let startTimeOfDayInMinutes: number = timeToMinutes(startTimeOfDay);
+    let endTimeOfDayInMinutes: number = timeToMinutes(endTimeOfDay);
 
-    if (startTimeOfDay === new Date(0, 0, 0, 0, 0, 0, 0)) {
-      startTimeOfDayInMinutes = null;
-      endTimeOfDayInMinutes = null;
-    } else if (!showEndTimeOfDayPicker) {
-      endTimeOfDayInMinutes = null;
-    }
-    
-    if (endTimeOfDayInMinutes && startTimeOfDayInMinutes && endTimeOfDayInMinutes < startTimeOfDayInMinutes) {
-        setShowTimeError(true);
-        return;
+    if (endTimeOfDayInMinutes < startTimeOfDayInMinutes) {
+      setShowTimeError(true);
+      return;
     }
 
     try {
-        const response = await api.post(
-            `/routine/create/${user.uid}/${userCharacter.id}`,
-        )
-    } catch(error) {
-        if (isAxiosError(error)) {
-            console.log(error.response?.data);
-        } else {
-            console.log(error);
+      const response = await api.post(
+        `/routine/create/${user.uid}/${userCharacter.id}`,
+        {
+          title,
+          description,
+          daysOfWeek,
+          startTimeOfDayInMinutes,
+          endTimeOfDayInMinutes,
+          difficulty,
+        },
+        {
+          headers: {
+            Authorization: await user.getIdToken(),
+          },
         }
+      );
+      if (response.status === 201) {
+        setRoutines([...routines, response.data]);
+        setRoutineCreationOpen(false);
+        reset();
+        setDaysOfWeek([]);
+        setStartTimeOfDay(new Date(0, 0, 0, 0, 0, 0, 0));
+        setEndTimeOfDay(new Date(0, 0, 0, 0, 0, 0, 0));
+        setDifficulty(DifficultyRank.E);
+      }
+    } catch (error) {
+      if (isAxiosError(error)) {
+        console.log(error.response?.data);
+      } else {
+        console.log(error);
+      }
     }
-
   };
 
   const onCancel = () => {
@@ -108,7 +120,6 @@ const RoutineCreationModal = () => {
     setStartTimeOfDay(new Date(0, 0, 0, 0, 0, 0, 0));
     setEndTimeOfDay(new Date(0, 0, 0, 0, 0, 0, 0));
     setDifficulty(DifficultyRank.E);
-    setShowEndTimeOfDayPicker(false);
   };
 
   const onStartTimeChange = (
@@ -288,29 +299,18 @@ const RoutineCreationModal = () => {
                         mode="time"
                         display="default"
                         value={startTimeOfDay}
-                        maximumDate={endTimeOfDay}
                         onChange={onStartTimeChange}
                       />
                     </View>
                     <View className="bg-red-400 h-[45px] flex flex-row items-center p-2 justify-between">
                       <Text>End Time</Text>
-                      {showEndTimeOfDayPicker ? (
-                        <DateTimePicker
-                          mode="time"
-                          display="default"
-                          value={endTimeOfDay}
-                          minimumDate={startTimeOfDay}
-                          onChange={onEndTimeChange}
-                        />
-                      ) : (
-                        <TouchableHighlight
-                          className="bg-[#000000] rounded-md p-2 h-full"
-                          underlayColor="#FFFFFF"
-                          onPress={() => setShowEndTimeOfDayPicker(true)}
-                        >
-                          <Text className="text-white">Select End Time</Text>
-                        </TouchableHighlight>
-                      )}
+                      <DateTimePicker
+                        mode="time"
+                        display="default"
+                        value={endTimeOfDay}
+                        minimumDate={startTimeOfDay}
+                        onChange={onEndTimeChange}
+                      />
                     </View>
                   </View>
                 ) : null}
@@ -327,7 +327,7 @@ const RoutineCreationModal = () => {
                 <TouchableHighlight
                   className="bg-[#000000] w-[225px] h-[45px] rounded-md mt-10"
                   underlayColor="#FFFFFF"
-                  //   onPress={handleSubmit(submitHandler)}
+                    onPress={handleSubmit(submitHandler)}
                 >
                   <Text className="text-white text-xl font-semibold mx-auto my-auto">
                     Add to Routine

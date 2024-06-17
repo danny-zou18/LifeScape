@@ -89,7 +89,6 @@ const HabitCreationModal = () => {
         console.log("Habit created successfully", response.data);
         setHabits([...habits, response.data]);
         setHabitCreationOpen(false);
-        setHabitCreationOpen(false);
         reset();
         setQuitting(false);
         setRepeat(Repeat.DAILY);
