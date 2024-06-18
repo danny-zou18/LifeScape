@@ -105,8 +105,8 @@ interface Routine {
   createdAt: Date;
 
   daysOfWeek: number[];
-  startTimeOfDayInMinutes?: number | null;
-  endTimeofDayInMinutes?: number | null;
+  startTimeOfDayInMinutes: number;
+  endTimeOfDayInMinutes: number;
 
   difficultyRank: DifficultyRank;
 

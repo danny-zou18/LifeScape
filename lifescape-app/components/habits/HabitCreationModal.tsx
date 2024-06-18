@@ -89,7 +89,6 @@ const HabitCreationModal = () => {
         console.log("Habit created successfully", response.data);
         setHabits([...habits, response.data]);
         setHabitCreationOpen(false);
-        setHabitCreationOpen(false);
         reset();
         setQuitting(false);
         setRepeat(Repeat.DAILY);
@@ -143,9 +142,7 @@ const HabitCreationModal = () => {
     <Modal
       animationType="slide"
       visible={habitCreationOpen}
-      onRequestClose={() => {
-        setHabitCreationOpen(false);
-      }}
+      onRequestClose={onCancel}
     >
       <SafeAreaView>
         <View className="flex flex-row">

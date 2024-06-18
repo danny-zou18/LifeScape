@@ -1,10 +1,14 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
+import CreateRoutineBtn from '../routine/CreateRoutineBtn'
+import RoutineCreationModal from '../routine/RoutineCreationModal'
+
 const RoutineWrapper = () => {
   return (
     <View >
-      <Text>RoutineWrapper</Text>
+      <RoutineCreationModal />
+      <CreateRoutineBtn />
     </View>
   )
 }
