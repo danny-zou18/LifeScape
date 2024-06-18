@@ -57,4 +57,23 @@ router.post("/register", async (req, res) => {
     });
 });
 
+router.post("/authenticate/:userId", async (req, res) => {
+  const { userId } = req.params;
+  const { password, email } = req.body;
+
+  getAuth()
+  .updateUser(userId, {
+    email: email,
+    password: 'newPassword', // username stored in our database
+  })
+  .then((userRecord) => {
+    // See the UserRecord reference doc for the contents of userRecord.
+    console.log('Successfully updated user', userRecord.toJSON());
+  })
+  .catch((error) => {
+    console.log('Error updating user:', error);
+  });
+});
+
+
 export { router as userRouter };
