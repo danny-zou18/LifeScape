@@ -50,7 +50,7 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({ task, setTasks }) => 
     });
     return (
       <TouchableOpacity activeOpacity={0.6} onPress={() => handleDeleteTask()}>
-        <View className="bg-[#fc4949] flex items-center justify-center h-full w-[70px] rounded-lg">
+        <View className="bg-[#fc4949] flex items-center justify-center h-full w-[70px] ">
           <Animated.Text
             className="text-white font-bold text-lg"
             style={{ transform: [{ scale: scale }] }}
@@ -63,10 +63,29 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({ task, setTasks }) => 
   };
 
   return (
-    <Swipeable renderRightActions={rightSwipe}>
-      <View className="bg-red-100 p-4 rounded-lg overflow-hidden">
-        <Text>{task.title}</Text>
-      </View>
+    <Swipeable renderRightActions={rightSwipe} overshootRight={false}>
+        {task.description ? (
+          <View>
+          <View className="bg-red-100 p-4 py-3 rounded-lg overflow-hidden flex flex-row justify-between items-end">
+            <View>
+              <Text>{task.title}</Text>
+              <Text className="text-sm mt-1 text-neutral-500">
+                {task.description}
+              </Text>
+            </View>
+            <View className="flex flex-row gap-4 items-center">
+              <Text>{task.difficultyRank}</Text>
+              {task.dueDate ? (<Text>{new Date(task.dueDate).getMonth() + 1} / {new Date(task.dueDate).getDate()}</Text>) : null}
+            </View>
+          </View>
+        </View>
+        ): (
+          <Text className="text-center text-lg text-gray-500">
+            No description
+          </Text>
+        
+        )}
+  
     </Swipeable>
   );
 };
