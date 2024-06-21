@@ -1,67 +1,19 @@
 import {
   View,
   SafeAreaView,
-  TouchableOpacity,
-  Text,
-  Animated as RNAnimated,
-  useWindowDimensions,
   FlatList,
 } from "react-native";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  useAnimatedScrollHandler,
-} from "react-native-reanimated";
-import React, { useState, useEffect, useRef } from "react";
+
+import React, { useState, useRef } from "react";
 
 import { useGlobalContext } from "@/context/GlobalProvider";
 
-// import ViewSelectionBtns from "@/components/home/ViewSelectionBtns";
-
-import CharacterOverview from "@/components/home/CharacterOverview";
 import CharacterCreationModal from "@/components/home/CharacterCreationModal";
+import CharacterOverview from "@/components/home/CharacterOverview";
 
-import TaskProvider from "@/context/TaskProvider";
-import TaskWrapper from "@/components/home/TaskWrapper";
+import ViewSelectionBtns from "@/components/home/ViewSelectionBtns";
+import TasksHabitsRoutine from "@/components/home/TasksHabitsRoutine";
 
-import HabitProvider from "@/context/HabitProvider";
-import HabitWrapper from "@/components/home/HabitWrapper";
-
-import RoutineProvider from "@/context/RoutineProvider";
-import RoutineWrapper from "@/components/home/RoutineWrapper";
-
-const TABS = ["Tasks", "Habits", "Routine"];
-
-interface ViewSelectionBtnsProps {
-  currentView: string;
-  setCurrentView: React.Dispatch<React.SetStateAction<string>>;
-  flatListRef: React.RefObject<FlatList>;
-}
-const ViewSelectionBtns: React.FC<ViewSelectionBtnsProps> = ({
-  currentView,
-  setCurrentView,
-  flatListRef,
-}) => {
-  return (
-    <View className="w-full  flex flex-row justify-around pb-1">
-      {TABS.map((tab, index) => (
-        <TouchableOpacity
-          key={index}
-          onPress={() => {
-            setCurrentView(tab);
-            flatListRef.current?.scrollToIndex({ index });
-          }}
-          className={` w-[30%] p-3 ${
-            currentView === tab ? "border-b-2 border-blue-500" : ""
-          }`}
-        >
-          <Text className={`text-center text-md font-bold`}>{tab}</Text>
-        </TouchableOpacity>
-      ))}
-    </View>
-  );
-};
 
 const Home = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -71,18 +23,7 @@ const Home = () => {
   const { userCharacter } = useGlobalContext();
 
   const [currentlyOpen, setCurrentlyOpen] = useState<string>("Tasks");
-
-  const scrollX = useSharedValue(0);
   const flatListRef = useRef<FlatList>(null);
-
-  const scrollHandler = useAnimatedScrollHandler((event) => {
-    scrollX.value = event.contentOffset.x / 300; // 300 is the width of each tab
-  });
-
-  useEffect(() => {
-    const index = TABS.indexOf(currentlyOpen);
-    flatListRef.current?.scrollToIndex({ index });
-  }, [currentlyOpen]);
 
   return (
     <SafeAreaView>
@@ -95,35 +36,9 @@ const Home = () => {
               setCurrentView={setCurrentlyOpen}
               flatListRef={flatListRef}
             />
-            <Animated.FlatList
-              ref={flatListRef}
-              horizontal
-              data={TABS}
-              keyExtractor={(item) => item}
-              pagingEnabled
-              scrollEnabled={false}
-              showsHorizontalScrollIndicator={false}
-              onScroll={scrollHandler}
-              scrollEventThrottle={16}
-              renderItem={({ item }) => (
-                <View className="w-[95vw] ">
-                  {item === "Tasks" && (
-                    <TaskProvider>
-                      <TaskWrapper />
-                    </TaskProvider>
-                  )}
-                  {item === "Habits" && (
-                    <HabitProvider>
-                      <HabitWrapper />
-                    </HabitProvider>
-                  )}
-                  {item === "Routine" && (
-                    <RoutineProvider>
-                      <RoutineWrapper />
-                    </RoutineProvider>
-                  )}
-                </View>
-              )}
+            <TasksHabitsRoutine
+              currentlyOpen={currentlyOpen}
+              flatListRef={flatListRef}
             />
           </View>
         </View>
