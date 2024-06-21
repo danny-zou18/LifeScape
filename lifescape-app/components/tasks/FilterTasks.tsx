@@ -12,8 +12,12 @@ const differentSortOptions = [
     value: "dueDate",
   },
   {
-    label: "Difficulty",
-    value: "difficulty",
+    label: "Hardest",
+    value: "hardest",
+  },
+  {
+    label: "Easiest",
+    value: "easiest",
   }
 ];
 const FilterTasks = () => {
@@ -35,10 +39,16 @@ const FilterTasks = () => {
           }
         })
       );
-    } else if (sortBy === "difficulty ") {
+    } else if (sortBy === "hardest") {
       setTasks(
         [...tasks].sort((a, b) => {
           return a.difficultyRank.localeCompare(b.difficultyRank);
+        })
+      );
+    } else if (sortBy === "easiest") {
+      setTasks(
+        [...tasks].sort((a, b) => {
+          return b.difficultyRank.localeCompare(a.difficultyRank);
         })
       );
     }
@@ -56,7 +66,6 @@ const FilterTasks = () => {
         labelField="label"
         valueField="value"
         placeholder="Sort By..."
-        maxHeight={110}
         value={sortBy}
         onChange={item => {
           setSortBy(item.value);
