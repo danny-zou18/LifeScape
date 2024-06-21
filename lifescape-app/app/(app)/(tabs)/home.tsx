@@ -1,17 +1,22 @@
 import {
   View,
-  Text,
-  TouchableHighlight,
-  Button,
-  Modal,
   SafeAreaView,
-  Image,
+  TouchableOpacity,
+  Text,
+  Animated as RNAnimated,
+  FlatList,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import Animated,{
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  useAnimatedScrollHandler,
+} from "react-native-reanimated";
+import React, { useState, useEffect, useRef } from "react";
 
 import { useGlobalContext } from "@/context/GlobalProvider";
 
-import ViewSelectionBtns from "@/components/home/ViewSelectionBtns";
+// import ViewSelectionBtns from "@/components/home/ViewSelectionBtns";
 
 import CharacterOverview from "@/components/home/CharacterOverview";
 import CharacterCreationModal from "@/components/home/CharacterCreationModal";
@@ -25,6 +30,42 @@ import HabitWrapper from "@/components/home/HabitWrapper";
 import RoutineProvider from "@/context/RoutineProvider";
 import RoutineWrapper from "@/components/home/RoutineWrapper";
 
+const TABS = ["tasks", "habits", "routine"];
+
+interface ViewSelectionBtnsProps {
+  currentView: string;
+  setCurrentView: React.Dispatch<React.SetStateAction<string>>;
+  flatListRef: React.RefObject<FlatList>;
+}
+const ViewSelectionBtns: React.FC<ViewSelectionBtnsProps> = ({
+  currentView,
+  setCurrentView,
+  flatListRef,
+}) => {
+  return (
+    <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
+      {TABS.map((tab, index) => (
+        <TouchableOpacity
+          key={index}
+          onPress={() => {
+            setCurrentView(tab);
+            flatListRef.current?.scrollToIndex({ index });
+          }}
+        >
+          <Text
+            style={{
+              padding: 16,
+              color: currentView === tab ? "blue" : "black",
+            }}
+          >
+            {tab}
+          </Text>
+        </TouchableOpacity>
+      ))}
+    </View>
+  );
+};
+
 const Home = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [characterCreationModalVisible, setCharacterCreationModalVisible] =
@@ -34,31 +75,81 @@ const Home = () => {
 
   const [currentlyOpen, setCurrentlyOpen] = useState<string>("tasks");
 
+  const scrollX = useSharedValue(0);
+  const flatListRef = useRef<FlatList>(null);
+
+  const scrollHandler = useAnimatedScrollHandler((event) => {
+    scrollX.value = event.contentOffset.x / 300; // 300 is the width of each tab
+  });
+
+  const animatedIndicatorStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { translateX: withTiming(scrollX.value * (100 / TABS.length)) },
+      ],
+    };
+  });
+
+  useEffect(() => {
+    const index = TABS.indexOf(currentlyOpen);
+    flatListRef.current?.scrollToIndex({ index });
+  }, [currentlyOpen]);
+
   return (
     <SafeAreaView>
       {userCharacter ? (
         <View className="flex items-center">
           <CharacterOverview />
-          <View className="w-[95vw]">
+          <View className="w-[95vw] flex">
             <ViewSelectionBtns
               currentView={currentlyOpen}
               setCurrentView={setCurrentlyOpen}
+              flatListRef={flatListRef}
             />
-            {currentlyOpen === "tasks" && (
-              <TaskProvider>
-                <TaskWrapper />
-              </TaskProvider>
-            )}
-            {currentlyOpen === "habits" && (
-              <HabitProvider>
-                <HabitWrapper />
-              </HabitProvider>
-            )}
-            {currentlyOpen === "routine" && (
-              <RoutineProvider>
-                <RoutineWrapper />
-              </RoutineProvider>
-            )}
+            <View style={{ height: 2, flexDirection: "row", marginTop: 8 }}>
+              <Animated.View
+                style={[
+                  {
+                    height: "100%",
+                    width: `${100 / TABS.length}%`,
+                    backgroundColor: "blue",
+                  },
+                  animatedIndicatorStyle,
+                ]}
+              />
+            </View>
+            <Animated.FlatList
+              ref={flatListRef}
+              horizontal
+              data={TABS}
+              keyExtractor={(item) => item}
+              pagingEnabled
+              scrollEnabled={false}
+              showsHorizontalScrollIndicator={false}
+              onScroll={scrollHandler}
+              scrollEventThrottle={16}
+              renderItem={({ item }) => (
+                <View
+                  className="w-[95vw]"
+                >
+                  {item === "tasks" && (
+                    <TaskProvider>
+                      <TaskWrapper />
+                    </TaskProvider>
+                  )}
+                  {item === "habits" && (
+                    <HabitProvider>
+                      <HabitWrapper />
+                    </HabitProvider>
+                  )}
+                  {item === "routine" && (
+                    <RoutineProvider>
+                      <RoutineWrapper />
+                    </RoutineProvider>
+                  )}
+                </View>
+              )}
+            />
           </View>
         </View>
       ) : (
