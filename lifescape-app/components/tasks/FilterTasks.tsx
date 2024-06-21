@@ -5,7 +5,6 @@ import { useTaskContext } from "@/context/TaskProvider";
 
 import { Dropdown } from "react-native-element-dropdown";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 const differentSortOptions = [
   {
@@ -23,7 +22,8 @@ const FilterTasks = () => {
       setTasks(
         [...tasks].sort((a, b) => {
           if (a.dueDate && b.dueDate) {
-            return a.dueDate.getTime() - b.dueDate.getTime();
+            console.log(a.dueDate, b.dueDate);
+            return (new Date(a.dueDate)).getTime() - (new Date(b.dueDate)).getTime();
           } else if (a.dueDate) {
             return -1;
           } else if (b.dueDate) {
@@ -34,14 +34,13 @@ const FilterTasks = () => {
         })
       );
     }
-  }, [sortBy]);
+  }, [sortBy, setSortBy]);
 
   return (
     <Dropdown
         style={styles.dropdown}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
         iconStyle={styles.iconStyle}
         data={differentSortOptions}
         search={false}
@@ -75,19 +74,17 @@ const styles = StyleSheet.create({
   placeholderStyle: {
     fontSize: 16,
     marginLeft: 5,
-    textDecorationColor: 'gray',
+    color: 'gray',
   },
   selectedTextStyle: {
     fontSize: 16,
+    marginLeft: 5,
   },
   iconStyle: {
     width: 20,
     height: 20,
   },
-  inputSearchStyle: {
-    height: 40,
-    fontSize: 16,
-  },
+
 });
 
 
