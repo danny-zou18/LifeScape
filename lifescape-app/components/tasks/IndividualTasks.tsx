@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity, Animated } from "react-native";
 import React from "react";
-import {isAxiosError} from "axios";
+import { isAxiosError } from "axios";
 import api from "@/api/axios";
 import { useGlobalContext } from "@/context/GlobalProvider";
 
@@ -13,7 +13,10 @@ interface IndividualTasksProps {
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
 }
 
-const IndividualTasks: React.FC<IndividualTasksProps> = ({ task, setTasks }) => {
+const IndividualTasks: React.FC<IndividualTasksProps> = ({
+  task,
+  setTasks,
+}) => {
   const { user } = useGlobalContext();
 
   const handleDeleteTask = async () => {
@@ -45,7 +48,7 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({ task, setTasks }) => 
   ) => {
     const scale = dragX.interpolate({
       inputRange: [-100, 0],
-      outputRange: [1, .5],
+      outputRange: [1, 0.5],
       extrapolate: "clamp",
     });
     return (
@@ -64,8 +67,8 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({ task, setTasks }) => 
 
   return (
     <Swipeable renderRightActions={rightSwipe} overshootRight={false}>
-        {task.description ? (
-          <View>
+      {task.description ? (
+        <View>
           <View className="bg-red-100 p-4 py-3 rounded-lg overflow-hidden flex flex-row justify-between items-end">
             <View>
               <Text>{task.title}</Text>
@@ -75,17 +78,33 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({ task, setTasks }) => 
             </View>
             <View className="flex flex-row gap-4 items-center">
               <Text>{task.difficultyRank}</Text>
-              {task.dueDate ? (<Text>{new Date(task.dueDate).getMonth() + 1} / {new Date(task.dueDate).getDate()}</Text>) : null}
+              {task.dueDate ? (
+                <Text>
+                  {new Date(task.dueDate).getMonth() + 1} /{" "}
+                  {new Date(task.dueDate).getDate()}
+                </Text>
+              ) : null}
             </View>
           </View>
         </View>
-        ): (
-          <Text className="text-center text-lg text-gray-500">
-            No description
-          </Text>
-        
-        )}
-  
+      ) : (
+        <View>
+          <View className="bg-red-100 p-4 py-5 rounded-lg overflow-hidden flex flex-row justify-between items-end">
+            <View>
+              <Text>{task.title}</Text>
+            </View>
+            <View className="flex flex-row gap-4 items-center">
+              <Text>{task.difficultyRank}</Text>
+                {task.dueDate ? (
+                  <Text>
+                    {new Date(task.dueDate).getMonth() + 1} /{" "}
+                    {new Date(task.dueDate).getDate()}
+                  </Text>
+                ) : null}
+            </View>
+          </View>
+        </View>
+      )}
     </Swipeable>
   );
 };

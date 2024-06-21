@@ -64,7 +64,7 @@ model Task {
   dueDate   DateTime?
   completed Boolean   @default(false)
 
-  difficultyRank DifficultyRank @default(F)
+  difficultyRank DifficultyRank @default(E)
 
   experienceReward Int?
   goldReward       Int?
@@ -96,7 +96,7 @@ model Habit {
 
   quitting Boolean @default(false)
 
-  difficultyRank DifficultyRank @default(F)
+  difficultyRank DifficultyRank @default(E)
 
   experienceReward Int?
   goldReward       Int?
@@ -124,7 +124,7 @@ model Routine {
   startTimeOfDayInMinutes Int
   endTimeOfDayInMinutes   Int
 
-  difficultyRank DifficultyRank @default(F)
+  difficultyRank DifficultyRank @default(E)
 
   experienceReward Int?
   goldReward       Int?

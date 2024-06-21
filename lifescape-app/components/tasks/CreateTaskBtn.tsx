@@ -1,20 +1,22 @@
-import { Text, TouchableHighlight } from "react-native";
+import { View, Text, TouchableHighlight } from "react-native";
 import React from "react";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 import { useTaskContext } from "@/context/TaskProvider";
 
 const CreateTaskBtn = () => {
-
-    const { setTaskCreationOpen } = useTaskContext();
+  const { setTaskCreationOpen } = useTaskContext();
   return (
     <TouchableHighlight
-      className="bg-[#FDFDFD] w-[225px] h-[45px] rounded-md mt-4"
-      underlayColor="#FFFFFF"
+      style={{ alignSelf: "flex-start" }}
+      className="bg-[rgb(253,253,253)] p-2 rounded-full shadow-sm"
+      underlayColor="#FFFFFF60"
       onPress={() => setTaskCreationOpen(true)}
     >
-      <Text className="text-black text-xl font-semibold mx-auto my-auto">
-        Create Task
-      </Text>
+      <View className="flex flex-row items-center pl-2">
+        <Text className="mr-2 text-md font-[500]">Create</Text>
+        <AntDesign name="plus" size={24} color="black" />
+      </View>
     </TouchableHighlight>
   );
 };

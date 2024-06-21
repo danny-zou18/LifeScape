@@ -17,7 +17,7 @@ router.post("/create/:userId/:characterId", async (req, res) => {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
-  const { title, description, dueDate } = req.body;
+  const { title, description, dueDate, difficultyRank } = req.body;
 
   await db.task
     .create({
@@ -25,6 +25,7 @@ router.post("/create/:userId/:characterId", async (req, res) => {
         title: title,
         description: description,
         dueDate: dueDate,
+        difficultyRank: difficultyRank,
         Character: {
           connect: {
             id: parseInt(characterId),

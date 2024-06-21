@@ -11,12 +11,15 @@ import api from "@/api/axios";
 import { useGlobalContext } from "./GlobalProvider";
 
 import { Task } from "@/types/db_types";
+import { set } from "react-hook-form";
 
 interface TaskContextTypes {
   tasks: Task[];
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
   taskCreationOpen: boolean;
   setTaskCreationOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  sortBy: string;
+  setSortBy: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const defaultState = {
@@ -24,6 +27,8 @@ const defaultState = {
   setTasks: () => {},
   taskCreationOpen: false,
   setTaskCreationOpen: () => {},
+  sortBy: "",
+  setSortBy: () => {},
 };
 
 const TaskContext = createContext<TaskContextTypes>(defaultState);
@@ -34,6 +39,7 @@ const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [taskCreationOpen, setTaskCreationOpen] = useState<boolean>(
     defaultState.taskCreationOpen
   );
+  const [sortBy, setSortBy] = useState<string>(defaultState.sortBy);
 
   const { user, userCharacter } = useGlobalContext();
 
@@ -64,7 +70,7 @@ const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   return (
     <TaskContext.Provider
-      value={{ tasks, setTasks, taskCreationOpen, setTaskCreationOpen }}
+      value={{ tasks, setTasks, taskCreationOpen, setTaskCreationOpen, sortBy, setSortBy}}
     >
       {children}
     </TaskContext.Provider>
