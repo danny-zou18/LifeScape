@@ -4,7 +4,9 @@ import {
   TouchableOpacity,
   Text,
   Animated as RNAnimated,
+  useWindowDimensions,
   FlatList,
+  
 } from "react-native";
 import Animated,{
   useSharedValue,
@@ -74,20 +76,12 @@ const Home = () => {
   const { userCharacter } = useGlobalContext();
 
   const [currentlyOpen, setCurrentlyOpen] = useState<string>("tasks");
-
+  
   const scrollX = useSharedValue(0);
   const flatListRef = useRef<FlatList>(null);
 
   const scrollHandler = useAnimatedScrollHandler((event) => {
     scrollX.value = event.contentOffset.x / 300; // 300 is the width of each tab
-  });
-
-  const animatedIndicatorStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        { translateX: withTiming(scrollX.value * (100 / TABS.length)) },
-      ],
-    };
   });
 
   useEffect(() => {
@@ -106,23 +100,12 @@ const Home = () => {
               setCurrentView={setCurrentlyOpen}
               flatListRef={flatListRef}
             />
-            <View style={{ height: 2, flexDirection: "row", marginTop: 8 }}>
-              <Animated.View
-                style={[
-                  {
-                    height: "100%",
-                    width: `${100 / TABS.length}%`,
-                    backgroundColor: "blue",
-                  },
-                  animatedIndicatorStyle,
-                ]}
-              />
-            </View>
             <Animated.FlatList
               ref={flatListRef}
               horizontal
               data={TABS}
               keyExtractor={(item) => item}
+
               pagingEnabled
               scrollEnabled={false}
               showsHorizontalScrollIndicator={false}
@@ -130,7 +113,7 @@ const Home = () => {
               scrollEventThrottle={16}
               renderItem={({ item }) => (
                 <View
-                  className="w-[95vw]"
+                  className="w-[95vw] bg-red-400"
                 >
                   {item === "tasks" && (
                     <TaskProvider>
