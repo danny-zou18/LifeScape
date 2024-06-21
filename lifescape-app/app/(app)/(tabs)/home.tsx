@@ -1,29 +1,19 @@
 import {
   View,
-  Text,
-  TouchableHighlight,
-  Button,
-  Modal,
   SafeAreaView,
-  Image,
+  FlatList,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+
+import React, { useState, useRef } from "react";
 
 import { useGlobalContext } from "@/context/GlobalProvider";
 
-import ViewSelectionBtns from "@/components/home/ViewSelectionBtns";
-
-import CharacterOverview from "@/components/home/CharacterOverview";
 import CharacterCreationModal from "@/components/home/CharacterCreationModal";
+import CharacterOverview from "@/components/home/CharacterOverview";
 
-import TaskProvider from "@/context/TaskProvider";
-import TaskWrapper from "@/components/home/TaskWrapper";
+import ViewSelectionBtns from "@/components/home/ViewSelectionBtns";
+import TasksHabitsRoutine from "@/components/home/TasksHabitsRoutine";
 
-import HabitProvider from "@/context/HabitProvider";
-import HabitWrapper from "@/components/home/HabitWrapper";
-
-import RoutineProvider from "@/context/RoutineProvider";
-import RoutineWrapper from "@/components/home/RoutineWrapper";
 
 const Home = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -32,33 +22,24 @@ const Home = () => {
 
   const { userCharacter } = useGlobalContext();
 
-  const [currentlyOpen, setCurrentlyOpen] = useState<string>("tasks");
+  const [currentlyOpen, setCurrentlyOpen] = useState<string>("Tasks");
+  const flatListRef = useRef<FlatList>(null);
 
   return (
     <SafeAreaView>
       {userCharacter ? (
         <View className="flex items-center">
           <CharacterOverview />
-          <View className="w-[95vw]">
+          <View className="w-[95vw] flex mt-1">
             <ViewSelectionBtns
               currentView={currentlyOpen}
               setCurrentView={setCurrentlyOpen}
+              flatListRef={flatListRef}
             />
-            {currentlyOpen === "tasks" && (
-              <TaskProvider>
-                <TaskWrapper />
-              </TaskProvider>
-            )}
-            {currentlyOpen === "habits" && (
-              <HabitProvider>
-                <HabitWrapper />
-              </HabitProvider>
-            )}
-            {currentlyOpen === "routine" && (
-              <RoutineProvider>
-                <RoutineWrapper />
-              </RoutineProvider>
-            )}
+            <TasksHabitsRoutine
+              currentlyOpen={currentlyOpen}
+              flatListRef={flatListRef}
+            />
           </View>
         </View>
       ) : (
