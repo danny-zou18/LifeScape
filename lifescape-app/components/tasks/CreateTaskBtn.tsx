@@ -9,7 +9,7 @@ const CreateTaskBtn = () => {
   return (
     <TouchableHighlight
       style={{ alignSelf: "flex-start" }}
-      className="bg-[rgb(253,253,253)] p-2 rounded-full shadow-sm ml-auto mr-2"
+      className="bg-[rgb(253,253,253)] p-2 rounded-full shadow-sm mr-2"
       underlayColor="#FFFFFF60"
       onPress={() => setTaskCreationOpen(true)}
     >
