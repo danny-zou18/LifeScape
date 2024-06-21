@@ -1,10 +1,32 @@
 import { View, Text, TouchableHighlight } from 'react-native'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+
+import { useTaskContext } from '@/context/TaskProvider';
 
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 const FilterTasks = () => {
+    const { tasks, setTasks } = useTaskContext();
+    const [sortBy, setSortBy] = useState<string>("");
+    
+    useEffect(() => {
+        if (sortBy === "dueDate") {
+            setTasks([...tasks].sort((a, b) => {
+                if (a.dueDate && b.dueDate) {
+                    return Number(a.dueDate) - Number(b.dueDate) ;
+                } else if (a.dueDate) {
+                    return -1;
+                } else if (b.dueDate) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }));
+        } 
+    }, [sortBy]);
+    
+
   return (
     <TouchableHighlight
       style={{ alignSelf: "flex-start" }}
