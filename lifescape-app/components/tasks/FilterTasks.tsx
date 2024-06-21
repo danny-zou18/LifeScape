@@ -35,10 +35,10 @@ const FilterTasks = () => {
           }
         })
       );
-    } else if (sortBy === "difficulty") {
+    } else if (sortBy === "difficulty ") {
       setTasks(
         [...tasks].sort((a, b) => {
-          return Number(a.difficultyRank) - Number(b.difficultyRank);
+          return a.difficultyRank.localeCompare(b.difficultyRank);
         })
       );
     }
