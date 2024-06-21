@@ -6,9 +6,8 @@ import {
   Animated as RNAnimated,
   useWindowDimensions,
   FlatList,
-  
 } from "react-native";
-import Animated,{
+import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
@@ -32,7 +31,7 @@ import HabitWrapper from "@/components/home/HabitWrapper";
 import RoutineProvider from "@/context/RoutineProvider";
 import RoutineWrapper from "@/components/home/RoutineWrapper";
 
-const TABS = ["tasks", "habits", "routine"];
+const TABS = ["Tasks", "Habits", "Routine"];
 
 interface ViewSelectionBtnsProps {
   currentView: string;
@@ -45,7 +44,7 @@ const ViewSelectionBtns: React.FC<ViewSelectionBtnsProps> = ({
   flatListRef,
 }) => {
   return (
-    <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
+    <View className="w-full  flex flex-row justify-around pb-1">
       {TABS.map((tab, index) => (
         <TouchableOpacity
           key={index}
@@ -53,15 +52,11 @@ const ViewSelectionBtns: React.FC<ViewSelectionBtnsProps> = ({
             setCurrentView(tab);
             flatListRef.current?.scrollToIndex({ index });
           }}
+          className={` w-[30%] p-3 ${
+            currentView === tab ? "border-b-2 border-blue-500" : ""
+          }`}
         >
-          <Text
-            style={{
-              padding: 16,
-              color: currentView === tab ? "blue" : "black",
-            }}
-          >
-            {tab}
-          </Text>
+          <Text className={`text-center text-md font-bold`}>{tab}</Text>
         </TouchableOpacity>
       ))}
     </View>
@@ -75,8 +70,8 @@ const Home = () => {
 
   const { userCharacter } = useGlobalContext();
 
-  const [currentlyOpen, setCurrentlyOpen] = useState<string>("tasks");
-  
+  const [currentlyOpen, setCurrentlyOpen] = useState<string>("Tasks");
+
   const scrollX = useSharedValue(0);
   const flatListRef = useRef<FlatList>(null);
 
@@ -94,7 +89,7 @@ const Home = () => {
       {userCharacter ? (
         <View className="flex items-center">
           <CharacterOverview />
-          <View className="w-[95vw] flex">
+          <View className="w-[95vw] flex mt-1">
             <ViewSelectionBtns
               currentView={currentlyOpen}
               setCurrentView={setCurrentlyOpen}
@@ -105,27 +100,24 @@ const Home = () => {
               horizontal
               data={TABS}
               keyExtractor={(item) => item}
-
               pagingEnabled
               scrollEnabled={false}
               showsHorizontalScrollIndicator={false}
               onScroll={scrollHandler}
               scrollEventThrottle={16}
               renderItem={({ item }) => (
-                <View
-                  className="w-[95vw] bg-red-400"
-                >
-                  {item === "tasks" && (
+                <View className="w-[95vw] ">
+                  {item === "Tasks" && (
                     <TaskProvider>
                       <TaskWrapper />
                     </TaskProvider>
                   )}
-                  {item === "habits" && (
+                  {item === "Habits" && (
                     <HabitProvider>
                       <HabitWrapper />
                     </HabitProvider>
                   )}
-                  {item === "routine" && (
+                  {item === "Routine" && (
                     <RoutineProvider>
                       <RoutineWrapper />
                     </RoutineProvider>
