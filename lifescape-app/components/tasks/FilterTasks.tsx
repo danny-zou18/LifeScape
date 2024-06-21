@@ -11,6 +11,10 @@ const differentSortOptions = [
     label: "Due Date",
     value: "dueDate",
   },
+  {
+    label: "Difficulty",
+    value: "difficulty",
+  }
 ];
 const FilterTasks = () => {
   const { tasks, setTasks, sortBy, setSortBy } = useTaskContext();
@@ -31,6 +35,12 @@ const FilterTasks = () => {
           }
         })
       );
+    } else if (sortBy === "difficulty") {
+      setTasks(
+        [...tasks].sort((a, b) => {
+          return Number(a.difficultyRank) - Number(b.difficultyRank);
+        })
+      );
     }
   }, [sortBy, setSortBy]);
 
@@ -39,14 +49,14 @@ const FilterTasks = () => {
         style={styles.dropdown}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
+        itemContainerStyle={styles.itemContainerStyle}
         iconStyle={styles.iconStyle}
         data={differentSortOptions}
         search={false}
-        maxHeight={50}
         labelField="label"
         valueField="value"
         placeholder="Sort By..."
-        searchPlaceholder="Search..."
+        maxHeight={110}
         value={sortBy}
         onChange={item => {
           setSortBy(item.value);
@@ -62,7 +72,6 @@ const styles = StyleSheet.create({
   dropdown: {
     margin: 2,
     width: 140,
-    height: 30,
     borderBottomColor: 'gray',
     borderBottomWidth: 0.5,
   },
@@ -82,6 +91,10 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
   },
+  itemContainerStyle: {
+    borderBottomColor: 'gray',
+    borderBottomWidth: 0.5,
+  }
 
 });
 

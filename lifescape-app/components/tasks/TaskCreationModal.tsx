@@ -10,9 +10,10 @@ import {
   ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
-import { FieldValues, useForm } from "react-hook-form";
+import { FieldValues, set, useForm } from "react-hook-form";
 import { isAxiosError } from "axios";
 import api from "@/api/axios";
+import { DifficultyRank } from "@/types/db_types";
 
 import DateTimePicker, {
   DateTimePickerEvent,
@@ -20,6 +21,8 @@ import DateTimePicker, {
 
 import { useTaskContext } from "@/context/TaskProvider";
 import { useGlobalContext } from "@/context/GlobalProvider";
+
+import DifficultySelection from "../general/DifficultySelection";
 
 const roundToNextHour = (date: Date): Date => {
   const roundedDate = new Date(date);
@@ -39,6 +42,8 @@ const TaskCreationModal: React.FC = () => {
 
   const [date, setDate] = useState(roundToNextHour(new Date()));
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
+
+  const [difficultyRank, setDifficultyRank] = useState<DifficultyRank>(DifficultyRank.E);
 
   const onDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     if (selectedDate) {
@@ -74,7 +79,7 @@ const TaskCreationModal: React.FC = () => {
     try {
       const response = await api.post(
         `/tasks/create/${user.uid}/${userCharacter.id}`,
-        { title, description, dueDate },
+        { title, description, dueDate, difficultyRank },
         {
           headers: {
             Authorization: await user.getIdToken(),
@@ -86,6 +91,7 @@ const TaskCreationModal: React.FC = () => {
         setTasks([...tasks, response.data]);
         setTaskCreationOpen(false);
         setShowDatePicker(false);
+        setDifficultyRank(DifficultyRank.E);
         setSortBy("");
         reset();
       }
@@ -105,6 +111,7 @@ const TaskCreationModal: React.FC = () => {
   const onCancel = () => {
     setTaskCreationOpen(false);
     setShowDatePicker(false);
+    setDifficultyRank(DifficultyRank.E);
     reset();
   };
 
@@ -182,6 +189,8 @@ const TaskCreationModal: React.FC = () => {
                 )}
               </View>
             </View>
+            <DifficultySelection difficulty={difficultyRank} setDifficulty={setDifficultyRank} />
+
             {loading ? (
               <ActivityIndicator size="large" color="#0000ff" />
             ) : (
