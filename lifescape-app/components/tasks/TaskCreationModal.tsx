@@ -31,7 +31,7 @@ const roundToNextHour = (date: Date): Date => {
 };
 
 const TaskCreationModal: React.FC = () => {
-  const { tasks, setTasks, taskCreationOpen, setTaskCreationOpen } =
+  const { tasks, setTasks, taskCreationOpen, setTaskCreationOpen, setSortBy } =
     useTaskContext();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -86,6 +86,7 @@ const TaskCreationModal: React.FC = () => {
         setTasks([...tasks, response.data]);
         setTaskCreationOpen(false);
         setShowDatePicker(false);
+        setSortBy("");
         reset();
       }
     } catch (error) {
