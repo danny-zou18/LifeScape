@@ -11,5 +11,13 @@ module.exports = {
   },
   rules : {
     'import/no-unresolved': [2, {commonjs: true, amd: true}]
-  }
+  },
+  overrides: [
+    {
+      files: ["./app/**/*", "./components/**/*", "./context/**/*", "./hooks/**/*"],
+      rules: {
+        "import/no-unresolved": "off",
+      },
+    },
+  ],
 };
