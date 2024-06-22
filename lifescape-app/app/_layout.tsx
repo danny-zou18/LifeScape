@@ -11,7 +11,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
-} from 'expo-router
+} from 'expo-router';
 
 SplashScreen.preventAutoHideAsync();
 
