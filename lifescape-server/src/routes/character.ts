@@ -8,8 +8,6 @@ const router = express.Router();
 router.get("/get/:userId", async (req, res) => {
   const authToken = req.headers.authorization;
   const { userId } = req.params;
-  console.log(userId);
-  console.log(authToken);
   try {
     const authUser = await auth().verifyIdToken(authToken as string);
     if (authUser.uid !== userId) {
@@ -29,9 +27,9 @@ router.get("/get/:userId", async (req, res) => {
     }
     const character = userWithCharacter.character;
     if (!character) {
-      return res.json(null);
+      return res.status(200).json(null);
     }
-    res.json(character);
+    res.status(200).json(character);
   } catch (e) {
     console.log(e);
     return res.status(500).json({ error: "Internal Server Error" });
@@ -81,7 +79,7 @@ router.post("/create/:userId", async (req, res) => {
       },
     })
     .then((character) => {
-      return res.json({ success: true, character: character });
+      return res.status(201).json(character);
     })
     .catch((error) => {
       console.log(error);

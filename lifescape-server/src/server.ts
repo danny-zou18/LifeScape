@@ -8,6 +8,9 @@ import credentials from "../credentials.json";
 
 import { userRouter } from "./routes/users";
 import { CharacterRouter } from "./routes/character";
+import { tasksRouter } from "./routes/tasks";
+import { habitsRouter } from "./routes/habits";
+import { routineRouter } from "./routes/routine";
 
 
 admin.initializeApp({
@@ -22,6 +25,9 @@ app.use(express.json());
 
 app.use("/auth", userRouter);
 app.use("/character", CharacterRouter);
+app.use("/tasks", tasksRouter);
+app.use("/habits", habitsRouter);
+app.use("/routine", routineRouter);
 
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.setHeader("Access-Control-Allow-Origin", "*");

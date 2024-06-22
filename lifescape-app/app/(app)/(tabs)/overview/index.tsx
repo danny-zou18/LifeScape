@@ -34,14 +34,11 @@ const Overview = () => {
         setIsSigningIn(false);
       });
   };
-  const goToAccount = () =>{
-    router.replace("/overview/acocunt")
-  };
   
   return (
     <View style={styles.container}>
       <View style={styles.topButtonContainer}>
-        <Link href="/overview/account/index" style={styles.button}>
+        <Link href="/overview/account" style={styles.button}>
           <Text style={styles.buttonText}>Account</Text>
         </Link>
       </View>

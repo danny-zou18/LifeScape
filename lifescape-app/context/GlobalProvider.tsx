@@ -5,7 +5,8 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-import axios from "axios";
+import {isAxiosError} from "axios";
+import api from "@/api/axios";
 
 import { useRouter } from "expo-router";
 
@@ -51,19 +52,24 @@ const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     console.log("Setting up onAuthStateChanged listener");
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, async (user) => {
       if (user) {
-        console.log("User logged in:", user); 
+        console.log("User logged in:", user);
         setLoggedIn(true);
         setUser(user);
         try {
-          const response = await axios.get(`http://128.113.145.204:8000/character/get/${user.uid}`, {
-            headers: {
-              "Authorization": await user.getIdToken(),
+          const response = await api.get(
+            `/character/get/${user.uid}`,
+            {
+              headers: {
+                Authorization: await user.getIdToken(),
+              },
             }
-          });
-          setUserCharacter(response.data);
-          console.log("Character fetched: ", response.data);
+          );
+          if (response.status === 200) {
+            setUserCharacter(response.data);
+            console.log("Character fetched: ", response.data);
+          }
         } catch (error) {
-          if (axios.isAxiosError(error)) {
+          if (isAxiosError(error)) {
             // AxiosError type will have a response property
             console.log(error.response?.data);
           } else {
