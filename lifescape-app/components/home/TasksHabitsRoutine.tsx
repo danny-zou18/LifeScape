@@ -37,7 +37,7 @@ const TasksHabitsRoutine: React.FC<TasksHabitsRoutineProps> = ({
   useEffect(() => {
     const index = TABS.indexOf(currentlyOpen);
     flatListRef.current?.scrollToIndex({ index });
-  }, [currentlyOpen]);
+  }, [currentlyOpen, flatListRef]);
 
   return (
     <Animated.FlatList

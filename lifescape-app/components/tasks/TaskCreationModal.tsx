@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
-import { FieldValues, set, useForm } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
 import { isAxiosError } from "axios";
 import api from "@/api/axios";
 import { DifficultyRank } from "@/types/db_types";
