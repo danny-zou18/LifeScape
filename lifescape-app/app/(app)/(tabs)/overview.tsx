@@ -9,7 +9,7 @@ import { useRouter } from "expo-router";
 import { useGlobalContext } from "@/context/GlobalProvider";
 
 const Overview = () => {
-  const [isSigningIn, setIsSigningIn] = useState<Boolean>(false);
+  const [isSigningIn, setIsSigningIn] = useState<boolean>(false);
 
   const { loggedIn, setLoggedIn } = useGlobalContext();
 
