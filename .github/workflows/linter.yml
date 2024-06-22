@@ -35,5 +35,9 @@ jobs:
             - name: Install dependencies
               run: npm install
           
-            - name: Run ESLint
-              run: npm run lint --if-present --max-warnings=0
+            - name: Run linters
+              if: steps.filter.outputs.lifescape-app == 'true'
+              uses: wearerequired/lint-action@v2
+              with:
+                eslint: true
+                prettier: true
