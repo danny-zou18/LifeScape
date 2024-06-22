@@ -9,5 +9,7 @@ module.exports = {
   env: {
     node: true,
   },
-
+  rules : {
+    'import/no-unresolved': [2, {commonjs: true, amd: true}]
+  }
 };
