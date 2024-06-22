@@ -1,3 +1,5 @@
+/* eslint-disable prefer-const */
+/* eslint-disable no-var */
 import { PrismaClient } from "@prisma/client";
 
 let db: PrismaClient;
