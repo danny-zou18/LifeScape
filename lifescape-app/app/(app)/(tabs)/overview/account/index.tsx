@@ -6,16 +6,7 @@ import 'nativewind'
 import { useGlobalContext } from '@/context/GlobalProvider';
 
 const Account = () => {
-  //const {user} = useGlobalContext();
-  const navigation = useNavigation();
-
-  const user = {
-    username: 'Ramzey',
-    email: 'RY@gmail',
-    emailVerified: true,
-  };
-
-
+  const {user} = useGlobalContext();
   return (
     <View className="flex-1 bg-gray-100 p-5">
       <View className="w-full bg-white p-6 rounded-lg shadow-md">
