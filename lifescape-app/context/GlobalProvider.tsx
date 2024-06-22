@@ -90,6 +90,7 @@ const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       console.log("Cleaning up onAuthStateChanged listener");
       unsubscribe();
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

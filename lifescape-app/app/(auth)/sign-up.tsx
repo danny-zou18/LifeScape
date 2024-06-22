@@ -7,7 +7,6 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
   ActivityIndicator,
-  Button,
   TouchableHighlight,
   ScrollView,
 } from "react-native";
@@ -58,11 +57,13 @@ const SignUp: React.FC = () => {
           password: password,
         }
       );
-      await signInWithEmailAndPassword(auth, email, password)
-        .then((userCredentials) => {})
+      if (response.status === 200) {
+        await signInWithEmailAndPassword(auth, email, password)
+        .then(() => {})
         .catch((error) => {
           console.log(error);
         });
+      }
     } catch (error) {
       if (isAxiosError(error)) {
         // AxiosError type will have a response property

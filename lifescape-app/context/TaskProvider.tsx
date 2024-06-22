@@ -11,7 +11,6 @@ import api from "@/api/axios";
 import { useGlobalContext } from "./GlobalProvider";
 
 import { Task } from "@/types/db_types";
-import { set } from "react-hook-form";
 
 interface TaskContextTypes {
   tasks: Task[];

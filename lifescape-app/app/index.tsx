@@ -1,13 +1,11 @@
-import { View, Text, ScrollView, Button } from "react-native";
-import { Redirect, router } from "expo-router";
+import { View, Text, ScrollView } from "react-native";
+import { router } from "expo-router";
 
 import React from "react";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import CustomButton from "@/components/onboarding/CustomButton";
-
-import { useGlobalContext } from "@/context/GlobalProvider";
 
 const Index:React.FC = () => {
   return (

@@ -3,6 +3,7 @@ import { Stack } from 'expo-router';
 import React, { useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import "../global.css"
+import { useFonts } from 'expo-font';
 import GlobalProvider from '@/context/GlobalProvider';
 
 import FontAwesome from '@expo/vector-icons/FontAwesome';
@@ -11,7 +12,6 @@ export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
 } from 'expo-router';
-import { useFonts } from 'expo-font';
 
 SplashScreen.preventAutoHideAsync();
 

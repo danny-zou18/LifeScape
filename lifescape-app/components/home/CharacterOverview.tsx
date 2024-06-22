@@ -1,9 +1,7 @@
 import { View, Text, Image } from "react-native";
-import React, { useMemo, useEffect } from "react";
+import React, { useMemo } from "react";
 
 import { useGlobalContext } from "@/context/GlobalProvider";
-
-import cat from "../../constants/Images.ts";
 
 const CharacterOverview = () => {
   const { userCharacter } = useGlobalContext();
@@ -20,15 +18,15 @@ const CharacterOverview = () => {
   );
   const healthPercentage = useMemo(
     () => calculatePercentage(userCharacter.health, userCharacter.maxHealth),
-    [userCharacter.health]
+    [userCharacter.health, userCharacter.maxHealth]
   );
   const manaPercentage = useMemo(
     () => calculatePercentage(userCharacter.mana, userCharacter.maxMana),
-    [userCharacter.mana]
+    [userCharacter.mana, userCharacter.maxMana]
   );
   const energyPercentage = useMemo(
     () => calculatePercentage(userCharacter.energy, userCharacter.maxEnergy),
-    [userCharacter.energy]
+    [userCharacter.energy, userCharacter.maxEnergy]
   );
   return (
     <View className="bg-red-300 flex flex-row h-[17vh] p-3">
