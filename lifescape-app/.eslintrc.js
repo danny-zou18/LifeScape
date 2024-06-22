@@ -10,14 +10,6 @@ module.exports = {
     node: true,
   },
   rules : {
-    'import/no-unresolved': [2, {commonjs: true, amd: true}]
+    'import/no-unresolved': "off"
   },
-  overrides: [
-    {
-      files: ["./app/**/*", "./components/**/*", "./context/**/*", "./hooks/**/*"],
-      rules: {
-        "import/no-unresolved": "off",
-      },
-    },
-  ],
 };
