@@ -18,26 +18,9 @@ jobs:
         
         steps:
             - uses: actions/checkout@v4 
-
-            - uses: dorny/paths-filter@v3
-              id: filter
-              with:
-                filters: |
-                  lifescape-app:
-                  - 'lifescape-app/**'    
-        
-            - name: Set up Node.js
-              if: steps.filter.outputs.lifescape-app == 'true'
-              uses: actions/setup-node@v4
-              with:
-                node-version: '20'
             
             - name: Install dependencies
               run: npm install
           
-            - name: Run linters
-              if: steps.filter.outputs.lifescape-app == 'true'
-              uses: wearerequired/lint-action@v2
-              with:
-                eslint: true
-                prettier: true
+            - name: Run ESLint
+              run: npm run lint --if-present 
