@@ -15,27 +15,65 @@ const differentSortOptions = [
     label: "Easiest",
     value: "easiest",
   },
+  {
+    label: "Oldest",
+    value: "oldest",
+  },
+  {
+    label: "Newest",
+    value: "newest",
+  },
 ];
 
 const FilterHabits = () => {
   const { habits, setHabits, sortBy, setSortBy } = useHabitContext();
 
-useEffect(() => {
+  useEffect(() => {
     if (sortBy === "hardest") {
+      setHabits(
+        [...habits].sort((a, b) => {
+          return a.difficultyRank.localeCompare(b.difficultyRank);
+        })
+      );
+    } else if (sortBy === "easiest") {
+      setHabits(
+        [...habits].sort((a, b) => {
+          return b.difficultyRank.localeCompare(a.difficultyRank);
+        })
+      );
+    } else if (sortBy === "oldest") {
         setHabits(
             [...habits].sort((a, b) => {
-                return a.difficultyRank.localeCompare(b.difficultyRank);
+            if (a.createdAt && b.createdAt) {
+                return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+            } else if (a.createdAt) {
+                return -1;
+            } else if (b.createdAt) {
+                return 1;
+            } else {
+                return 0;
+            }
             })
         );
-    } else if (sortBy === "easiest") {
+    } else if (sortBy === "newest") {
         setHabits(
             [...habits].sort((a, b) => {
-                return b.difficultyRank.localeCompare(a.difficultyRank);
+            if (a.createdAt && b.createdAt) {
+                return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+            } else if (b.createdAt) {
+                return -1;
+            } else if (a.createdAt) {
+                return 1;
+            } else {
+                return 0;
+            }
             })
         );
     }
+    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [sortBy, setSortBy]);
+  }, [sortBy, setSortBy]);
 
   return (
     <Dropdown
@@ -45,6 +83,7 @@ useEffect(() => {
       itemContainerStyle={styles.itemContainerStyle}
       iconStyle={styles.iconStyle}
       data={differentSortOptions}
+      maxHeight={150}
       search={false}
       labelField="label"
       valueField="value"
