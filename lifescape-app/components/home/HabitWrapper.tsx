@@ -1,18 +1,18 @@
-import { View } from 'react-native'
-import React from 'react'
+import { View } from "react-native";
+import React from "react";
 
-import CreateHabitBtn from '../habits/CreateHabitBtn'
-import HabitCreationModal from '../habits/HabitCreationModal'
-import DisplayHabits from '../habits/DisplayHabits'
+import TopBar from "../habits/TopBar";
+import HabitCreationModal from "../habits/HabitCreationModal";
+import DisplayHabits from "../habits/DisplayHabits";
 
 const HabitWrapper = () => {
   return (
-    <View >
+    <View>
       <HabitCreationModal />
-      <CreateHabitBtn />
+      <TopBar />
       <DisplayHabits />
     </View>
-  )
-}
+  );
+};
 
-export default HabitWrapper
+export default HabitWrapper;
