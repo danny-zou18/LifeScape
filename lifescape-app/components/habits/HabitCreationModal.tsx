@@ -23,7 +23,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import DifficultySelection from "../general/DifficultySelection";
 
 const HabitCreationModal = () => {
-  const { habits, setHabits, habitCreationOpen, setHabitCreationOpen } =
+  const { habits, setHabits, habitCreationOpen, setHabitCreationOpen, setSortBy } =
     useHabitContext();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -95,6 +95,7 @@ const HabitCreationModal = () => {
         setGoalCompletionWeekly(1);
         setGoalCompletionMonthly(1);
         setDifficulty(DifficultyRank.E);
+        setSortBy("");
       }
     } catch (error) {
       if (isAxiosError(error)) {
@@ -115,6 +116,7 @@ const HabitCreationModal = () => {
     setGoalCompletionWeekly(1);
     setGoalCompletionMonthly(1);
     setDifficulty(DifficultyRank.E);
+    
   };
 
   const onMinusWeeklyGoal = () => {

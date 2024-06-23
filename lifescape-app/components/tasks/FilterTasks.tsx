@@ -117,7 +117,7 @@ const FilterTasks = () => {
 const styles = StyleSheet.create({
   dropdown: {
     margin: 2,
-    width: 140,
+    width: 120,
     borderBottomColor: 'gray',
     borderBottomWidth: 0.5,
   },

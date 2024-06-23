@@ -23,6 +23,14 @@ const differentSortOptions = [
     label: "Newest",
     value: "newest",
   },
+  {
+    label: "Streak",
+    value: "streak",
+  },
+  {
+    label: "Qutting?",
+    value: "quitting",
+  }
 ];
 
 const FilterHabits = () => {
@@ -69,8 +77,20 @@ const FilterHabits = () => {
             }
             })
         );
+    } else if (sortBy === "streak") {
+        setHabits(
+            [...habits].sort((a, b) => {
+            return b.streak - a.streak;
+            })
+        );
+    } else if (sortBy === "quitting") {
+        setHabits(
+            [...habits].sort((a, b) => {
+            return a.quitting === b.quitting ? 0 : a.quitting ? -1 : 1;
+            })
+        );
     }
-    
+
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortBy, setSortBy]);
@@ -102,7 +122,7 @@ const FilterHabits = () => {
 const styles = StyleSheet.create({
   dropdown: {
     margin: 2,
-    width: 140,
+    width: 120,
     borderBottomColor: "gray",
     borderBottomWidth: 0.5,
   },
