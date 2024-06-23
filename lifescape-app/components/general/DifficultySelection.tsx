@@ -19,8 +19,8 @@ const DifficultySelection: React.FC<DifficultySelectionProps> = ({
       </Text>
       <View className="flex flex-row justify-between p-1 bg-gray-400 rounded-lg h-[50px] w-full">
         <TouchableHighlight
-          className={`flex items-center justify-center w-[13.3%] bg-${
-            difficulty === DifficultyRank.F ? "[#b93df2]" : "[#e1abf740]"
+          className={`flex items-center justify-center w-[13.3%] ${
+            difficulty === DifficultyRank.F ?"bg-[#b93df2]" : "bg-[#e1abf740]"
           } rounded-md`}
           onPress={() => setDifficulty(DifficultyRank.F)}
           underlayColor="#b93df200"
@@ -28,8 +28,8 @@ const DifficultySelection: React.FC<DifficultySelectionProps> = ({
           <Text>F</Text>
         </TouchableHighlight>
         <TouchableHighlight
-          className={`flex items-center justify-center w-[13.3%] bg-${
-            difficulty === DifficultyRank.E ? "[#b93df2]" : "[#e1abf740]"
+          className={`flex items-center justify-center w-[13.3%] ${
+            difficulty === DifficultyRank.E ? "bg-[#b93df2]" : "bg-[#e1abf740]"
           } rounded-md`}
           onPress={() => setDifficulty(DifficultyRank.E)}
           underlayColor="#b93df200"
@@ -37,8 +37,8 @@ const DifficultySelection: React.FC<DifficultySelectionProps> = ({
           <Text>E</Text>
         </TouchableHighlight>
         <TouchableHighlight
-          className={`flex items-center justify-center w-[13.3%] bg-${
-            difficulty === DifficultyRank.D ? "[#b93df2]" : "[#e1abf740]"
+          className={`flex items-center justify-center w-[13.3%] ${
+            difficulty === DifficultyRank.D ? "bg-[#b93df2]" : "bg-[#e1abf740]"
           } rounded-md`}
           onPress={() => setDifficulty(DifficultyRank.D)}
           underlayColor="#b93df200"
@@ -46,8 +46,8 @@ const DifficultySelection: React.FC<DifficultySelectionProps> = ({
           <Text>D</Text>
         </TouchableHighlight>
         <TouchableHighlight
-          className={`flex items-center justify-center w-[13.3%] bg-${
-            difficulty === DifficultyRank.C ? "[#b93df2]" : "[#e1abf740]"
+          className={`flex items-center justify-center w-[13.3%] ${
+            difficulty === DifficultyRank.C ? "bg-[#b93df2]" : "bg-[#e1abf740]"
           } rounded-md`}
           onPress={() => setDifficulty(DifficultyRank.C)}
           underlayColor="#b93df200"
@@ -55,8 +55,8 @@ const DifficultySelection: React.FC<DifficultySelectionProps> = ({
           <Text>C</Text>
         </TouchableHighlight>
         <TouchableHighlight
-          className={`flex items-center justify-center w-[13.3%] bg-${
-            difficulty === DifficultyRank.B ? "[#b93df2]" : "[#e1abf740]"
+          className={`flex items-center justify-center w-[13.3%] ${
+            difficulty === DifficultyRank.B ? "bg-[#b93df2]" : "bg-[#e1abf740]"
           } rounded-md`}
           onPress={() => setDifficulty(DifficultyRank.B)}
           underlayColor="#b93df200"
@@ -64,8 +64,8 @@ const DifficultySelection: React.FC<DifficultySelectionProps> = ({
           <Text>B</Text>
         </TouchableHighlight>
         <TouchableHighlight
-          className={`flex items-center justify-center w-[13.3%] bg-${
-            difficulty === DifficultyRank.A ? "[#b93df2]" : "[#e1abf740]"
+          className={`flex items-center justify-center w-[13.3%] ${
+            difficulty === DifficultyRank.A ? "bg-[#b93df2]" : "bg-[#e1abf740]"
           } rounded-md`}
           onPress={() => setDifficulty(DifficultyRank.A)}
           underlayColor="#b93df200"
@@ -73,8 +73,8 @@ const DifficultySelection: React.FC<DifficultySelectionProps> = ({
           <Text>A</Text>
         </TouchableHighlight>
         <TouchableHighlight
-          className={`flex items-center justify-center w-[13.3%] bg-${
-            difficulty === DifficultyRank.S ? "[#b93df2]" : "[#e1abf740]"
+          className={`flex items-center justify-center w-[13.3%] ${
+            difficulty === DifficultyRank.S ? "bg-[#b93df2]" : "bg-[#e1abf740]"
           } rounded-md`}
           onPress={() => setDifficulty(DifficultyRank.S)}
           underlayColor="#b93df200"

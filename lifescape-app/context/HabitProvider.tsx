@@ -17,6 +17,8 @@ interface HabitContextTypes {
   setHabits: React.Dispatch<React.SetStateAction<Habit[]>>;
   habitCreationOpen: boolean;
   setHabitCreationOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  sortBy: string;
+  setSortBy: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const defaultState = {
@@ -24,6 +26,8 @@ const defaultState = {
   setHabits: () => {},
   habitCreationOpen: false,
   setHabitCreationOpen: () => {},
+  sortBy: "",
+  setSortBy: () => {},
 };
 
 const HabitContext = createContext<HabitContextTypes>(defaultState);
@@ -34,6 +38,7 @@ const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [habitCreationOpen, setHabitCreationOpen] = useState<boolean>(
     defaultState.habitCreationOpen
   );
+  const [sortBy, setSortBy] = useState<string>(defaultState.sortBy);
 
   const { user, userCharacter } = useGlobalContext();
 
@@ -50,7 +55,7 @@ const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         );
         if (response.status === 200) {
           setHabits(response.data);
-          console.log(response.data)
+          console.log(response.data);
         }
       } catch (error) {
         if (isAxiosError(error)) {
@@ -71,6 +76,8 @@ const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         setHabits,
         habitCreationOpen,
         setHabitCreationOpen,
+        sortBy,
+        setSortBy,
       }}
     >
       {children}

@@ -1,5 +1,6 @@
-import { Text, TouchableHighlight } from "react-native";
+import { Text, View, TouchableHighlight } from "react-native";
 import React from "react";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 import { useHabitContext } from "@/context/HabitProvider";
 
@@ -7,13 +8,15 @@ const CreateHabitBtn = () => {
   const { setHabitCreationOpen } = useHabitContext();
   return (
     <TouchableHighlight
-      className="bg-[#FDFDFD] w-[225px] h-[45px] rounded-md mt-4"
-      underlayColor="#FFFFFF"
+      style={{ alignSelf: "flex-start" }}
+      className="bg-[rgb(253,253,253)] p-2 rounded-full shadow-sm"
+      underlayColor="#FFFFFF60"
       onPress={() => setHabitCreationOpen(true)}
     >
-      <Text className="text-black text-xl font-semibold mx-auto my-auto">
-        Create Habit
-      </Text>
+      <View className="flex flex-row items-center pl-2">
+        <Text className="mr-2 text-md font-[500]">Create</Text>
+        <AntDesign name="plus" size={24} color="black" />
+      </View>
     </TouchableHighlight>
   );
 };

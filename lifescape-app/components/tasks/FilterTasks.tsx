@@ -18,7 +18,15 @@ const differentSortOptions = [
   {
     label: "Easiest",
     value: "easiest",
-  }
+  },
+  {
+    label: "Oldest",
+    value: "oldest",
+  },
+  {
+    label: "Newest",
+    value: "newest",
+  },
 ];
 const FilterTasks = () => {
   const { tasks, setTasks, sortBy, setSortBy } = useTaskContext();
@@ -51,7 +59,35 @@ const FilterTasks = () => {
           return b.difficultyRank.localeCompare(a.difficultyRank);
         })
       );
-    }
+    } else if (sortBy === "oldest") {
+      setTasks(
+          [...tasks].sort((a, b) => {
+          if (a.createdAt && b.createdAt) {
+              return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+          } else if (a.createdAt) {
+              return -1;
+          } else if (b.createdAt) {
+              return 1;
+          } else {
+              return 0;
+          }
+          })
+      );
+  } else if (sortBy === "newest") {
+      setTasks(
+          [...tasks].sort((a, b) => {
+          if (a.createdAt && b.createdAt) {
+              return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+          } else if (b.createdAt) {
+              return -1;
+          } else if (a.createdAt) {
+              return 1;
+          } else {
+              return 0;
+          }
+          })
+      );
+  }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortBy, setSortBy]);
 
@@ -81,7 +117,7 @@ const FilterTasks = () => {
 const styles = StyleSheet.create({
   dropdown: {
     margin: 2,
-    width: 140,
+    width: 120,
     borderBottomColor: 'gray',
     borderBottomWidth: 0.5,
   },

@@ -23,7 +23,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import DifficultySelection from "../general/DifficultySelection";
 
 const HabitCreationModal = () => {
-  const { habits, setHabits, habitCreationOpen, setHabitCreationOpen } =
+  const { habits, setHabits, habitCreationOpen, setHabitCreationOpen, setSortBy } =
     useHabitContext();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -95,6 +95,7 @@ const HabitCreationModal = () => {
         setGoalCompletionWeekly(1);
         setGoalCompletionMonthly(1);
         setDifficulty(DifficultyRank.E);
+        setSortBy("");
       }
     } catch (error) {
       if (isAxiosError(error)) {
@@ -115,6 +116,7 @@ const HabitCreationModal = () => {
     setGoalCompletionWeekly(1);
     setGoalCompletionMonthly(1);
     setDifficulty(DifficultyRank.E);
+    
   };
 
   const onMinusWeeklyGoal = () => {
@@ -177,8 +179,8 @@ const HabitCreationModal = () => {
               </Text>
               <View className="flex flex-row justify-between bg-gray-400 w-full h-[50px] rounded-lg p-1">
                 <TouchableHighlight
-                  className={`flex items-center justify-center h-full bg-${
-                    !quitting ? "[#b93df2]" : "[#e1abf740]"
+                  className={`flex items-center justify-center h-full ${
+                    !quitting ? "bg-[#b93df2]" : "bg-[#e1abf740]"
                   } w-[49.5%] rounded-md transition-all duration-200`}
                   onPress={() => setQuitting(false)}
                   underlayColor="#b93df200"
@@ -186,8 +188,8 @@ const HabitCreationModal = () => {
                   <Text>Positive</Text>
                 </TouchableHighlight>
                 <TouchableHighlight
-                  className={`flex items-center justify-center h-full bg-${
-                    quitting ? "[#b93df2]" : "[#e1abf740]"
+                  className={`flex items-center justify-center h-full ${
+                    quitting ? "bg-[#b93df2]" : "bg-[#e1abf740]"
                   } w-[49.5%] rounded-md transition-all duration-200`}
                   onPress={() => setQuitting(true)}
                   underlayColor="#b93df200"
@@ -202,8 +204,8 @@ const HabitCreationModal = () => {
               </Text>
               <View className="flex flex-row justify-between bg-gray-400 w-full h-[40px] rounded-lg p-1">
                 <TouchableHighlight
-                  className={`flex items-center justify-center h-full bg-${
-                    repeat === "DAILY" ? "[#b93df2]" : "[#e1abf740]"
+                  className={`flex items-center justify-center h-full ${
+                    repeat === "DAILY" ? "bg-[#b93df2]" : "bg-[#e1abf740]"
                   } w-[32.7%] rounded-md transition-all duration-200`}
                   onPress={() => setRepeat(Repeat.DAILY)}
                   underlayColor="#b93df200"
@@ -211,8 +213,8 @@ const HabitCreationModal = () => {
                   <Text>Daily</Text>
                 </TouchableHighlight>
                 <TouchableHighlight
-                  className={`flex items-center justify-center h-full bg-${
-                    repeat === "WEEKLY" ? "[#b93df2]" : "[#e1abf740]"
+                  className={`flex items-center justify-center h-full ${
+                    repeat === "WEEKLY" ? "bg-[#b93df2]" : "bg-[#e1abf740]"
                   } w-[32.7%] rounded-md transition-all duration-200`}
                   onPress={() => setRepeat(Repeat.WEEKLY)}
                   underlayColor="#b93df200"
@@ -220,8 +222,8 @@ const HabitCreationModal = () => {
                   <Text>Weekly</Text>
                 </TouchableHighlight>
                 <TouchableHighlight
-                  className={`flex items-center justify-center h-full bg-${
-                    repeat === "MONTHLY" ? "[#b93df2]" : "[#e1abf740]"
+                  className={`flex items-center justify-center h-full ${
+                    repeat === "MONTHLY" ? "bg-[#b93df2]" : "bg-[#e1abf740]"
                   } w-[32.7%] rounded-md transition-all duration-200`}
                   onPress={() => setRepeat(Repeat.MONTHLY)}
                   underlayColor="#b93df200"
