@@ -68,7 +68,7 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({
     <Swipeable renderRightActions={rightSwipe} overshootRight={false}>
       {habit.description ? (
         <View>
-          <View className="bg-red-100 p-4 py-3 rounded-lg overflow-hidden flex flex-row justify-between items-end">
+          <View className={`${habit.quitting ? "bg-red-100" : "bg-green-200"} p-4 py-3 rounded-lg overflow-hidden flex flex-row justify-between items-end`}>
             <View>
               <Text>{habit.title}</Text>
               <Text className="text-sm mt-1 text-neutral-500">
@@ -94,7 +94,7 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({
         </View>
       ) : (
         <View>
-          <View className="bg-red-100 p-4 py-5 rounded-lg overflow-hidden flex flex-row justify-between items-end">
+          <View className={`${habit.quitting ? "bg-red-100" : "bg-green-200"} p-4 py-5 rounded-lg overflow-hidden flex flex-row justify-between items-end`}>
             <View>
               <Text>{habit.title}</Text>
             </View>
