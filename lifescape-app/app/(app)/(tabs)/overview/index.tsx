@@ -36,58 +36,29 @@ const Overview = () => {
   };
   
   return (
-    <View style={styles.container}>
-      <View style={styles.topButtonContainer}>
-        <Link href="/overview/account" style={styles.button}>
-          <Text style={styles.buttonText}>Account</Text>
+    <View className="flex-1 justify-between p-5 bg-gray-100">
+      <View className="flex-col items-center mb-5">
+        <Link href="/overview/account" className="px-5 py-3 bg-black rounded mb-3 w-40">
+          <Text className="text-white font-bold">Account</Text>
         </Link>
-        <Link href="/overview/history" style={styles.button}>
-        <Text style={styles.buttonText}>History</Text>
+        <Link href="/overview/history" className="px-5 py-3 bg-black rounded mb-3 w-40">
+          <Text className="text-white font-bold">History</Text>
         </Link>
       </View>
-      <Text style={styles.text}>Overview</Text>
+      <Text className="text-center text-xl my-5">Overview</Text>
       {isSigningIn ? (
         <ActivityIndicator size="large" color="#0000ff" />
       ) : (
-        <View style={styles.bottomButtonContainer}>
+        <View className="items-center">
           <Button
             title="Sign Out"
-            onPress={() => {
-              handleSignOut();
-            }}
+            onPress={handleSignOut}
+            color="#000000"
           />
         </View>
       )}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'space-between',
-    padding: 20,
-  },
-  topButtonContainer: {
-    alignItems: 'center',
-  },
-  button: {
-    padding: 10,
-    backgroundColor: '#FFA001',
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  text: {
-    textAlign: 'center',
-    fontSize: 20,
-    marginVertical: 20,
-  },
-  bottomButtonContainer: {
-    alignItems: 'center',
-  },
-});
 
 export default Overview;
