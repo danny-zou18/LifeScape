@@ -1,5 +1,4 @@
-import { View, Text, Pressable} from 'react-native';
-import { useNavigation } from 'expo-router';
+import { View, Text} from 'react-native';
 import React from 'react';
 import 'nativewind'
 

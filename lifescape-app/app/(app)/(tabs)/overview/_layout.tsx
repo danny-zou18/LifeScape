@@ -19,6 +19,14 @@ export default function OverviewLayout() {
           headerBackTitle: "Overview",
         }} 
       />
+      <Stack.Screen 
+        name="history/index" 
+        options={{
+          headerShown: true,
+          title: "History",
+          headerBackTitle: "Overview",
+        }} 
+      />
     </Stack>
   );
 }
