@@ -33,13 +33,13 @@ function TabBarIcon(props: {
           }}
         />
         <Tabs.Screen
-          name="overview"
-          options={{
-            title: 'Overview',
-            tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />
-            
-          }}
-        />
-      </Tabs>
+      name="overview"
+      options={{
+        title: 'Overview',
+        tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+        headerShown: false
+      }}
+    />
+  </Tabs>
     );
   }
