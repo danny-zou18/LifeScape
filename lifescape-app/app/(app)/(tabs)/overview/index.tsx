@@ -41,6 +41,9 @@ const Overview = () => {
         <Link href="/overview/account" style={styles.button}>
           <Text style={styles.buttonText}>Account</Text>
         </Link>
+        <Link href="/overview/history" style={styles.button}>
+        <Text style={styles.buttonText}>History</Text>
+        </Link>
       </View>
       <Text style={styles.text}>Overview</Text>
       {isSigningIn ? (
