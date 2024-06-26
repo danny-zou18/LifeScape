@@ -8,7 +8,7 @@ type TabBarProps = {
 
 const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
   return (
-    <View style={{ flexDirection: 'row' }}>
+    <View className='flex flex-row justify-between items-center absolute bottom-5 max-w-[95vw] mx-[20px] py-4 bg-black'>
       {state.routes.map((route:any, index:number) => {
         const { options } = descriptors[route.key];
         const label =
@@ -49,6 +49,7 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
             onLongPress={onLongPress}
             style={{ flex: 1 }}
             key={route.key}
+            className='flex items-center'
           >
             <Text style={{ color: isFocused ? '#673ab7' : '#222' }}>
               {label}
