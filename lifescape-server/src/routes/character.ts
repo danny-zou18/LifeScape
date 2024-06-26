@@ -5,6 +5,41 @@ import { auth } from "firebase-admin";
 
 const router = express.Router();
 
+/** @api {get} /character/get/:userId Get Character
+ *  @apiName GetCharacter
+ *  @apiGroup Character
+ *
+ * @apiDescription Get a character using user id
+ *
+ * @apiParam {String} userId User ID
+ *
+ * @apiHeader {String} Authorization Firebase ID Token
+ *
+ * @apiSuccess {Object} character Character object
+ * @apiSuccessExample {json} Success-Response:
+ *       HTTP/1.1 200 OK
+ *       {
+ *         CHARACTER OBJECT
+ *       }
+ * @apiError Unauthorized User is not authorized
+ * @apiErrorExample {json} Unauthorized:
+ *       HTTP/1.1 403 Unauthorized
+ *       {
+ *         "error": "Unauthorized"
+ *       }
+ * @apiError UserNotFound User not found
+ * @apiErrorExample {json} UserNotFound:
+ *       HTTP/1.1 404 Not Found
+ *       {
+ *         "error": "User not found"
+ *       }
+ * @apiError InternalServerError Internal Server Error
+ * @apiErrorExample {json} InternalServerError:
+ *       HTTP/1.1 500 Internal Server Error
+ *       {
+ *         "error": "Internal Server Error"
+ *       }
+ */
 router.get("/get/:userId", async (req, res) => {
   const authToken = req.headers.authorization;
   const { userId } = req.params;
@@ -36,10 +71,53 @@ router.get("/get/:userId", async (req, res) => {
   }
 });
 
+/** @api {post} /character/create/:userId Create Character
+ *  @apiName CreateCharacter
+ *  @apiGroup Character
+ *
+ * @apiDescription Create a character using user id
+ *
+ * @apiParam {String} userId User ID
+ *
+ * @apiHeader {String} Authorization Firebase ID Token
+ * 
+ * @apiBody {String} name Character Name
+ *
+ * @apiSuccess {Object} character Character object
+ * @apiSuccessExample {json} Success-Response:
+ *       HTTP/1.1 201 OK
+ *       {
+ *         CHARACTER OBJECT
+ *       }
+ * @apiError Unauthorized User is not authorized
+ * @apiErrorExample {json} Unauthorized:
+ *       HTTP/1.1 403 Unauthorized
+ *       {
+ *         "error": "Unauthorized"
+ *       }
+ * @apiError UserNotFound User not found
+ * @apiErrorExample {json} UserNotFound:
+ *       HTTP/1.1 404 Not Found
+ *       {
+ *         "error": "User not found"
+ *       }
+ * @apiError UserAlreadyHasCharacter User already has a character
+ * @apiErrorExample {json} UserAlreadyHasCharacter:
+ *       HTTP/1.1 404 Not Found
+ *       {
+ *         "error": "User already has a character"
+ *       }
+ * @apiError InternalServerError Internal Server Error
+ * @apiErrorExample {json} InternalServerError:
+ *       HTTP/1.1 500 Internal Server Error
+ *       {
+ *         "error": "Internal Server Error"
+ *       }
+ */
 router.post("/create/:userId", async (req, res) => {
   const authToken = req.headers.authorization;
   const { userId } = req.params;
-  
+
   //Authorize
   try {
     const authUser = await auth().verifyIdToken(authToken as string);
