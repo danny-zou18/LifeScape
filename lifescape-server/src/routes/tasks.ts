@@ -5,6 +5,47 @@ import { auth } from "firebase-admin";
 
 const router = express.Router();
 
+/** @api {post} /tasks/create/:userId/:characterId Create Task
+ *  @apiName CreateTask
+ *  @apiGroup Task
+ *
+ * @apiDescription Create a task for a character
+ *
+ * @apiParam {String} userId User ID
+ * @apiParam {String} characterId Character ID
+ *
+ * @apiHeader {String} Authorization Firebase ID Token
+ *
+ * @apiBody {String} title Title of the task
+ * @apiBody {String} description Description of the task
+ * @apiBody {Date} dueDate Due date of the task
+ * @apiBody {DifficultyRank} difficultyRank Difficulty rank of the task
+ * 
+ * @apiSuccess {Object} task Task object
+ * @apiSuccessExample {json} Success-Response:
+ *      HTTP/1.1 201 OK
+ *      {
+ *        TASK OBJECT
+ *      } 
+ * @apiError Unauthorized User is not authorized
+ * @apiErrorExample {json} Unauthorized:
+ *       HTTP/1.1 403 Unauthorized
+ *       {
+ *         "error": "Unauthorized"
+ *       }
+ * @apiError Unauthorized User is not authorized
+ * @apiErrorExample {json} Unauthorized:
+ *       HTTP/1.1 401 Unauthorized
+ *       {
+ *         "error": "Unauthorized"
+ *       }
+ * @apiError TaskCreationFailed Task creation failed
+ * @apiErrorExample {json} TaskCreationFailed:
+ *      HTTP/1.1 400 Bad Request
+ *      {
+ *        "error": "Task Creation Failed"
+ *      }
+ */
 router.post("/create/:userId/:characterId", async (req, res) => {
   const authToken = req.headers.authorization;
   const { userId, characterId } = req.params;
@@ -42,6 +83,42 @@ router.post("/create/:userId/:characterId", async (req, res) => {
     });
 });
 
+/** @api {get} /tasks/get/:userId/:characterId Get Tasks
+ *  @apiName GetTasks
+ *  @apiGroup Task
+ *
+ * @apiDescription Get all tasks for a character
+ *
+ * @apiParam {String} userId User ID
+ * @apiParam {String} characterId Character ID
+ *
+ * @apiHeader {String} Authorization Firebase ID Token
+ *
+ * @apiSuccess {Object[]} tasks List of task objects
+ * @apiSuccessExample {json} Success-Response:
+ *      HTTP/1.1 200 OK
+ *      {
+ *        TASK OBJECTS
+ *      } 
+ * @apiError Unauthorized User is not authorized
+ * @apiErrorExample {json} Unauthorized:
+ *       HTTP/1.1 403 Unauthorized
+ *       {
+ *         "error": "Unauthorized"
+ *       }
+ * @apiError Unauthorized User is not authorized
+ * @apiErrorExample {json} Unauthorized:
+ *       HTTP/1.1 401 Unauthorized
+ *       {
+ *         "error": "Unauthorized"
+ *       }
+ * @apiError InternalServerError Internal Server Error
+ * @apiErrorExample {json} InternalServerError:
+ *       HTTP/1.1 500 Internal Server Error
+ *       {
+ *         "error": "Internal Server Error"
+ *       }
+ */
 router.get("/get/:userId/:characterId", async (req, res) => {
   const authToken = req.headers.authorization;
   const { userId, characterId } = req.params;
@@ -69,8 +146,42 @@ router.get("/get/:userId/:characterId", async (req, res) => {
     });
 });
 
-export { router as tasksRouter };
-
+/** @api {delete} /tasks/delete/:userId/:taskId Delete Task
+ *  @apiName DeleteTask
+ *  @apiGroup Task
+ *
+ * @apiDescription Delete a task
+ *
+ * @apiParam {String} userId User ID
+ * @apiParam {String} taskId Task ID
+ *
+ * @apiHeader {String} Authorization Firebase ID Token
+ *
+ * @apiSuccess {Object} message Success message
+ * @apiSuccessExample {json} Success-Response:
+ *      HTTP/1.1 200 OK
+ *      {
+ *        "message": "Task deleted successfully"
+ *      } 
+ * @apiError Unauthorized User is not authorized
+ * @apiErrorExample {json} Unauthorized:
+ *       HTTP/1.1 403 Unauthorized
+ *       {
+ *         "error": "Unauthorized"
+ *       }
+ * @apiError Unauthorized User is not authorized
+ * @apiErrorExample {json} Unauthorized:
+ *       HTTP/1.1 401 Unauthorized
+ *       {
+ *         "error": "Unauthorized"
+ *       }
+ * @apiError InternalServerError Internal Server Error
+ * @apiErrorExample {json} InternalServerError:
+ *       HTTP/1.1 500 Internal Server Error
+ *       {
+ *         "error": "Internal Server Error"
+ *       }
+ */
 router.delete("/delete/:userId/:taskId", async (req, res) => {
   const authToken = req.headers.authorization;
   const { userId, taskId } = req.params;
@@ -97,3 +208,5 @@ router.delete("/delete/:userId/:taskId", async (req, res) => {
       return res.status(500).json({ error: "Internal Server Error" });
     });
 });
+
+export { router as tasksRouter };
