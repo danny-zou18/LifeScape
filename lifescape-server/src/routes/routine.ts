@@ -5,6 +5,56 @@ import { auth } from "firebase-admin";
 
 const router = express.Router();
 
+/** @api {post} /routine/create/:userId/:characterId Create Routine
+ *  @apiName CreateRoutine
+ *  @apiGroup Routine
+ *
+ * @apiDescription Create a routine for a character
+ *
+ * @apiParam {String} userId User ID
+ * @apiParam {String} characterId Character ID
+ *
+ * @apiHeader {String} Authorization Firebase ID Token
+ *
+ * @apiBody {String} title Title of the routine
+ * @apiBody {String} description Description of the routine
+ * @apiBody {Number[]} daysOfWeek Days of the week the routine is scheduled
+ * @apiBody {Number} startTimeOfDayInMinutes Start time of the routine in minutes
+ * @apiBody {Number} endTimeOfDayInMinutes End time of the routine in minutes
+ * @apiBody {Number} difficultyRank Difficulty rank of the routine
+ * 
+ * @apiSuccess {Object} routine Routine object
+ * @apiSuccessExample {json} Success-Response:
+ *      HTTP/1.1 201 OK
+ *      {
+ *        ROUTINE OBJECT
+ *      } 
+ * @apiError Unauthorized User is not authorized
+ * @apiErrorExample {json} Unauthorized:
+ *       HTTP/1.1 403 Unauthorized
+ *       {
+ *         "error": "Unauthorized"
+ *       }
+ * @apiError Unauthorized User is not authorized
+ * @apiErrorExample {json} Unauthorized:
+ *       HTTP/1.1 401 Unauthorized
+ *       {
+ *         "error": "Unauthorized"
+ *       }
+ * @apiError RoutineCreationFailed Time slot is not available
+ * @apiErrorExample {json} RoutineCreationFailed:
+ *      HTTP/1.1 400 Bad Request
+ *      {
+ *        "error": "Timeslot is not available"
+ *      }
+ * 
+ * @apiError RoutineCreationFailed Routine creation failed
+ * @apiErrorExample {json} RoutineCreationFailed:
+ *      HTTP/1.1 400 Bad Request
+ *      {
+ *        "error": "Routine Creation Failed"
+ *      }
+ */
 router.post("/create/:userId/:characterId", async (req, res) => {
   const authToken = req.headers.authorization;
   const { userId, characterId } = req.params;
@@ -63,6 +113,42 @@ router.post("/create/:userId/:characterId", async (req, res) => {
     });
 });
 
+/** @api {get} /routine/get/:userId/:characterId Get Routines
+ *  @apiName GetRoutines
+ *  @apiGroup Routine
+ *
+ * @apiDescription Get routines for a character
+ *
+ * @apiParam {String} userId User ID
+ * @apiParam {String} characterId Character ID
+ *
+ * @apiHeader {String} Authorization Firebase ID Token
+ *
+ * @apiSuccess {Object[]} routines Array of routine objects
+ * @apiSuccessExample {json} Success-Response:
+ *      HTTP/1.1 200 OK
+ *      [
+ *        ROUTINE OBJECTS
+ *      ] 
+ * @apiError Unauthorized User is not authorized
+ * @apiErrorExample {json} Unauthorized:
+ *       HTTP/1.1 403 Unauthorized
+ *       {
+ *         "error": "Unauthorized"
+ *       }
+ * @apiError Unauthorized User is not authorized
+ * @apiErrorExample {json} Unauthorized:
+ *       HTTP/1.1 401 Unauthorized
+ *       {
+ *         "error": "Unauthorized"
+ *       }
+ * @apiError RoutineFetchFailed Routine fetch failed
+ * @apiErrorExample {json} RoutineFetchFailed:
+ *      HTTP/1.1 400 Bad Request
+ *      {
+ *        "error": "Routine Fetch Failed"
+ *      }
+ */
 router.get("/get/:userId/:characterId", async (req, res) => {
   const authToken = req.headers.authorization;
   const { userId, characterId } = req.params;
@@ -99,6 +185,14 @@ router.get("/get/:userId/:characterId", async (req, res) => {
     });
 });
 
+/** Checks if time slot is available for a routine to be added
+ * 
+ * @param daysOfWeek     Array of days of the week, represented as integers 1 - 7, where 1 is Sunday, 2 is Monday, etc.
+ * @param startTime      Start time of the routine in minutes
+ * @param endTime        End time of the routine in minutes 
+ * @param characterId    ID of the character
+ * @returns 
+ */
 async function isTimeslotAvailable(
   daysOfWeek: number[],
   startTime: number,
