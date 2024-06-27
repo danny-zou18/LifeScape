@@ -19,6 +19,10 @@ interface HabitContextTypes {
   setHabitCreationOpen: React.Dispatch<React.SetStateAction<boolean>>;
   sortBy: string;
   setSortBy: React.Dispatch<React.SetStateAction<string>>;
+  currentEditHabit: Habit | null;
+  setCurrentEditHabit: React.Dispatch<React.SetStateAction<Habit | null>>;
+  editHabitOpen: boolean;
+  setEditHabitOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const defaultState = {
@@ -28,6 +32,10 @@ const defaultState = {
   setHabitCreationOpen: () => {},
   sortBy: "",
   setSortBy: () => {},
+  editHabitOpen: false,
+  setEditHabitOpen: () => {},
+  currentEditHabit: null,
+  setCurrentEditHabit: () => {},
 };
 
 const HabitContext = createContext<HabitContextTypes>(defaultState);
@@ -39,6 +47,12 @@ const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     defaultState.habitCreationOpen
   );
   const [sortBy, setSortBy] = useState<string>(defaultState.sortBy);
+  const [currentEditHabit, setCurrentEditHabit] = useState<Habit | null>(
+    defaultState.currentEditHabit
+  );
+  const [editHabitOpen, setEditHabitOpen] = useState<boolean>(
+    defaultState.editHabitOpen
+  );
 
   const { user, userCharacter } = useGlobalContext();
 
@@ -78,6 +92,10 @@ const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         setHabitCreationOpen,
         sortBy,
         setSortBy,
+        currentEditHabit,
+        setCurrentEditHabit,
+        editHabitOpen,
+        setEditHabitOpen,
       }}
     >
       {children}
