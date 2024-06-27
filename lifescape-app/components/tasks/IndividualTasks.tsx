@@ -3,6 +3,7 @@ import React from "react";
 import { isAxiosError } from "axios";
 import api from "@/api/axios";
 import { useGlobalContext } from "@/context/GlobalProvider";
+import { useTaskContext } from "@/context/TaskProvider";
 
 import { Task } from "@/types/db_types";
 
@@ -18,6 +19,7 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({
   setTasks,
 }) => {
   const { user } = useGlobalContext();
+  const { setEditTaskOpen, setCurrentEditTask } = useTaskContext();
 
   const handleDeleteTask = async () => {
     try {
@@ -43,7 +45,8 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({
   };
 
   const onPressTask = () => {
-    console.log("Task pressed");
+    setCurrentEditTask(task);
+    setEditTaskOpen(true);
   };
 
   const rightSwipe = (

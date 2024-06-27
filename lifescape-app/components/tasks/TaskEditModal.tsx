@@ -10,10 +10,10 @@ import {
   ActivityIndicator,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import { FieldValues, useForm } from "react-hook-form";
+import { FieldValues, useForm, Controller } from "react-hook-form";
 import { isAxiosError } from "axios";
 import api from "@/api/axios";
-import { DifficultyRank, Task } from "@/types/db_types";
+import { DifficultyRank } from "@/types/db_types";
 
 import DateTimePicker, {
   DateTimePickerEvent,
@@ -33,11 +33,7 @@ const roundToNextHour = (date: Date): Date => {
   return roundedDate;
 };
 
-interface TaskEditModalProps {
-  task: Task;
-}
-
-const TaskEditModal: React.FC<TaskEditModalProps> = ({ task }) => {
+const TaskEditModal: React.FC = () => {
   const {
     tasks,
     setTasks,
@@ -45,6 +41,7 @@ const TaskEditModal: React.FC<TaskEditModalProps> = ({ task }) => {
     setEditTaskOpen,
     currentEditTask,
     setCurrentEditTask,
+    setSortBy,
   } = useTaskContext();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -67,6 +64,7 @@ const TaskEditModal: React.FC<TaskEditModalProps> = ({ task }) => {
   const {
     setValue,
     handleSubmit,
+    control,
     reset,
     formState: { errors },
   } = useForm<FieldValues>({
@@ -77,7 +75,49 @@ const TaskEditModal: React.FC<TaskEditModalProps> = ({ task }) => {
     },
   });
 
+  const submitHandler = async ({
+    title,
+    description,
+    dueDate,
+  }: FieldValues) => {
+    setLoading(true);
+
+    if (!showDatePicker) {
+      dueDate = null;
+    }
+
+    try {
+      const response = await api.post(
+        `/tasks/update/${user.uid}/${userCharacter.id}`,
+        { title, description, dueDate, difficultyRank },
+        {
+          headers: {
+            Authorization: await user.getIdToken(),
+          },
+        }
+      );
+      if (response.status === 200) {
+        console.log("Task updated successfully");
+        setTasks([...tasks, response.data]);
+        setEditTaskOpen(false);
+        setCurrentEditTask(null);
+        setSortBy("");
+      }
+    } catch (error) {
+      if (isAxiosError(error)) {
+        // AxiosError type will have a response property
+        console.log(error.response?.data);
+      } else {
+        // Handle other error types if needed
+        console.log(error);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const onCancel = () => {
+    setEditTaskOpen(false);
     setCurrentEditTask(null);
   };
 
@@ -88,6 +128,7 @@ const TaskEditModal: React.FC<TaskEditModalProps> = ({ task }) => {
         setShowDatePicker(true);
         setValue("dueDate", new Date(currentEditTask.dueDate));
       }
+      console.log(currentEditTask);
       setDifficultyRank(currentEditTask.difficultyRank);
       setValue("title", currentEditTask.title);
       setValue("description", currentEditTask.description);
@@ -116,24 +157,40 @@ const TaskEditModal: React.FC<TaskEditModalProps> = ({ task }) => {
           <View className="flex items-center justify-center mt-5">
             <View className="w-[85%]">
               <Text className="ml-2 text-md text-neutral-700 pb-1">Title</Text>
-              <TextInput
-                id="title"
-                autoCapitalize="none"
-                onChangeText={(text) => setValue("title", text)}
-                autoComplete="name"
-                className="w-full h-[50px] bg-black rounded-lg text-white px-3"
+              <Controller
+                control={control}
+                name="title"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    id="title"
+                    autoCapitalize="none"
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    autoComplete="name"
+                    className="w-full h-[50px] bg-black rounded-lg text-white px-3"
+                  />
+                )}
               />
             </View>
             <View className="mt-5 w-[85%]">
               <Text className="ml-2 text-md text-neutral-700 pb-1">Notes</Text>
-              <TextInput
-                id="description"
-                autoCapitalize="none"
-                onChangeText={(text) => setValue("description", text)}
-                autoComplete="name"
-                className="w-full h-[50px] bg-black rounded-lg text-white px-3"
-                numberOfLines={2}
+              <Controller
+                control={control}
+                name="description"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    id="description"
+                    autoCapitalize="none"
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    autoComplete="name"
+                    className="w-full h-[50px] bg-black rounded-lg text-white px-3"
+                  />
+                )}
               />
+              
             </View>
             <View className="mt-5 flex w-[85%]">
               <Text className="ml-2 text-md text-neutral-700 pb-1">
