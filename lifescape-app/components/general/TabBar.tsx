@@ -22,7 +22,7 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
     play: (props: any) => (
       <MaterialCommunityIcons
         name="sword-cross"
-        size={24}
+        size={27}
         color="white"
         {...props}
       />
@@ -111,14 +111,14 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
           }}
           style={{ transform: [{ translateX: -25 }] }}
           key={state.routes[2].key}
-          className="absolute flex items-center bg-red-200 min-w-[50px] h-[50px] rounded-full justify-center left-1/2 -top-10 "
+          className="absolute flex items-center bg-red-200 min-w-[55px] h-[55px] rounded-full justify-center left-1/2 -top-6 "
         >
           {icons[state.routes[2].name]({
             color: state.index === 2 ? "red" : "white",
           })}
         </TouchableOpacity>
       )}
-      <View className="w-[45%] h-full flex flex-row justify-between items-center">
+      <View className="w-[41%] h-full flex flex-row justify-between items-center">
         {state.routes.slice(3, 5).map((route: any, index: number) => {
           const { options } = descriptors[route.key];
 
@@ -171,9 +171,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    width: "95%",
+    width: "90%",
+    height: 50,
     backgroundColor: "black",
-    marginHorizontal: 10,
+    marginHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 10,
     borderCurve: "continuous",
