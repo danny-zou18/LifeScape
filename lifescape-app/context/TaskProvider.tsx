@@ -19,6 +19,8 @@ interface TaskContextTypes {
   setTaskCreationOpen: React.Dispatch<React.SetStateAction<boolean>>;
   sortBy: string;
   setSortBy: React.Dispatch<React.SetStateAction<string>>;
+  currentEditTask: Task | null;
+  setCurrentEditTask: React.Dispatch<React.SetStateAction<Task | null>>;
   editTaskOpen: boolean;
   setEditTaskOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -32,6 +34,8 @@ const defaultState = {
   setSortBy: () => {},
   editTaskOpen: false,
   setEditTaskOpen: () => {},
+  currentEditTask: null,
+  setCurrentEditTask: () => {},
 };
 
 const TaskContext = createContext<TaskContextTypes>(defaultState);
@@ -43,6 +47,9 @@ const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     defaultState.taskCreationOpen
   );
   const [sortBy, setSortBy] = useState<string>(defaultState.sortBy);
+  const [currentEditTask, setCurrentEditTask] = useState<Task | null>(
+    defaultState.currentEditTask
+  );
   const [editTaskOpen, setEditTaskOpen] = useState<boolean>(
     defaultState.editTaskOpen
   );
@@ -76,7 +83,7 @@ const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   return (
     <TaskContext.Provider
-      value={{ tasks, setTasks, taskCreationOpen, setTaskCreationOpen, sortBy, setSortBy, editTaskOpen, setEditTaskOpen}}
+      value={{ tasks, setTasks, taskCreationOpen, setTaskCreationOpen, sortBy, setSortBy, currentEditTask, setCurrentEditTask ,editTaskOpen, setEditTaskOpen}}
     >
       {children}
     </TaskContext.Provider>
