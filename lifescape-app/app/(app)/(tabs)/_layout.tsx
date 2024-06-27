@@ -30,6 +30,12 @@ function TabBarIcon(props: {
             title: 'Character',
           }}
         />
+         <Tabs.Screen
+          name="play"
+          options={{
+            title: 'Play',
+          }}
+        />
         <Tabs.Screen
           name="market"
           options={{
