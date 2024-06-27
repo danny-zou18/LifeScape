@@ -99,7 +99,13 @@ const TaskEditModal: React.FC = () => {
       );
       if (response.status === 200) {
         console.log("Task updated successfully");
-        setTasks([...tasks, response.data]);
+        const updatedTasks = tasks.map((task) => {
+          if (task.id === taskId) {
+            return response.data;
+          }
+          return task;
+        });
+        setTasks(updatedTasks);
         setEditTaskOpen(false);
         setCurrentEditTask(null);
         setSortBy("");
