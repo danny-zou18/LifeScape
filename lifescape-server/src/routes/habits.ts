@@ -5,7 +5,7 @@ import { auth } from "firebase-admin";
 
 const router = express.Router();
 
-/** @api {post} /habits/create/:userId/:characterId Create Habit  
+/** @api {post} /habits/create/:userId/:characterId Create Habit
  *  @apiName CreateHabit
  *  @apiGroup Habit
  *
@@ -23,13 +23,13 @@ const router = express.Router();
  * @apiBody {Number?} if Repeat is monthly, completionGoalMonthly Monthly completion goal of the habit
  * @apiBody {Boolean} quitting Quitting status of the habit
  * @apiBody {Number} difficultyRank Difficulty rank of the habit
- * 
+ *
  * @apiSuccess {Object} habit Habit object
  * @apiSuccessExample {json} Success-Response:
  *      HTTP/1.1 201 OK
  *      {
  *        HABIT OBJECT
- *      } 
+ *      }
  * @apiError Unauthorized User is not authorized
  * @apiErrorExample {json} Unauthorized:
  *       HTTP/1.1 403 Unauthorized
@@ -118,7 +118,7 @@ router.post("/create/:userId/:characterId", async (req, res) => {
  *      HTTP/1.1 200 OK
  *      {
  *        HABIT OBJECT[]
- *      } 
+ *      }
  * @apiError Unauthorized User is not authorized
  * @apiErrorExample {json} Unauthorized:
  *       HTTP/1.1 403 Unauthorized
@@ -175,13 +175,13 @@ router.get("/get/:userId/:characterId", async (req, res) => {
  * @apiParam {String} habitId Habit ID
  *
  * @apiHeader {String} Authorization Firebase ID Token
- * 
+ *
  * @apiSuccess {Object} habit Habit object
  * @apiSuccessExample {json} Success-Response:
  *      HTTP/1.1 200 OK
  *      {
  *        sucess: "Habit deleted"
- *      } 
+ *      }
  * @apiError Unauthorized User is not authorized
  * @apiErrorExample {json} Unauthorized:
  *       HTTP/1.1 403 Unauthorized
@@ -227,4 +227,97 @@ router.delete("/delete/:userId/:habitId", async (req, res) => {
     });
 });
 
+/** @api {put} /habits/update/:userId/:habitId Update Habit
+ *  @apiName UpdateHabit
+ *  @apiGroup Habit
+ *
+ * @apiDescription Update a habit
+ *
+ * @apiParam {String} userId User ID
+ * @apiParam {String} habitId Habit ID
+ *
+ * @apiHeader {String} Authorization Firebase ID Token
+ *
+ * @apiBody {String} title Title of the habit
+ * @apiBody {String} description Description of the habit
+ * @apiBody {String} repeat Repeat of the habit
+ * @apiBody {Number?} if Repeat is weekly, completionGoalWeekly Weekly completion goal of the habit
+ * @apiBody {Number?} if Repeat is monthly, completionGoalMonthly Monthly completion goal of the habit
+ * @apiBody {Boolean} quitting Quitting status of the habit
+ * @apiBody {Number} difficultyRank Difficulty rank of the habit
+ *
+ * @apiSuccess {Object} habit Habit object
+ * @apiSuccessExample {json} Success-Response:
+ *      HTTP/1.1 200 OK
+ *      {
+ *        HABIT OBJECT
+ *      }
+ * @apiError Unauthorized User is not authorized
+ * @apiErrorExample {json} Unauthorized:
+ *       HTTP/1.1 403 Unauthorized
+ *       {
+ *         "error": "Unauthorized"
+ *       }
+ * @apiError Unauthorized User is not authorized
+ * @apiErrorExample {json} Unauthorized:
+ *       HTTP/1.1 401 Unauthorized
+ *       {
+ *         "error": "Unauthorized"
+ *       }
+ * @apiError HabitUpdateFailed Habit update failed
+ * @apiErrorExample {json} HabitUpdateFailed:
+ *      HTTP/1.1 400 Bad Request
+ *      {
+ *        "error": "Failed to update habit"
+ *      }
+ */
+router.put("/update/:userId/:habitId", async (req, res) => {
+  const authToken = req.headers.authorization;
+  const { userId, habitId } = req.params;
+  try {
+    const authUser = await auth().verifyIdToken(authToken as string);
+    if (authUser.uid !== userId) {
+      res.status(403).json({ error: "Unauthorized" });
+    }
+  } catch (e) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  const {
+    title,
+    description,
+    repeat,
+    completionGoalWeekly,
+    completionGoalMonthly,
+    quitting,
+    difficultyRank,
+  } = req.body;
+
+  await db.habit
+    .update({
+      where: {
+        id: parseInt(habitId),
+      },
+      data: {
+        title: title,
+        description: description,
+        repeat: repeat,
+        completionGoalWeekly: completionGoalWeekly
+          ? parseInt(completionGoalWeekly)
+          : null,
+        completionGoalMonthly: completionGoalMonthly
+          ? parseInt(completionGoalMonthly)
+          : null,
+        quitting: quitting,
+        difficultyRank: difficultyRank,
+      },
+    })
+    .then((habit) => {
+      return res.status(200).json(habit);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(400).json({ error: "Failed to update habit" });
+    });
+});
 export { router as habitsRouter };
