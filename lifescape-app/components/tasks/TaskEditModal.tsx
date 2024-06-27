@@ -45,7 +45,8 @@ const TaskEditModal: React.FC = () => {
   } = useTaskContext();
 
   const [loading, setLoading] = useState<boolean>(false);
-  const { user, userCharacter } = useGlobalContext();
+  const { user } = useGlobalContext();
+  const [taskId, setTaskId] = useState<number | null>(null);
 
   const [date, setDate] = useState(roundToNextHour(new Date()));
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
@@ -87,8 +88,8 @@ const TaskEditModal: React.FC = () => {
     }
 
     try {
-      const response = await api.post(
-        `/tasks/update/${user.uid}/${userCharacter.id}`,
+      const response = await api.put(
+        `/tasks/update/${user.uid}/${taskId?.toString()}`,
         { title, description, dueDate, difficultyRank },
         {
           headers: {
@@ -123,12 +124,12 @@ const TaskEditModal: React.FC = () => {
 
   useEffect(() => {
     if (currentEditTask) {
+      setTaskId(currentEditTask.id);
       if (currentEditTask.dueDate) {
         setDate(new Date(currentEditTask.dueDate));
         setShowDatePicker(true);
         setValue("dueDate", new Date(currentEditTask.dueDate));
       }
-      console.log(currentEditTask);
       setDifficultyRank(currentEditTask.difficultyRank);
       setValue("title", currentEditTask.title);
       setValue("description", currentEditTask.description);
@@ -136,6 +137,7 @@ const TaskEditModal: React.FC = () => {
       setEditTaskOpen(false);
       setShowDatePicker(false);
       setDifficultyRank(DifficultyRank.E);
+      setTaskId(null);
       reset();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -190,7 +192,6 @@ const TaskEditModal: React.FC = () => {
                   />
                 )}
               />
-              
             </View>
             <View className="mt-5 flex w-[85%]">
               <Text className="ml-2 text-md text-neutral-700 pb-1">
