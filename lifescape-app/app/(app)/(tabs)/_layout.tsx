@@ -22,16 +22,24 @@ function TabBarIcon(props: {
           name="home"
           options={{
             title: 'Home',
-            tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-           
+          }}
+        />
+        <Tabs.Screen
+          name="character"
+          options={{
+            title: 'Character',
+          }}
+        />
+        <Tabs.Screen
+          name="market"
+          options={{
+            title: 'Market',
           }}
         />
         <Tabs.Screen
           name="overview"
           options={{
             title: 'Overview',
-            tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />
-
           }}
         />
       </Tabs>

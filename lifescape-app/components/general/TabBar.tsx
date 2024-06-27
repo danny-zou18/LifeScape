@@ -1,4 +1,10 @@
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+
+import Feather from '@expo/vector-icons/Feather';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+
 
 type TabBarProps = {
   state: any;
@@ -7,8 +13,15 @@ type TabBarProps = {
 };
 
 const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
+    const icons:any = {
+        home: (props:any) => <Feather name="home" size={24} color="white" {...props}/>,
+        character: (props:any) => <MaterialIcons name="elderly-woman" size={24} color="white" {...props}/>,
+        market: (props:any) => <FontAwesome5 name="store" size={24} color="white" {...props}/>,
+        overview: (props:any) => <MaterialCommunityIcons name="face-man-profile" size={24} color="white" {...props}/>,
+    }
+
   return (
-    <View className='flex flex-row justify-between items-center absolute bottom-5 max-w-[95vw] mx-[20px] py-4 bg-black'>
+    <View style={styles.tabbar}>
       {state.routes.map((route:any, index:number) => {
         const { options } = descriptors[route.key];
         const label =
@@ -51,7 +64,8 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
             key={route.key}
             className='flex items-center'
           >
-            <Text style={{ color: isFocused ? '#673ab7' : '#222' }}>
+            {icons[route.name]({ color: isFocused ? 'red' : 'white'})}
+            <Text style={{ color: isFocused ? 'red' : 'white' }} className='mt-2'>
               {label}
             </Text>
           </TouchableOpacity>
@@ -60,5 +74,24 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+    tabbar: {
+        position: 'absolute',
+        bottom: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: 'black',
+        marginHorizontal: 20,
+        paddingVertical: 10,
+        borderRadius: 10,
+        borderCurve: 'continuous',
+        shadowColor: 'black',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 1,
+        shadowRadius: 3,
+    }
+})
 
 export default TabBar;
