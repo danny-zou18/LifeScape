@@ -3,6 +3,7 @@ import React from "react";
 import { isAxiosError } from "axios";
 import api from "@/api/axios";
 import { useGlobalContext } from "@/context/GlobalProvider";
+import { useHabitContext } from "@/context/HabitProvider";
 
 import { Habit } from "@/types/db_types";
 
@@ -18,6 +19,7 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({
   setHabits,
 }) => {
   const { user } = useGlobalContext();
+  const { setEditHabitOpen, setCurrentEditHabit } = useHabitContext();
 
   const handleDeleteTask = async () => {
     try {
@@ -40,6 +42,11 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({
         console.log(error);
       }
     }
+  };
+
+  const onPressHabit = () => {
+    setCurrentEditHabit(habit);
+    setEditHabitOpen(true);
   };
 
   const rightSwipe = (
@@ -68,7 +75,13 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({
     <Swipeable renderRightActions={rightSwipe} overshootRight={false}>
       {habit.description ? (
         <View>
-          <View className={`${habit.quitting ? "bg-red-100" : "bg-green-200"} p-4 py-3 rounded-lg overflow-hidden flex flex-row justify-between items-end`}>
+          <TouchableOpacity
+            className={`${
+              habit.quitting ? "bg-red-100" : "bg-green-200"
+            } p-4 py-3 rounded-lg overflow-hidden flex flex-row justify-between items-end`}
+            activeOpacity={1}
+            onPress={() => onPressHabit()}
+          >
             <View>
               <Text>{habit.title}</Text>
               <Text className="text-sm mt-1 text-neutral-500">
@@ -90,11 +103,17 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({
                 </Text>
               ) : null}
             </View>
-          </View>
+          </TouchableOpacity>
         </View>
       ) : (
         <View>
-          <View className={`${habit.quitting ? "bg-red-100" : "bg-green-200"} p-4 py-5 rounded-lg overflow-hidden flex flex-row justify-between items-end`}>
+          <TouchableOpacity
+            className={`${
+              habit.quitting ? "bg-red-100" : "bg-green-200"
+            } p-4 py-5 rounded-lg overflow-hidden flex flex-row justify-between items-end`}
+            activeOpacity={1}
+            onPress={() => onPressHabit()}
+          >
             <View>
               <Text>{habit.title}</Text>
             </View>
@@ -113,7 +132,7 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({
                 </Text>
               ) : null}
             </View>
-          </View>
+          </TouchableOpacity>
         </View>
       )}
     </Swipeable>
