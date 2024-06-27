@@ -42,6 +42,10 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({
     }
   };
 
+  const onPressTask = () => {
+    console.log("Task pressed");
+  };
+
   const rightSwipe = (
     progress: ReturnType<Animated.Value["interpolate"]>,
     dragX: ReturnType<Animated.Value["interpolate"]>
@@ -69,7 +73,11 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({
     <Swipeable renderRightActions={rightSwipe} overshootRight={false}>
       {task.description ? (
         <View>
-          <View className="bg-red-100 p-4 py-3 rounded-lg overflow-hidden flex flex-row justify-between items-end">
+          <TouchableOpacity
+            className="bg-red-100 p-4 py-3 rounded-lg overflow-hidden flex flex-row justify-between items-end"
+            activeOpacity={1}
+            onPress={() => onPressTask()}
+          >
             <View>
               <Text>{task.title}</Text>
               <Text className="text-sm mt-1 text-neutral-500">
@@ -85,24 +93,28 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({
                 </Text>
               ) : null}
             </View>
-          </View>
+          </TouchableOpacity>
         </View>
       ) : (
         <View>
-          <View className="bg-red-100 p-4 py-5 rounded-lg overflow-hidden flex flex-row justify-between items-end">
+          <TouchableOpacity
+            className="bg-red-100 p-4 py-5 rounded-lg overflow-hidden flex flex-row justify-between items-end"
+            activeOpacity={1}
+            onPress={() => onPressTask()}
+          >
             <View>
               <Text>{task.title}</Text>
             </View>
             <View className="flex flex-row gap-4 items-center">
               <Text>{task.difficultyRank}</Text>
-                {task.dueDate ? (
-                  <Text>
-                    {new Date(task.dueDate).getMonth() + 1} /{" "}
-                    {new Date(task.dueDate).getDate()}
-                  </Text>
-                ) : null}
+              {task.dueDate ? (
+                <Text>
+                  {new Date(task.dueDate).getMonth() + 1} /{" "}
+                  {new Date(task.dueDate).getDate()}
+                </Text>
+              ) : null}
             </View>
-          </View>
+          </TouchableOpacity>
         </View>
       )}
     </Swipeable>

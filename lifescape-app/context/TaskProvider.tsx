@@ -19,6 +19,8 @@ interface TaskContextTypes {
   setTaskCreationOpen: React.Dispatch<React.SetStateAction<boolean>>;
   sortBy: string;
   setSortBy: React.Dispatch<React.SetStateAction<string>>;
+  editTaskOpen: boolean;
+  setEditTaskOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const defaultState = {
@@ -28,6 +30,8 @@ const defaultState = {
   setTaskCreationOpen: () => {},
   sortBy: "",
   setSortBy: () => {},
+  editTaskOpen: false,
+  setEditTaskOpen: () => {},
 };
 
 const TaskContext = createContext<TaskContextTypes>(defaultState);
@@ -39,6 +43,9 @@ const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     defaultState.taskCreationOpen
   );
   const [sortBy, setSortBy] = useState<string>(defaultState.sortBy);
+  const [editTaskOpen, setEditTaskOpen] = useState<boolean>(
+    defaultState.editTaskOpen
+  );
 
   const { user, userCharacter } = useGlobalContext();
 
@@ -69,7 +76,7 @@ const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   return (
     <TaskContext.Provider
-      value={{ tasks, setTasks, taskCreationOpen, setTaskCreationOpen, sortBy, setSortBy}}
+      value={{ tasks, setTasks, taskCreationOpen, setTaskCreationOpen, sortBy, setSortBy, editTaskOpen, setEditTaskOpen}}
     >
       {children}
     </TaskContext.Provider>
