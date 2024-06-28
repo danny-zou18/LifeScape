@@ -43,7 +43,7 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
 
   return (
     <View style={styles.tabbar}>
-      <View className="w-[45%] h-full flex flex-row justify-between items-center ">
+      <View className="w-[45%] h-full flex flex-row justify-around items-center ">
         {state.routes.slice(0, 2).map((route: any, index: number) => {
           const { options } = descriptors[route.key];
 
@@ -78,7 +78,7 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
               onLongPress={onLongPress}
               style={{ flex: 1 }}
               key={route.key}
-              className={`flex items-center max-w-[40%] bg-red-400 h-full rounded-md`}
+              className={`flex items-center justify-center max-w-[40%] ${isFocused ? "bg-red-400":""} h-full `}
             >
               {icons[route.name]({ color: isFocused ? "red" : "white" })}
             </TouchableOpacity>
@@ -119,7 +119,7 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
           })}
         </TouchableOpacity>
       )}
-      <View className="w-[41%] h-full flex flex-row justify-between items-center">
+      <View className="w-[41%] h-full flex flex-row justify-around items-center">
         {state.routes.slice(3, 5).map((route: any, index: number) => {
           const { options } = descriptors[route.key];
 
@@ -154,7 +154,7 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
               onLongPress={onLongPress}
               key={route.key}
               style={{ flex: 1 }}
-              className="flex items-center"
+              className={`flex items-center justify-center max-w-[40%] ${isFocused ? "bg-red-400":""} h-full `}
             >
               {icons[route.name]({ color: isFocused ? "red" : "white" })}
             </TouchableOpacity>
