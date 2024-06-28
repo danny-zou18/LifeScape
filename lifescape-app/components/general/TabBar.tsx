@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, TouchableOpacity, StyleSheet, Image } from "react-native";
 
 import Feather from "@expo/vector-icons/Feather";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -20,12 +20,13 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
       <MaterialIcons name="elderly-woman" size={24} color="white" {...props} />
     ),
     play: (props: any) => (
-      <MaterialCommunityIcons
-        name="sword-cross"
-        size={27}
-        color="white"
-        {...props}
-      />
+      <View className="h-[90%]">
+        <Image
+          source={require("../../assets/images/crossed_swords.png")}
+          resizeMode="contain"
+          style={{ flex: 1, aspectRatio: 1 }}
+        />
+      </View>
     ),
     market: (props: any) => (
       <FontAwesome5 name="store" size={24} color="white" {...props} />
@@ -42,7 +43,7 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
 
   return (
     <View style={styles.tabbar}>
-      <View className="w-[45%] h-full flex flex-row justify-between items-center">
+      <View className="w-[45%] h-full flex flex-row justify-between items-center ">
         {state.routes.slice(0, 2).map((route: any, index: number) => {
           const { options } = descriptors[route.key];
 
@@ -77,7 +78,7 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
               onLongPress={onLongPress}
               style={{ flex: 1 }}
               key={route.key}
-              className="flex items-center"
+              className={`flex items-center max-w-[40%] bg-red-400 h-full rounded-md`}
             >
               {icons[route.name]({ color: isFocused ? "red" : "white" })}
             </TouchableOpacity>
@@ -111,7 +112,7 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
           }}
           style={{ transform: [{ translateX: -25 }] }}
           key={state.routes[2].key}
-          className="absolute flex items-center bg-red-200 min-w-[55px] h-[55px] rounded-full justify-center left-1/2 -top-6 "
+          className="absolute flex items-center min-w-[60px] h-[60px] rounded-full justify-center left-1/2 -top-7 "
         >
           {icons[state.routes[2].name]({
             color: state.index === 2 ? "red" : "white",
@@ -175,7 +176,6 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: "black",
     marginHorizontal: 20,
-    paddingVertical: 10,
     borderRadius: 10,
     borderCurve: "continuous",
     shadowColor: "black",
