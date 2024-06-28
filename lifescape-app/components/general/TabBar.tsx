@@ -16,19 +16,25 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
     home: (props: any) => (
       <View className="h-[90%]">
         <Image
-          source={require("../../assets/images/home.png")}
+          source={require("../../assets/images/tabicons/home.png")}
           resizeMode="contain"
           style={{ flex: 1, aspectRatio: 1 }}
         />
       </View>
     ),
     character: (props: any) => (
-      <MaterialIcons name="elderly-woman" size={24} color="white" {...props} />
+      <View className="h-[90%]">
+        <Image
+          source={require("../../assets/images/tabicons/inventory.png")}
+          resizeMode="contain"
+          style={{ flex: 1, aspectRatio: 1 }}
+        />
+      </View>
     ),
     play: (props: any) => (
       <View className="h-[90%]">
         <Image
-          source={require("../../assets/images/crossed_swords.png")}
+          source={require("../../assets/images/tabicons/crossed_swords.png")}
           resizeMode="contain"
           style={{ flex: 1, aspectRatio: 1 }}
         />
