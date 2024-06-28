@@ -29,7 +29,7 @@ const CharacterOverview = () => {
     [userCharacter.energy, userCharacter.maxEnergy]
   );
   return (
-    <View className="bg-red-300 flex flex-row h-[17vh] p-3">
+    <View className=" flex flex-row h-[17vh] p-3">
       <View className="w-[37%] h-[95%] relative mt-auto mb-auto">
         <View className="absolute top-[-.5rem] left-2 z-10 bg-white px-2 rounded-full">
           <Text className="text-xs">{userCharacter.name}</Text>
