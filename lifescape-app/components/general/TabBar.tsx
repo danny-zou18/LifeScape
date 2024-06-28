@@ -14,7 +14,13 @@ type TabBarProps = {
 const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
   const icons: any = {
     home: (props: any) => (
-      <Feather name="home" size={24} color="white" {...props} />
+      <View className="h-[90%]">
+        <Image
+          source={require("../../assets/images/home.png")}
+          resizeMode="contain"
+          style={{ flex: 1, aspectRatio: 1 }}
+        />
+      </View>
     ),
     character: (props: any) => (
       <MaterialIcons name="elderly-woman" size={24} color="white" {...props} />
