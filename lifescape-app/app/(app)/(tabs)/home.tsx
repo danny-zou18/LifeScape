@@ -30,7 +30,7 @@ const Home = () => {
       {userCharacter ? (
         <View className="flex items-center">
           <CharacterOverview />
-          <View className="w-[95vw] flex mt-1">
+          <View className="w-[95vw] flex ">
             <ViewSelectionBtns
               currentView={currentlyOpen}
               setCurrentView={setCurrentlyOpen}

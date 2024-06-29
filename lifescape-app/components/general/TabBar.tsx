@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, TouchableOpacity, StyleSheet, Image } from "react-native";
 
 import Feather from "@expo/vector-icons/Feather";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -14,18 +14,31 @@ type TabBarProps = {
 const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
   const icons: any = {
     home: (props: any) => (
-      <Feather name="home" size={24} color="white" {...props} />
+      <View className="h-[80%]">
+        <Image
+          source={require("../../assets/images/tabicons/home.png")}
+          resizeMode="contain"
+          style={{ flex: 1, aspectRatio: 1 }}
+        />
+      </View>
     ),
     character: (props: any) => (
-      <MaterialIcons name="elderly-woman" size={24} color="white" {...props} />
+      <View className="h-[80%]">
+        <Image
+          source={require("../../assets/images/tabicons/inventory.png")}
+          resizeMode="contain"
+          style={{ flex: 1, aspectRatio: 1 }}
+        />
+      </View>
     ),
     play: (props: any) => (
-      <MaterialCommunityIcons
-        name="sword-cross"
-        size={27}
-        color="white"
-        {...props}
-      />
+      <View className="h-[110%]">
+        <Image
+          source={require("../../assets/images/tabicons/crossed_swords.png")}
+          resizeMode="contain"
+          style={{ flex: 1, aspectRatio: 1 }}
+        />
+      </View>
     ),
     market: (props: any) => (
       <FontAwesome5 name="store" size={24} color="white" {...props} />
@@ -42,7 +55,7 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
 
   return (
     <View style={styles.tabbar}>
-      <View className="w-[45%] h-full flex flex-row justify-between items-center">
+      <View className="w-[45%] h-full flex flex-row justify-around items-center ">
         {state.routes.slice(0, 2).map((route: any, index: number) => {
           const { options } = descriptors[route.key];
 
@@ -77,7 +90,7 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
               onLongPress={onLongPress}
               style={{ flex: 1 }}
               key={route.key}
-              className="flex items-center"
+              className={`flex items-center justify-center max-w-[40%] ${isFocused ? "bg-red-400":""} h-full `}
             >
               {icons[route.name]({ color: isFocused ? "red" : "white" })}
             </TouchableOpacity>
@@ -111,14 +124,14 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
           }}
           style={{ transform: [{ translateX: -25 }] }}
           key={state.routes[2].key}
-          className="absolute flex items-center bg-red-200 min-w-[55px] h-[55px] rounded-full justify-center left-1/2 -top-6 "
+          className="absolute flex items-center min-w-[60px] h-[60px] rounded-full justify-center left-1/2 -top-7 "
         >
           {icons[state.routes[2].name]({
             color: state.index === 2 ? "red" : "white",
           })}
         </TouchableOpacity>
       )}
-      <View className="w-[41%] h-full flex flex-row justify-between items-center">
+      <View className="w-[41%] h-full flex flex-row justify-around items-center">
         {state.routes.slice(3, 5).map((route: any, index: number) => {
           const { options } = descriptors[route.key];
 
@@ -153,7 +166,7 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
               onLongPress={onLongPress}
               key={route.key}
               style={{ flex: 1 }}
-              className="flex items-center"
+              className={`flex items-center justify-center max-w-[40%] ${isFocused ? "bg-red-400":""} h-full `}
             >
               {icons[route.name]({ color: isFocused ? "red" : "white" })}
             </TouchableOpacity>
@@ -175,7 +188,6 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: "black",
     marginHorizontal: 20,
-    paddingVertical: 10,
     borderRadius: 10,
     borderCurve: "continuous",
     shadowColor: "black",

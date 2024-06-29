@@ -29,10 +29,10 @@ const CharacterOverview = () => {
     [userCharacter.energy, userCharacter.maxEnergy]
   );
   return (
-    <View className="bg-red-300 flex flex-row h-[17vh] p-3">
+    <View className=" flex flex-row h-[17vh] p-3">
       <View className="w-[37%] h-[95%] relative mt-auto mb-auto">
-        <View className="absolute top-[-.5rem] left-2 z-10 bg-white px-2 rounded-full">
-          <Text className="text-xs">{userCharacter.name}</Text>
+        <View className="absolute top-[-.5rem] left-2 z-10 bg-[#00000090] px-2 rounded-full">
+          <Text className="text-xs text-white">{userCharacter.name}</Text>
         </View>
         <Image
           className="w-full h-full z-0 rounded-md"
@@ -49,10 +49,10 @@ const CharacterOverview = () => {
               : "left-1"
           }`}
         >
-          <View className="bg-red-50 px-[0.4rem] rounded-full">
-            <Text className="text-xs ">{userCharacter.level}</Text>
+          <View className="bg-black px-[0.4rem] rounded-full">
+            <Text className="text-xs text-white">{userCharacter.level}</Text>
           </View>
-          <View className="bg-red-50 ml-1 mt-[0.15rem] min-w-[76%] max-h-[70%] rounded-full overflow-hidden">
+          <View className="bg-[#00000090] ml-1 mt-[0.15rem] min-w-[76%] max-h-[70%] rounded-full overflow-hidden">
             <View
               style={{ width: expPercentage }}
               className={`bg-green-400 h-full rounded-l-full rounded-r-lg flex items-center justify-center`}
@@ -132,8 +132,8 @@ const CharacterOverview = () => {
             </View>
           </View>
         </View>
-        <View className="h-[30%] p-1">
-          <View className="w-fullflex flex-row items-center">
+        <View className="h-[30%] p-1 mt-1">
+          <View className="w-full flex flex-row items-center justify-end">
             <View className="h-8">
               <Image
                 source={require("../../assets/images/pixil-frame-0.png")}

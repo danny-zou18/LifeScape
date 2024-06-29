@@ -16,12 +16,13 @@ function TabBarIcon(props: {
     return (
       <Tabs
         tabBar={props => <TabBar {...props} />}
-
       >
         <Tabs.Screen
           name="home"
           options={{
             title: 'Home',
+            headerStyle: { backgroundColor: '#323538' },
+            headerTintColor: '#fff',
           }}
         />
         <Tabs.Screen
