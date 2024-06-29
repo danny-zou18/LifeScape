@@ -14,7 +14,7 @@ type TabBarProps = {
 const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
   const icons: any = {
     home: (props: any) => (
-      <View className="h-[90%]">
+      <View className="h-[80%]">
         <Image
           source={require("../../assets/images/tabicons/home.png")}
           resizeMode="contain"
@@ -23,7 +23,7 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
       </View>
     ),
     character: (props: any) => (
-      <View className="h-[90%]">
+      <View className="h-[80%]">
         <Image
           source={require("../../assets/images/tabicons/inventory.png")}
           resizeMode="contain"
@@ -32,7 +32,7 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
       </View>
     ),
     play: (props: any) => (
-      <View className="h-[90%]">
+      <View className="h-[110%]">
         <Image
           source={require("../../assets/images/tabicons/crossed_swords.png")}
           resizeMode="contain"
