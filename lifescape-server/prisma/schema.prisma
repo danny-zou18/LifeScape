@@ -53,7 +53,7 @@ model Character {
   agilityXp   Float @default(0) //Created trigger function for this.
   vitalityXp  Float @default(0) //Created trigger function for this.
   enduranceXp Float @default(0) //Created trigger function for this.
-  willXp      Float @default(0)
+  willXp      Float @default(0) //Created trigger function for this.
 
   Owner    users     @relation(fields: [OwnerId], references: [id])
   OwnerId  String    @unique
