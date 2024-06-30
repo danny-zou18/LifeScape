@@ -47,6 +47,14 @@ model Character {
   Endurance Int @default(10)
   Will      Int @default(10)
 
+  strengthXp Int @default(0)
+  defenseXp  Int @default(0)
+  dexterityXp Int @default(0)
+  agilityXp Int @default(0)
+  vitalityXp Int @default(0)
+  enduranceXp Int @default(0)
+  willXp Int @default(0)
+
   Owner    users     @relation(fields: [OwnerId], references: [id])
   OwnerId  String    @unique
   Tasks    Task[]
