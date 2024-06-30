@@ -47,8 +47,8 @@ model Character {
   Endurance Int @default(10)
   Will      Int @default(10)
 
-  strengthXp  Float @default(0)
-  defenseXp   Float @default(0)
+  strengthXp  Float @default(0) //Created trigger function for this.
+  defenseXp   Float @default(0) //Created trigger function for this.
   dexterityXp Float @default(0)
   agilityXp   Float @default(0)
   vitalityXp  Float @default(0)
