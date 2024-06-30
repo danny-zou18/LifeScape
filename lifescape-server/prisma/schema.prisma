@@ -51,7 +51,7 @@ model Character {
   defenseXp   Float @default(0) //Created trigger function for this.
   dexterityXp Float @default(0) //Created trigger function for this.
   agilityXp   Float @default(0) //Created trigger function for this.
-  vitalityXp  Float @default(0) 
+  vitalityXp  Float @default(0) //Created trigger function for this.
   enduranceXp Float @default(0)
   willXp      Float @default(0)
 
