@@ -69,7 +69,6 @@ const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         );
         if (response.status === 200) {
           setHabits(response.data);
-          console.log(response.data);
         }
       } catch (error) {
         if (isAxiosError(error)) {

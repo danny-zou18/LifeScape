@@ -71,7 +71,6 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({
           );
           if (response.status === 200) {
             setUserCharacter(response.data);
-            console.log("Character updated: ", response.data);
           }
         } catch (error) {
           if (isAxiosError(error)) {
