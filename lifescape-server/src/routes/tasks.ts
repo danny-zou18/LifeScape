@@ -161,6 +161,7 @@ router.get("/get/:userId/:characterId", async (req, res) => {
     .findMany({
       where: {
         CharacterId: parseInt(characterId),
+        completed: false,
       },
     })
     .then((tasks) => {
