@@ -33,6 +33,13 @@ const router = express.Router();
  *       {
  *         "error": "Unauthorized"
  *       }
+ * @apiError CharacterNotFound Character not found
+ * @apiErrorExample {json} CharacterNotFound:
+ *       HTTP/1.1 404 Not Found
+ *       {
+ *         "error": "Character not found"
+ *       }
+ * 
  * @apiError Unauthorized User is not authorized
  * @apiErrorExample {json} Unauthorized:
  *       HTTP/1.1 401 Unauthorized
@@ -58,6 +65,16 @@ router.post("/create/:userId/:characterId", async (req, res) => {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
+  const character = await db.character.findUnique({
+    where: {
+      id: parseInt(characterId),
+    },
+  });
+
+  if (!character) {
+    return res.status(404).json({ error: "Character not found" });
+  }
+
   const { title, description, dueDate, difficultyRank } = req.body;
 
   await db.task
@@ -67,6 +84,15 @@ router.post("/create/:userId/:characterId", async (req, res) => {
         description: description,
         dueDate: dueDate,
         difficultyRank: difficultyRank,
+        experienceReward: 10,
+        goldReward: 10,
+        StrengthReward: 3,
+        DefenseReward: 3,
+        DexterityReward: 3,
+        AgilityReward: 3,
+        VitalityReward: 3,
+        EnduranceReward: 3,
+        WillReward: 3,
         Character: {
           connect: {
             id: parseInt(characterId),
