@@ -9,6 +9,8 @@ import { Task } from "@/types/db_types";
 
 import { Swipeable } from "react-native-gesture-handler";
 
+import Feather from '@expo/vector-icons/Feather';
+
 interface IndividualTasksProps {
   task: Task;
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
@@ -75,9 +77,14 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({
   return (
     <Swipeable renderRightActions={rightSwipe} overshootRight={false}>
       {task.description ? (
-        <View>
+        <View className="flex flex-row">
+          <View className="bg-blue-300 w-[10%] rounded-l-lg flex items-center justify-center">
+            <TouchableOpacity className="bg-red-300 w-8 h-8 rounded-full flex justify-center items-center">
+              <Feather name="check" size={18} color="black" />
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity
-            className="bg-red-100 p-4 py-3 rounded-lg overflow-hidden flex flex-row justify-between items-end"
+            className="bg-red-100 p-4 py-3 rounded-r-lg overflow-hidden flex flex-row justify-between items-end w-[90%]"
             activeOpacity={1}
             onPress={() => onPressTask()}
           >
