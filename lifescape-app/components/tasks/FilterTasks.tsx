@@ -36,7 +36,6 @@ const FilterTasks = () => {
       setTasks(
         [...tasks].sort((a, b) => {
           if (a.dueDate && b.dueDate) {
-            console.log(a.dueDate, b.dueDate);
             return (new Date(a.dueDate)).getTime() - (new Date(b.dueDate)).getTime();
           } else if (a.dueDate) {
             return -1;

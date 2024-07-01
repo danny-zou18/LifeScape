@@ -33,6 +33,13 @@ const router = express.Router();
  *       {
  *         "error": "Unauthorized"
  *       }
+ * @apiError CharacterNotFound Character not found
+ * @apiErrorExample {json} CharacterNotFound:
+ *       HTTP/1.1 404 Not Found
+ *       {
+ *         "error": "Character not found"
+ *       }
+ *
  * @apiError Unauthorized User is not authorized
  * @apiErrorExample {json} Unauthorized:
  *       HTTP/1.1 401 Unauthorized
@@ -58,6 +65,16 @@ router.post("/create/:userId/:characterId", async (req, res) => {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
+  const character = await db.character.findUnique({
+    where: {
+      id: parseInt(characterId),
+    },
+  });
+
+  if (!character) {
+    return res.status(404).json({ error: "Character not found" });
+  }
+
   const { title, description, dueDate, difficultyRank } = req.body;
 
   await db.task
@@ -67,6 +84,15 @@ router.post("/create/:userId/:characterId", async (req, res) => {
         description: description,
         dueDate: dueDate,
         difficultyRank: difficultyRank,
+        experienceReward: 10,
+        goldReward: 10,
+        StrengthReward: 3,
+        DefenseReward: 3,
+        DexterityReward: 3,
+        AgilityReward: 3,
+        VitalityReward: 3,
+        EnduranceReward: 3,
+        WillReward: 3,
         Character: {
           connect: {
             id: parseInt(characterId),
@@ -135,6 +161,7 @@ router.get("/get/:userId/:characterId", async (req, res) => {
     .findMany({
       where: {
         CharacterId: parseInt(characterId),
+        completed: false,
       },
     })
     .then((tasks) => {
@@ -282,6 +309,137 @@ router.put("/update/:userId/:taskId", async (req, res) => {
     .catch((error) => {
       console.log(error);
       res.status(400).json({ error: "Task Update Failed" });
+    });
+});
+
+/** @api {put} /tasks/complete/:userId/:characterId/:taskId Complete Task
+ *  @apiName CompleteTask
+ *  @apiGroup Task
+ *
+ *  @apiDescription Complete a task
+ *
+ *  @apiParam {String} userId User ID
+ *  @apiParam {String} characterId Character ID
+ *  @apiParam {String} taskId Task ID
+ *
+ *  @apiHeader {String} Authorization Firebase ID Token
+ *
+ *  @apiSuccess {Object} message Success message
+ *  @apiSuccessExample {json} Success-Response:
+ *      HTTP/1.1 200 OK
+ *      {
+ *        "message": "Task completed successfully"
+ *      }
+ *  @apiError Unauthorized User is not authorized
+ *  @apiErrorExample {json} Unauthorized:
+ *      HTTP/1.1 403 Unauthorized
+ *      {
+ *        "error": "Unauthorized"
+ *      }
+ *  @apiError TaskNotFound Task not found
+ *  @apiErrorExample {json} TaskNotFound:
+ *      HTTP/1.1 404 Not Found
+ *      {
+ *        "error": "Task not found"
+ *      }
+ *  @apiError Unauthorized User is not authorized
+ *  @apiErrorExample {json} Unauthorized:
+ *      HTTP/1.1 401 Unauthorized
+ *      {
+ *         "error": "Unauthorized"
+ *      }
+ *  @apiError TaskCompletionFailed Task completion failed
+ *  @apiErrorExample {json} TaskCompletionUpdateFailed:
+ *      HTTP/1.1 400 Bad Request
+ *      {
+ *        "error": "Task Completion Update Failed"
+ *      }
+ * @apiError TaskCompletionFailed Task completion failed
+ * @apiErrorExample {json} TaskCompletionFailed:
+ *      HTTP/1.1 400 Bad Request
+ *      {
+ *        "error": "Task Completion Failed"
+ *      }
+ * 
+ */
+router.put("/complete/:userId/:characterId/:taskId", async (req, res) => {
+  const authToken = req.headers.authorization;
+  const { userId, characterId, taskId } = req.params;
+  try {
+    const authUser = await auth().verifyIdToken(authToken as string);
+    if (authUser.uid !== userId) {
+      res.status(403).json({ error: "Unauthorized" });
+    }
+  } catch (e) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  const task = await db.task.findUnique({
+    where: {
+      id: parseInt(taskId),
+    },
+  });
+
+  if (!task) {
+    return res.status(404).json({ error: "Task not found" });
+  }
+
+  await db.task
+    .update({
+      where: {
+        id: parseInt(taskId),
+      },
+      data: {
+        completed: true,
+      },
+    })
+    .then(() => {})
+    .catch((error) => {
+      console.log(error);
+      return res.status(400).json({ error: "Task Completion Update Failed" });
+    });
+
+  await db.character
+    .update({
+      where: {
+        id: parseInt(characterId),
+      },
+      data: {
+        experience: {
+          increment: task.experienceReward ? task.experienceReward : 0,
+        },
+        gold: {
+          increment: task.goldReward ? task.goldReward : 0,
+        },
+        strengthXp: {
+          increment: task.StrengthReward ? task.StrengthReward : 0,
+        },
+        defenseXp: {
+          increment: task.DefenseReward ? task.DefenseReward : 0,
+        },
+        dexterityXp: {
+          increment: task.DexterityReward ? task.DexterityReward : 0,
+        },
+        agilityXp: {
+          increment: task.AgilityReward ? task.AgilityReward : 0,
+        },
+        vitalityXp: {
+          increment: task.VitalityReward ? task.VitalityReward : 0,
+        },
+        enduranceXp: {
+          increment: task.EnduranceReward ? task.EnduranceReward : 0,
+        },
+        willXp: {
+          increment: task.WillReward ? task.WillReward : 0,
+        },
+      },
+    })
+    .then(() => {
+      return res.status(200).json({ message: "Task completed successfully" });
+    })
+    .catch((error) => {
+      console.log(error);
+      return res.status(400).json({ error: "Task Completion Failed" });
     });
 });
 

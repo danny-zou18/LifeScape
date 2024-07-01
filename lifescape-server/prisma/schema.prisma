@@ -47,6 +47,14 @@ model Character {
   Endurance Int @default(10)
   Will      Int @default(10)
 
+  strengthXp  Float @default(0) //Created trigger function for this.
+  defenseXp   Float @default(0) //Created trigger function for this.
+  dexterityXp Float @default(0) //Created trigger function for this.
+  agilityXp   Float @default(0) //Created trigger function for this.
+  vitalityXp  Float @default(0) //Created trigger function for this.
+  enduranceXp Float @default(0) //Created trigger function for this.
+  willXp      Float @default(0) //Created trigger function for this.
+
   Owner    users     @relation(fields: [OwnerId], references: [id])
   OwnerId  String    @unique
   Tasks    Task[]
@@ -90,7 +98,7 @@ model Habit {
   streak    Int      @default(0)
 
   repeat                Repeat @default(DAILY)
-  currentCompletions    Int   @default(0)
+  currentCompletions    Int    @default(0)
   completionGoalWeekly  Int?
   completionGoalMonthly Int?
 

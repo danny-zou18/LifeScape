@@ -96,7 +96,6 @@ const HabitEditModal = () => {
       );
 
       if (response.status === 200) {
-        console.log("Habit updated successfully", response.data);
         const updatedHabits = habits.map((habit) => {
           if (habit.id === habitId) {
             return response.data;

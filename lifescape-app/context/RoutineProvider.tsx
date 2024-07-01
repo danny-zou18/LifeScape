@@ -50,7 +50,6 @@ const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         );
         if (response.status === 200) {
           setRoutines(response.data);
-          console.log(response.data);
         }
       } catch (error) {
         if (isAxiosError(error)) {
