@@ -1,18 +1,9 @@
 import React, { useRef, useEffect } from 'react';
 import { Animated, Text, StyleSheet } from 'react-native';
+import { RewardsType } from '@/types/reward_type';  
 
 interface RewardsPopupsProps {
-  rewards: {
-    experienceReward?: number;
-    goldReward?: number;
-    strengthReward?: number;
-    defenseReward?: number;
-    dexterityReward?: number;
-    agilityReward?: number;
-    vitalityReward?: number;
-    enduranceReward?: number;
-    willReward?: number;
-  },
+  rewards: RewardsType;
   onComplete: () => void;
 }
 
@@ -26,7 +17,6 @@ const RewardsPopup: React.FC<RewardsPopupsProps> = ({rewards, onComplete}) => {
       duration: 500,
       useNativeDriver: true,
     }).start();
-
     // Fade out after 2-3 seconds
     const timer = setTimeout(() => {
       Animated.timing(fadeAnim, {
@@ -48,7 +38,7 @@ const RewardsPopup: React.FC<RewardsPopupsProps> = ({rewards, onComplete}) => {
       style={[fadeAnim, styles.modal]}
       className="absolute top-12 left-10 right-10 bg-black bg-opacity-70 rounded-lg p-2"
     >
-      <Text className="text-white text-lg">Testing</Text>
+      <Text className="text-black text-[15rem]">Testing</Text>
     </Animated.View>
   )
 }

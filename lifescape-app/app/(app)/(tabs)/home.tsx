@@ -11,6 +11,8 @@ import CharacterOverview from "@/components/home/CharacterOverview";
 import ViewSelectionBtns from "@/components/home/ViewSelectionBtns";
 import TasksHabitsRoutine from "@/components/home/TasksHabitsRoutine";
 
+import RewardsManager from "@/components/home/RewardsManager";
+
 const Home = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [characterCreationModalVisible, setCharacterCreationModalVisible] =
@@ -38,7 +40,9 @@ const Home = () => {
                 flatListRef={flatListRef}
               />
             </View>
+            <RewardsManager />
           </View>
+
         </HomeProvider>
       ) : (
         <CharacterCreationModal
