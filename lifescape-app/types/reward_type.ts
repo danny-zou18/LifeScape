@@ -1,5 +1,5 @@
 interface RewardsType {
-  id?: number;
+  id?: number | null;
   experienceReward?: number;
   goldReward?: number;
   strengthReward?: number;
