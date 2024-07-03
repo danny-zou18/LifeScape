@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { Animated, Text, StyleSheet } from 'react-native';
+import { Animated, Text } from 'react-native';
 import { RewardsType } from '@/types/reward_type';  
 
 interface RewardsPopupsProps {
@@ -35,30 +35,13 @@ const RewardsPopup: React.FC<RewardsPopupsProps> = ({rewards, onComplete}) => {
 
   return (
     <Animated.View
-      style={[fadeAnim, styles.modal]}
-      className="absolute top-12 left-10 right-10 bg-black bg-opacity-70 rounded-lg p-2"
+      style={[fadeAnim]}
+      className="absolute top-[70%] mx-auto bg-black bg-opacity-70 rounded-lg p-2"
+      pointerEvents={'none'}
     >
-      <Text className="text-black text-[15rem]">Testing</Text>
+      <Text className="text-white text-[2rem]">Testing</Text>
     </Animated.View>
   )
 }
-
-const styles = StyleSheet.create({
-  modal: {
-    position: 'absolute',
-    top: 50,
-    left: '10%',
-    right: '10%',
-    padding: 10,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  text: {
-    color: 'white',
-    fontSize: 16,
-  },
-});
-
 
 export default RewardsPopup

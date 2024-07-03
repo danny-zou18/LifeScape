@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, Text } from "react-native";
 
 import RewardsPopup from "./RewardsPopup";
 
@@ -9,7 +9,10 @@ const RewardsManager = () => {
   const { currentShownRewards, setCurrentShownRewards } = useHomeContext();
 
   return (
-    <View style={styles.container} pointerEvents="none">
+    <View
+      pointerEvents="none"
+      className="absolute z-50 h-[100vh] w-[100vw] bg-[#00000070]"
+    >
       {currentShownRewards.map((rewards) => (
         <RewardsPopup
           key={rewards.id}
@@ -21,22 +24,16 @@ const RewardsManager = () => {
           }}
         />
       ))}
+      <View
+        //   style={[fadeAnim]}
+        style={{ transform: [{ translateX: -50 }] }}
+        className="absolute top-[70%] left-1/2  rounded-lg bg-black bg-opacity-70 p-2"
+        pointerEvents={"none"}
+      >
+        <Text className="text-[2rem] text-white">Testing</Text>
+      </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
-    position: "absolute",
-    top: 0,
-    left: 0,
-    height: "100%",
-    backgroundColor: "transparent",
-  },
-});
 
 export default RewardsManager;

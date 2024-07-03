@@ -177,7 +177,7 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({
             </TouchableOpacity>
           </View>
           <TouchableOpacity
-            className="flex w-[90%] flex-row items-end justify-between overflow-hidden rounded-lg bg-red-100 p-4 py-5"
+            className="flex w-[90%] flex-row items-end justify-between overflow-hidden rounded-r-lg bg-red-100 p-4 py-5"
             activeOpacity={1}
             onPress={() => onPressTask()}
           >

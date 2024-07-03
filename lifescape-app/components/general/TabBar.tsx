@@ -122,7 +122,7 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
               target: state.routes[2].key,
             });
           }}
-          style={{ transform: [{ translateX: -25 }] }}
+          style={{ transform: [{ translateX: -32 }] }}
           key={state.routes[2].key}
           className="absolute flex items-center min-w-[60px] h-[60px] rounded-full justify-center left-1/2 -top-7 "
         >
@@ -131,7 +131,7 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
           })}
         </TouchableOpacity>
       )}
-      <View className="w-[41%] h-full flex flex-row justify-around items-center">
+      <View className="w-[45%] h-full flex flex-row justify-around items-center">
         {state.routes.slice(3, 5).map((route: any, index: number) => {
           const { options } = descriptors[route.key];
 
