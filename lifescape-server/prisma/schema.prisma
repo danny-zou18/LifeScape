@@ -41,7 +41,6 @@ model Character {
 
   Strength  Int @default(10)
   Defense   Int @default(10)
-  Dexterity Int @default(10)
   Agility   Int @default(10)
   Vitality  Int @default(10)
   Endurance Int @default(10)
@@ -49,7 +48,6 @@ model Character {
 
   strengthXp  Float @default(0) //Created trigger function for this.
   defenseXp   Float @default(0) //Created trigger function for this.
-  dexterityXp Float @default(0) //Created trigger function for this.
   agilityXp   Float @default(0) //Created trigger function for this.
   vitalityXp  Float @default(0) //Created trigger function for this.
   enduranceXp Float @default(0) //Created trigger function for this.
@@ -78,7 +76,6 @@ model Task {
   goldReward       Int?
   StrengthReward   Int?
   DefenseReward    Int?
-  DexterityReward  Int?
   AgilityReward    Int?
   VitalityReward   Int?
   EnduranceReward  Int?
@@ -110,7 +107,6 @@ model Habit {
   goldReward       Int?
   StrengthReward   Int?
   DefenseReward    Int?
-  DexterityReward  Int?
   AgilityReward    Int?
   VitalityReward   Int?
   EnduranceReward  Int?
@@ -138,7 +134,6 @@ model Routine {
   goldReward       Int?
   StrengthReward   Int?
   DefenseReward    Int?
-  DexterityReward  Int?
   AgilityReward    Int?
   VitalityReward   Int?
   EnduranceReward  Int?

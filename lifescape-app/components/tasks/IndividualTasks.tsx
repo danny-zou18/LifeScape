@@ -78,7 +78,6 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({
               goldReward: task.goldReward,
               strengthReward: task.StrengthReward,
               defenseReward: task.DefenseReward,
-              dexterityReward: task.DexterityReward,
               agilityReward: task.AgilityReward,
               vitalityReward: task.VitalityReward,
               enduranceReward: task.EnduranceReward,
