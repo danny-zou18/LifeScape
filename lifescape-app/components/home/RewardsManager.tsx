@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, Image } from "react-native";
 
 import RewardsPopup from "./RewardsPopup";
 
@@ -11,7 +11,7 @@ const RewardsManager = () => {
   return (
     <View
       pointerEvents="none"
-      className="absolute z-50 w-[100vw] h-full bg-transparent"
+      className="absolute z-50 h-full w-[100vw] bg-transparent"
     >
       {currentShownRewards.map((rewards) => (
         <RewardsPopup
@@ -25,12 +25,40 @@ const RewardsManager = () => {
         />
       ))}
       <View
-        //   style={[fadeAnim]}
-        style={{ transform: [{ translateX: -50 }] }}
-        className="absolute bottom-3 left-1/2 rounded-lg bg-black bg-opacity-70 p-2"
+        // style={[{ transform: [{ translateX: -70 }] }]}
+        className="absolute bottom-3 left-1/2 flex h-10 flex-row gap-2 rounded-full bg-black bg-opacity-70 p-2 px-4 -translate-x-1/2"
         pointerEvents={"none"}
       >
-        <Text className="text-[2rem] text-white">Testing</Text>
+        <View className="h-full flex flex-row items-center gap-1">
+          <View className="h-full">
+            <Image
+              source={require("../../assets/images/rewardicons/experience.png")}
+              resizeMode="contain"
+              style={{ flex: 1, aspectRatio: 1 }}
+            />
+          </View>
+          <Text className="text-white">2</Text>
+        </View>
+        <View className="h-full flex flex-row items-center gap-1">
+          <View className="h-full">
+            <Image
+              source={require("../../assets/images/rewardicons/gold.png")}
+              resizeMode="contain"
+              style={{ flex: 1, aspectRatio: 1 }}
+            />
+          </View>
+          <Text className="text-white">2</Text>
+        </View>
+        <View className="h-full flex flex-row items-center gap-1">
+          <View className="h-full">
+            <Image
+              source={require("../../assets/images/rewardicons/strength.png")}
+              resizeMode="contain"
+              style={{ flex: 1, aspectRatio: 1 }}
+            />
+          </View>
+          <Text className="text-white">2</Text>
+        </View>
       </View>
     </View>
   );
