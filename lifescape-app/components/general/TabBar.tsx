@@ -180,7 +180,7 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
 const styles = StyleSheet.create({
   tabbar: {
     position: "absolute",
-    bottom: 20,
+    bottom: 15,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",

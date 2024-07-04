@@ -1,13 +1,16 @@
-import React, { useRef, useEffect } from 'react';
-import { Animated, Text } from 'react-native';
-import { RewardsType } from '@/types/reward_type';  
+import React, { useRef, useEffect } from "react";
+import { Animated, Text, Image } from "react-native";
+import { RewardsType } from "@/types/reward_type";
 
 interface RewardsPopupsProps {
   rewards: RewardsType;
   onComplete: () => void;
 }
 
-const RewardsPopup: React.FC<RewardsPopupsProps> = ({rewards, onComplete}) => {
+const RewardsPopup: React.FC<RewardsPopupsProps> = ({
+  rewards,
+  onComplete,
+}) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -35,13 +38,13 @@ const RewardsPopup: React.FC<RewardsPopupsProps> = ({rewards, onComplete}) => {
 
   return (
     <Animated.View
-      style={[fadeAnim]}
-      className="absolute top-[70%] mx-auto bg-black bg-opacity-70 rounded-lg p-2"
-      pointerEvents={'none'}
+      style={[fadeAnim, {transform: [{ translateX: -50 }]}]}
+      className="absolute bottom-3 left-1/2 rounded-lg bg-black bg-opacity-70 p-2 flex flex-row"
+      pointerEvents={"none"}
     >
-      <Text className="text-white text-[2rem]">Testing</Text>
+      <Text className="text-[2rem] text-white">Testing</Text>
     </Animated.View>
-  )
-}
+  );
+};
 
-export default RewardsPopup
+export default RewardsPopup;

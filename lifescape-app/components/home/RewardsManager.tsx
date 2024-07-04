@@ -11,7 +11,7 @@ const RewardsManager = () => {
   return (
     <View
       pointerEvents="none"
-      className="absolute z-50 h-[100vh] w-[100vw] bg-[#00000070]"
+      className="absolute z-50 w-[100vw] h-full bg-transparent"
     >
       {currentShownRewards.map((rewards) => (
         <RewardsPopup
@@ -27,7 +27,7 @@ const RewardsManager = () => {
       <View
         //   style={[fadeAnim]}
         style={{ transform: [{ translateX: -50 }] }}
-        className="absolute top-[70%] left-1/2  rounded-lg bg-black bg-opacity-70 p-2"
+        className="absolute bottom-3 left-1/2 rounded-lg bg-black bg-opacity-70 p-2"
         pointerEvents={"none"}
       >
         <Text className="text-[2rem] text-white">Testing</Text>

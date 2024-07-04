@@ -51,7 +51,7 @@ const TasksHabitsRoutine: React.FC<TasksHabitsRoutineProps> = ({
       onScroll={scrollHandler}
       scrollEventThrottle={16}
       renderItem={({ item }) => (
-        <View className="w-[95vw] mt-1">
+        <View className="w-[95vw] mt-1 h-[35rem]">
           {item === "Tasks" && (
             <TaskProvider>
               <TaskWrapper />
