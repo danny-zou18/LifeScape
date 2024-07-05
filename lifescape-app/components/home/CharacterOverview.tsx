@@ -13,8 +13,11 @@ const CharacterOverview = () => {
   };
 
   const expPercentage = useMemo(
-    () => calculatePercentage(userCharacter.experience, 20),
-    [userCharacter.experience]
+    () => {
+      let next_level = 0.8 * Math.pow(userCharacter.level, 2) + 2 * userCharacter.level;
+      return calculatePercentage(userCharacter.experience, next_level)
+    },
+    [userCharacter.experience, userCharacter.level]
   );
   const healthPercentage = useMemo(
     () => calculatePercentage(userCharacter.health, userCharacter.maxHealth),

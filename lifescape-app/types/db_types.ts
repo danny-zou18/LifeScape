@@ -25,7 +25,6 @@ interface Character {
 
   Strength: number;
   Defense: number;
-  Dexterity: number;
   Agility: number;
   Vitality: number;
   Endurance: number;
@@ -54,7 +53,6 @@ interface Task {
   goldReward?: number | null;
   StrengthReward?: number | null;
   DefenseReward?: number | null;
-  DexterityReward?: number | null;
   AgilityReward?: number | null;
   VitalityReward?: number | null;
   EnduranceReward?: number | null;
@@ -86,7 +84,6 @@ interface Habit {
   goldReward?: number | null;
   StrengthReward?: number | null;
   DefenseReward?: number | null;
-  DexterityReward?: number | null;
   AgilityReward?: number | null;
   VitalityReward?: number | null;
   EnduranceReward?: number | null;
@@ -114,7 +111,6 @@ interface Routine {
   goldReward?: number | null;
   StrengthReward?: number | null;
   DefenseReward?: number | null;
-  DexterityReward?: number | null;
   AgilityReward?: number | null; 
   VitalityReward?: number | null;
   EnduranceReward?: number | null;

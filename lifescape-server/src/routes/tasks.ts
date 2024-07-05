@@ -88,7 +88,6 @@ router.post("/create/:userId/:characterId", async (req, res) => {
         goldReward: 10,
         StrengthReward: 3,
         DefenseReward: 3,
-        DexterityReward: 3,
         AgilityReward: 3,
         VitalityReward: 3,
         EnduranceReward: 3,
@@ -416,9 +415,6 @@ router.put("/complete/:userId/:characterId/:taskId", async (req, res) => {
         },
         defenseXp: {
           increment: task.DefenseReward ? task.DefenseReward : 0,
-        },
-        dexterityXp: {
-          increment: task.DexterityReward ? task.DexterityReward : 0,
         },
         agilityXp: {
           increment: task.AgilityReward ? task.AgilityReward : 0,

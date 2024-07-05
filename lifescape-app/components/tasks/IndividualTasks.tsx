@@ -4,6 +4,7 @@ import { isAxiosError } from "axios";
 import api from "@/api/axios";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useTaskContext } from "@/context/TaskProvider";
+import { useHomeContext } from "@/context/HomeProvider";
 
 import { Task } from "@/types/db_types";
 
@@ -22,6 +23,7 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({
 }) => {
   const { user, userCharacter, setUserCharacter } = useGlobalContext();
   const { setEditTaskOpen, setCurrentEditTask } = useTaskContext();
+  const { showReward } = useHomeContext();
 
   const handleDeleteTask = async () => {
     try {
@@ -71,6 +73,16 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({
           );
           if (response.status === 200) {
             setUserCharacter(response.data);
+            showReward({
+              experienceReward: task.experienceReward,
+              goldReward: task.goldReward,
+              strengthReward: task.StrengthReward,
+              defenseReward: task.DefenseReward,
+              agilityReward: task.AgilityReward,
+              vitalityReward: task.VitalityReward,
+              enduranceReward: task.EnduranceReward,
+              willReward: task.WillReward,
+            });
           }
         } catch (error) {
           if (isAxiosError(error)) {
@@ -164,7 +176,7 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({
             </TouchableOpacity>
           </View>
           <TouchableOpacity
-            className="flex w-[90%] flex-row items-end justify-between overflow-hidden rounded-lg bg-red-100 p-4 py-5"
+            className="flex w-[90%] flex-row items-end justify-between overflow-hidden rounded-r-lg bg-red-100 p-4 py-5"
             activeOpacity={1}
             onPress={() => onPressTask()}
           >
