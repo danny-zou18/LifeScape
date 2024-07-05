@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { Animated, Text, Image } from "react-native";
+import { Animated, Text, Image, View } from "react-native";
 import { RewardsType } from "@/types/reward_type";
 
 interface RewardsPopupsProps {
@@ -38,11 +38,106 @@ const RewardsPopup: React.FC<RewardsPopupsProps> = ({
 
   return (
     <Animated.View
-      style={[fadeAnim, {transform: [{ translateX: -50 }]}]}
-      className="absolute bottom-3 left-1/2 rounded-lg bg-black bg-opacity-70 p-2 flex flex-row"
+      style={[fadeAnim]}
+      className="absolute bottom-3 left-1/2 flex h-10 -translate-x-1/2 flex-row gap-2 rounded-full bg-black bg-opacity-70 p-2 px-4"
       pointerEvents={"none"}
     >
-      <Text className="text-[2rem] text-white">Testing</Text>
+      {rewards.experienceReward && (
+        <View className="flex h-full flex-row items-center gap-1">
+          <View className="h-full">
+            <Image
+              source={require("../../assets/images/rewardicons/experience.png")}
+              resizeMode="contain"
+              style={{ flex: 1, aspectRatio: 1 }}
+            />
+          </View>
+          <Text className="text-white">{rewards.experienceReward}</Text>
+        </View>
+      )}
+      {rewards.goldReward && (
+        <View className="flex h-full flex-row items-center gap-1">
+          <View className="h-full">
+            <Image
+              source={require("../../assets/images/rewardicons/gold.png")}
+              resizeMode="contain"
+              style={{ flex: 1, aspectRatio: 1 }}
+            />
+          </View>
+          <Text className="text-white">{rewards.goldReward}</Text>
+        </View>
+      )}
+      {rewards.strengthReward && (
+        <View className="flex h-full flex-row items-center gap-1">
+          <View className="h-full">
+            <Image
+              source={require("../../assets/images/rewardicons/strength.png")}
+              resizeMode="contain"
+              style={{ flex: 1, aspectRatio: 1 }}
+            />
+          </View>
+          <Text className="text-white">{rewards.strengthReward}</Text>
+        </View>
+      )}
+      {rewards.defenseReward && (
+        <View className="flex h-full flex-row items-center gap-1">
+          <View className="h-full">
+            <Image
+              source={require("../../assets/images/rewardicons/defense.png")}
+              resizeMode="contain"
+              style={{ flex: 1, aspectRatio: 1 }}
+            />
+          </View>
+          <Text className="text-white">{rewards.defenseReward}</Text>
+        </View>
+      )}
+      {rewards.agilityReward && (
+        <View className="flex h-full flex-row items-center gap-1">
+          <View className="h-full">
+            <Image
+              source={require("../../assets/images/rewardicons/agility.png")}
+              resizeMode="contain"
+              style={{ flex: 1, aspectRatio: 1 }}
+            />
+          </View>
+          <Text className="text-white">{rewards.agilityReward}</Text>
+        </View>
+      )}
+      {rewards.vitalityReward && (
+        <View className="flex h-full flex-row items-center gap-1">
+          <View className="h-full">
+            <Image
+              source={require("../../assets/images/rewardicons/vitality.png")}
+              resizeMode="contain"
+              style={{ flex: 1, aspectRatio: 1 }}
+            />
+          </View>
+          <Text className="text-white">{rewards.vitalityReward}</Text>
+        </View>
+      )}
+      {rewards.enduranceReward && (
+        <View className="flex h-full flex-row items-center gap-1">
+          <View className="h-full">
+            <Image
+              source={require("../../assets/images/rewardicons/endurance.png")}
+              resizeMode="contain"
+              style={{ flex: 1, aspectRatio: 1 }}
+            />
+          </View>
+          <Text className="text-white">{rewards.enduranceReward}</Text>
+        </View>
+      )}
+      {rewards.willReward && (
+        <View className="flex h-full flex-row items-center gap-1">
+          <View className="h-full">
+            <Image
+              source={require("../../assets/images/rewardicons/will.png")}
+              resizeMode="contain"
+              style={{ flex: 1, aspectRatio: 1 }}
+            />
+          </View>
+          <Text className="text-white">{rewards.willReward}</Text>
+        </View>
+      )}
     </Animated.View>
   );
 };
