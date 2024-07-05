@@ -38,7 +38,7 @@ const RewardsPopup: React.FC<RewardsPopupsProps> = ({
 
   return (
     <Animated.View
-      style={[fadeAnim]}
+      style={{opacity: fadeAnim}}
       className="absolute bottom-3 left-1/2 flex h-10 -translate-x-1/2 flex-row gap-2 rounded-full bg-black bg-opacity-70 p-2 px-4"
       pointerEvents={"none"}
     >
