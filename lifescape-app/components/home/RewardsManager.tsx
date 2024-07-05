@@ -79,6 +79,16 @@ const RewardsManager = () => {
           </View>
           <Text className="text-white">2</Text>
         </View>
+        <View className="h-full flex flex-row items-center gap-1">
+          <View className="h-full">
+            <Image
+              source={require("../../assets/images/rewardicons/vitality.png")}
+              resizeMode="contain"
+              style={{ flex: 1, aspectRatio: 1 }}
+            />
+          </View>
+          <Text className="text-white">2</Text>
+        </View>
       </View>
     </View>
   );
