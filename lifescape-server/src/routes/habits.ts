@@ -173,6 +173,85 @@ router.get("/get/:userId/:characterId", async (req, res) => {
     });
 });
 
+/** @api {put} /habits/checkStreaks/:userId/:characterId Check Streaks
+ * @apiName CheckStreaks
+ * @apiGroup Habit
+ *
+ * @apiDescription Go through all habits and check if the streaks are still valid
+ *
+ * @apiParam {String} userId User ID
+ * @apiParam {String} characterId Character ID
+ *
+ * @apiHeader {String} Authorization Firebase ID Token
+ *
+ * @apiSuccess {Object} message Success message
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "message": "Streaks checked successfully"
+ *     }
+ * @apiError Unauthorized User is not authorized
+ * @apiErrorExample {json} Unauthorized:
+ *     HTTP/1.1 403 Unauthorized
+ *     {
+ *       "error": "Unauthorized"
+ *     }
+ * @apiError Unauthorized User is not authorized
+ * @apiErrorExample {json} Unauthorized:
+ *     HTTP/1.1 401 Unauthorized
+ *     {
+ *       "error": "Unauthorized"
+ *      }
+ * @apiError StreakCheckFailed Streak check failed
+ * @apiErrorExample {json} StreakCheckFailed:
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *       "error": "Streak check failed"
+ *     }
+ */
+router.put("/checkStreaks/:userId/:characterId", async (req, res) => {
+  const authToken = req.headers.authorization;
+  const { userId, characterId } = req.params;
+  try {
+    const authUser = await auth().verifyIdToken(authToken as string);
+    if (authUser.uid !== userId) {
+      res.status(403).json({ error: "Unauthorized" });
+    }
+  } catch (e) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  const habits = await db.habit.findMany({
+    where: {
+      CharacterId: parseInt(characterId),
+    },
+  });
+
+  for (const habit of habits) {
+    const current = new Date();
+    if (habit.lastCompleted) {
+      if (habit.completeBy) {
+        if (current > habit.completeBy) {
+          await db.habit
+            .update({
+              where: {
+                id: habit.id,
+              },
+              data: {
+                streak: 0,
+              },
+            })
+            .catch((error) => {
+              console.log(error);
+              return res.status(400).json({ error: "Streak check failed" });
+            });
+        }
+      }
+    }
+  }
+  return res.status(200).json({ message: "Streaks checked successfully" });
+});
+
 /** @api {put} /habits/delete/:userId/:habitId Delete Habit
  *  @apiName DeleteHabit
  *  @apiGroup Habit
