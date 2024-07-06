@@ -328,4 +328,98 @@ router.put("/update/:userId/:habitId", async (req, res) => {
       res.status(400).json({ error: "Failed to update habit" });
     });
 });
+/** @api {put} /habits/complete/:userId/:characterId/:habitId Complete Habit
+ *  @apiName CompleteHabit
+ *  @apiGroup Habit
+ *
+ *  @apiDescription Complete a Habit
+ *
+ *  @apiParam {String} userId User ID
+ *  @apiParam {String} characterId Character ID
+ *  @apiParam {String} habitId Habit ID
+ *
+ *  @apiHeader {String} Authorization Firebase ID Token
+ *
+ *  @apiSuccess {Object} message Success message
+ *  @apiSuccessExample {json} Success-Response:
+ *      HTTP/1.1 200 OK
+ *      {
+ *        "message": "Habit completed successfully"
+ *      }
+ *  @apiError Unauthorized User is not authorized
+ *  @apiErrorExample {json} Unauthorized:
+ *      HTTP/1.1 403 Unauthorized
+ *      {
+ *        "error": "Unauthorized"
+ *      }
+ *  @apiError HabitNotFound Habit not found
+ *  @apiErrorExample {json} HabitNotFound:
+ *      HTTP/1.1 404 Not Found
+ *      {
+ *        "error": "Habit not found"
+ *      }
+ *  @apiError Unauthorized User is not authorized
+ *  @apiErrorExample {json} Unauthorized:
+ *      HTTP/1.1 401 Unauthorized
+ *      {
+ *         "error": "Unauthorized"
+ *      }
+ *  @apiError HabitCompletionFailed Task completion failed
+ *  @apiErrorExample {json} HabitCompletionUpdateFailed:
+ *      HTTP/1.1 400 Bad Request
+ *      {
+ *        "error": "Habit Completion Update Failed"
+ *      }
+ * @apiError HabitCompletionFailed Habit completion failed
+ * @apiErrorExample {json} HabitCompletionFailed:
+ *      HTTP/1.1 400 Bad Request
+ *      {
+ *        "error": "Habit Completion Failed"
+ *      }
+ */
+router.put("/complete/:userId/:characterId/:habitId", async (req, res) => {
+  const authToken = req.headers.authorization;
+  const { userId, characterId, habitId } = req.params;
+  try {
+    const authUser = await auth().verifyIdToken(authToken as string);
+    if (authUser.uid !== userId) {
+      res.status(403).json({ error: "Unauthorized" });
+    }
+  } catch (e) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  const habit = await db.habit.findUnique({
+    where: {
+      id: parseInt(habitId),
+    },
+  });
+
+  if (!habit) {
+    return res.status(404).json({ error: "Habit not found" });
+  }
+
+  const current = new Date();
+  const future = new Date(current.getTime() + 24 * 60 * 60 * 1000);
+
+  console.log(current, future);
+
+  await db.habit.update({
+    where: {
+      id: parseInt(habitId),
+    },
+    data: {
+      lastCompleted: current,
+      completeBy: future,
+      totalCompletion: {
+        increment: 1,
+      },
+      streak: {
+        increment: 1,
+      },
+    },
+  });
+  
+});
+
 export { router as habitsRouter };
