@@ -91,8 +91,11 @@ model Habit {
   title       String
   description String?
 
-  createdAt DateTime @default(now())
-  streak    Int      @default(0)
+  createdAt       DateTime  @default(now())
+  lastCompleted   DateTime?
+  completeBy      DateTime?
+  totalCompletion Int       @default(0)
+  streak          Int       @default(0)
 
   repeat                Repeat @default(DAILY)
   currentCompletions    Int    @default(0)

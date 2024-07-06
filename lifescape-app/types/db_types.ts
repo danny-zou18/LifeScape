@@ -69,6 +69,9 @@ interface Habit {
   description?: string | null;
 
   createdAt: Date;
+  lastCompleted?: Date | null;
+  completeBy?: Date | null;
+  totalCompletion: number;
   streak: number;
 
   repeat: Repeat;

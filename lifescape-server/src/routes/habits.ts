@@ -86,6 +86,14 @@ router.post("/create/:userId/:characterId", async (req, res) => {
           : null,
         quitting: quitting,
         difficultyRank: difficultyRank,
+        experienceReward: 10,
+        goldReward: 10,
+        StrengthReward: 3,
+        DefenseReward: 3,
+        AgilityReward: 3,
+        VitalityReward: 3,
+        EnduranceReward: 3,
+        WillReward: 3,
         Character: {
           connect: {
             id: parseInt(characterId),
@@ -163,6 +171,85 @@ router.get("/get/:userId/:characterId", async (req, res) => {
       console.log(error);
       res.status(400).json({ error: "Failed to get habits" });
     });
+});
+
+/** @api {put} /habits/checkStreaks/:userId/:characterId Check Streaks
+ * @apiName CheckStreaks
+ * @apiGroup Habit
+ *
+ * @apiDescription Go through all habits and check if the streaks are still valid
+ *
+ * @apiParam {String} userId User ID
+ * @apiParam {String} characterId Character ID
+ *
+ * @apiHeader {String} Authorization Firebase ID Token
+ *
+ * @apiSuccess {Object} message Success message
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "message": "Streaks checked successfully"
+ *     }
+ * @apiError Unauthorized User is not authorized
+ * @apiErrorExample {json} Unauthorized:
+ *     HTTP/1.1 403 Unauthorized
+ *     {
+ *       "error": "Unauthorized"
+ *     }
+ * @apiError Unauthorized User is not authorized
+ * @apiErrorExample {json} Unauthorized:
+ *     HTTP/1.1 401 Unauthorized
+ *     {
+ *       "error": "Unauthorized"
+ *      }
+ * @apiError StreakCheckFailed Streak check failed
+ * @apiErrorExample {json} StreakCheckFailed:
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *       "error": "Streak check failed"
+ *     }
+ */
+router.put("/checkStreaks/:userId/:characterId", async (req, res) => {
+  const authToken = req.headers.authorization;
+  const { userId, characterId } = req.params;
+  try {
+    const authUser = await auth().verifyIdToken(authToken as string);
+    if (authUser.uid !== userId) {
+      res.status(403).json({ error: "Unauthorized" });
+    }
+  } catch (e) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  const habits = await db.habit.findMany({
+    where: {
+      CharacterId: parseInt(characterId),
+    },
+  });
+
+  for (const habit of habits) {
+    const current = new Date();
+    if (habit.lastCompleted) {
+      if (habit.completeBy) {
+        if (current > habit.completeBy) {
+          await db.habit
+            .update({
+              where: {
+                id: habit.id,
+              },
+              data: {
+                streak: 0,
+              },
+            })
+            .catch((error) => {
+              console.log(error);
+              return res.status(400).json({ error: "Streak check failed" });
+            });
+        }
+      }
+    }
+  }
+  return res.status(200).json({ message: "Streaks checked successfully" });
 });
 
 /** @api {put} /habits/delete/:userId/:habitId Delete Habit
@@ -320,4 +407,171 @@ router.put("/update/:userId/:habitId", async (req, res) => {
       res.status(400).json({ error: "Failed to update habit" });
     });
 });
+/** @api {put} /habits/complete/:userId/:characterId/:habitId Complete Habit
+ *  @apiName CompleteHabit
+ *  @apiGroup Habit
+ *
+ *  @apiDescription Complete a Habit
+ *
+ *  @apiParam {String} userId User ID
+ *  @apiParam {String} characterId Character ID
+ *  @apiParam {String} habitId Habit ID
+ *
+ *  @apiHeader {String} Authorization Firebase ID Token
+ *
+ *  @apiSuccess {Object} message Success message
+ *  @apiSuccessExample {json} Success-Response:
+ *      HTTP/1.1 200 OK
+ *      {
+ *        "message": "Habit completed successfully"
+ *      }
+ *  @apiError Unauthorized User is not authorized
+ *  @apiErrorExample {json} Unauthorized:
+ *      HTTP/1.1 403 Unauthorized
+ *      {
+ *        "error": "Unauthorized"
+ *      }
+ *  @apiError HabitNotFound Habit not found
+ *  @apiErrorExample {json} HabitNotFound:
+ *      HTTP/1.1 404 Not Found
+ *      {
+ *        "error": "Habit not found"
+ *      }
+ *  @apiError Unauthorized User is not authorized
+ *  @apiErrorExample {json} Unauthorized:
+ *      HTTP/1.1 401 Unauthorized
+ *      {
+ *         "error": "Unauthorized"
+ *      }
+ *  @apiError HabitCompletionFailed Task completion failed
+ *  @apiErrorExample {json} HabitCompletionUpdateFailed:
+ *      HTTP/1.1 400 Bad Request
+ *      {
+ *        "error": "Habit Completion Update Failed"
+ *      }
+ * @apiError HabitCompletionFailed Habit completion failed
+ * @apiErrorExample {json} HabitCompletionFailed:
+ *      HTTP/1.1 400 Bad Request
+ *      {
+ *        "error": "Habit Completion Failed"
+ *      }
+ */
+router.put("/complete/:userId/:characterId/:habitId", async (req, res) => {
+  const authToken = req.headers.authorization;
+  const { userId, characterId, habitId } = req.params;
+  try {
+    const authUser = await auth().verifyIdToken(authToken as string);
+    if (authUser.uid !== userId) {
+      res.status(403).json({ error: "Unauthorized" });
+    }
+  } catch (e) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  const habit = await db.habit.findUnique({
+    where: {
+      id: parseInt(habitId),
+    },
+  });
+
+  if (!habit) {
+    return res.status(404).json({ error: "Habit not found" });
+  }
+
+  const current = new Date();
+  const future = new Date(current.getTime() + 24 * 60 * 60 * 1000);
+
+  await db.habit
+    .update({
+      where: {
+        id: parseInt(habitId),
+      },
+      data: {
+        lastCompleted: current,
+        completeBy: future,
+        totalCompletion: {
+          increment: 1,
+        },
+        streak: {
+          increment: 1,
+        },
+      },
+    })
+    .then(() => {})
+    .catch((error) => {
+      console.log(error);
+      res.status(400).json({ error: "Habit Completion Failed" });
+    });
+
+  if (habit.repeat === "WEEKLY" && habit.completionGoalWeekly) {
+    const currentCompletions = habit.currentCompletions + 1;
+    if (currentCompletions >= habit.completionGoalWeekly) {
+      // Handle completion goal reached for weekly habit
+    }
+    // Update current completions for weekly habit
+    await db.habit.update({
+      where: {
+        id: parseInt(habitId),
+      },
+      data: {
+        currentCompletions: currentCompletions,
+      },
+    });
+  } else if (habit.repeat === "MONTHLY" && habit.completionGoalMonthly) {
+    const currentCompletions = habit.currentCompletions + 1;
+    if (currentCompletions >= habit.completionGoalMonthly) {
+      // Handle completion goal reached for monthly habit
+    }
+    // Update current completions for monthly habit
+    await db.habit.update({
+      where: {
+        id: parseInt(habitId),
+      },
+      data: {
+        currentCompletions: currentCompletions,
+      },
+    });
+  }
+
+  await db.character
+    .update({
+      where: {
+        id: parseInt(characterId),
+      },
+      data: {
+        experience: {
+          increment: habit.experienceReward ? habit.experienceReward : 0,
+        },
+        gold: {
+          increment: habit.goldReward ? habit.goldReward : 0,
+        },
+        strengthXp: {
+          increment: habit.StrengthReward ? habit.StrengthReward : 0,
+        },
+        defenseXp: {
+          increment: habit.DefenseReward ? habit.DefenseReward : 0,
+        },
+        agilityXp: {
+          increment: habit.AgilityReward ? habit.AgilityReward : 0,
+        },
+        vitalityXp: {
+          increment: habit.VitalityReward ? habit.VitalityReward : 0,
+        },
+        enduranceXp: {
+          increment: habit.EnduranceReward ? habit.EnduranceReward : 0,
+        },
+        willXp: {
+          increment: habit.WillReward ? habit.WillReward : 0,
+        },
+      },
+    })
+    .then(() => {
+      return res.status(200).json({ message: "Habit completed successfully" });
+    })
+    .catch((error) => {
+      console.log(error);
+      return res.status(400).json({ error: "Habit Completion Failed" });
+    });
+});
+
 export { router as habitsRouter };
