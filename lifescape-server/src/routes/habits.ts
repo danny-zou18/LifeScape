@@ -402,8 +402,6 @@ router.put("/complete/:userId/:characterId/:habitId", async (req, res) => {
   const current = new Date();
   const future = new Date(current.getTime() + 24 * 60 * 60 * 1000);
 
-  console.log(current, future);
-
   await db.habit
     .update({
       where: {

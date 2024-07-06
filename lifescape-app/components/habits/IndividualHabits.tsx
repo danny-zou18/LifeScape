@@ -4,6 +4,7 @@ import { isAxiosError } from "axios";
 import api from "@/api/axios";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useHabitContext } from "@/context/HabitProvider";
+import { useHomeContext } from "@/context/HomeProvider";
 
 import { Habit } from "@/types/db_types";
 
@@ -20,10 +21,11 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({
   habit,
   setHabits,
 }) => {
-  const { user } = useGlobalContext();
+  const { user, userCharacter, setUserCharacter } = useGlobalContext();
   const { setEditHabitOpen, setCurrentEditHabit } = useHabitContext();
+  const { showReward } = useHomeContext();
 
-  const handleDeleteTask = async () => {
+  const handleDeleteHabit = async () => {
     try {
       const response = await api.delete(
         `/habits/delete/${user.uid}/${habit.id}`,
@@ -46,6 +48,60 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({
     }
   };
 
+  const handleCompleteHabit = async () => {
+    try {
+      const response = await api.put(
+        `/habits/complete/${user.uid}/${userCharacter.id}/${habit.id}`,
+        {},
+        {
+          headers: {
+            Authorization: await user.getIdToken(),
+          },
+        },
+      );
+      if (response.status === 200) {
+        console.log("Habit completed successfully");
+        try {
+          const response = await api.get(
+            `/character/get/${user.uid}`,
+            {
+              headers: {
+                Authorization: await user.getIdToken(),
+              },
+            }
+          );
+          if (response.status === 200) {
+            setUserCharacter(response.data);
+            showReward({
+              experienceReward: habit.experienceReward,
+              goldReward: habit.goldReward,
+              strengthReward: habit.StrengthReward,
+              defenseReward: habit.DefenseReward,
+              agilityReward: habit.AgilityReward,
+              vitalityReward: habit.VitalityReward,
+              enduranceReward: habit.EnduranceReward,
+              willReward: habit.WillReward,
+            });
+          }
+        } catch (error) {
+          if (isAxiosError(error)) {
+            // AxiosError type will have a response property
+            console.log(error.response?.data);
+          } else {
+            // Handle other error types if needed
+            console.log(error);
+          }
+        }
+      }
+    } catch (error) {
+      if (isAxiosError(error)) {
+        console.log(error.response?.data);
+      } else {
+        console.log(error);
+      }
+    }
+  }
+
   const onPressHabit = () => {
     setCurrentEditHabit(habit);
     setEditHabitOpen(true);
@@ -61,7 +117,7 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({
       extrapolate: "clamp",
     });
     return (
-      <TouchableOpacity activeOpacity={0.6} onPress={() => handleDeleteTask()}>
+      <TouchableOpacity activeOpacity={0.6} onPress={() => handleDeleteHabit()}>
         <View className="flex h-full w-[70px] items-center justify-center bg-[#fc4949]">
           <Animated.Text
             className="text-lg font-bold text-white"
@@ -80,7 +136,7 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({
           <View className="flex w-[10%] items-center justify-center rounded-l-lg bg-blue-300">
             <TouchableOpacity
               className="flex h-8 w-8 items-center justify-center rounded-full bg-red-300"
-              // onPress={handleCompleteTask}
+              onPress={handleCompleteHabit}
             >
               <AntDesign name="plus" size={18} color="black" />
             </TouchableOpacity>
@@ -120,7 +176,7 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({
           <View className="flex w-[10%] items-center justify-center rounded-l-lg bg-blue-300">
             <TouchableOpacity
               className="flex h-8 w-8 items-center justify-center rounded-full bg-red-300"
-              // onPress={handleCompleteTask}
+              onPress={handleCompleteHabit}
             >
               <AntDesign name="plus" size={18} color="black" />
             </TouchableOpacity>
