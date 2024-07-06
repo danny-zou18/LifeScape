@@ -86,6 +86,14 @@ router.post("/create/:userId/:characterId", async (req, res) => {
           : null,
         quitting: quitting,
         difficultyRank: difficultyRank,
+        experienceReward: 10,
+        goldReward: 10,
+        StrengthReward: 3,
+        DefenseReward: 3,
+        AgilityReward: 3,
+        VitalityReward: 3,
+        EnduranceReward: 3,
+        WillReward: 3,
         Character: {
           connect: {
             id: parseInt(characterId),
