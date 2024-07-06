@@ -404,22 +404,99 @@ router.put("/complete/:userId/:characterId/:habitId", async (req, res) => {
 
   console.log(current, future);
 
-  await db.habit.update({
-    where: {
-      id: parseInt(habitId),
-    },
-    data: {
-      lastCompleted: current,
-      completeBy: future,
-      totalCompletion: {
-        increment: 1,
+  await db.habit
+    .update({
+      where: {
+        id: parseInt(habitId),
       },
-      streak: {
-        increment: 1,
+      data: {
+        lastCompleted: current,
+        completeBy: future,
+        totalCompletion: {
+          increment: 1,
+        },
+        streak: {
+          increment: 1,
+        },
       },
-    },
-  });
-  
+    })
+    .then(() => {})
+    .catch((error) => {
+      console.log(error);
+      res.status(400).json({ error: "Habit Completion Failed" });
+    });
+
+  if (habit.repeat === "WEEKLY" && habit.completionGoalWeekly) {
+    const currentCompletions = habit.currentCompletions + 1;
+    if (currentCompletions >= habit.completionGoalWeekly) {
+      // Handle completion goal reached for weekly habit
+    } else {
+      // Update current completions for weekly habit
+      await db.habit.update({
+        where: {
+          id: parseInt(habitId),
+        },
+        data: {
+          currentCompletions: currentCompletions,
+        },
+      });
+    }
+  } else if (habit.repeat === "MONTHLY" && habit.completionGoalMonthly) {
+    const currentCompletions = habit.currentCompletions + 1;
+    if (currentCompletions >= habit.completionGoalMonthly) {
+      // Handle completion goal reached for monthly habit
+    } else {
+      // Update current completions for monthly habit
+      await db.habit.update({
+        where: {
+          id: parseInt(habitId),
+        },
+        data: {
+          currentCompletions: currentCompletions,
+        },
+      });
+    }
+  }
+
+  await db.character
+    .update({
+      where: {
+        id: parseInt(characterId),
+      },
+      data: {
+        experience: {
+          increment: habit.experienceReward ? habit.experienceReward : 0,
+        },
+        gold: {
+          increment: habit.goldReward ? habit.goldReward : 0,
+        },
+        strengthXp: {
+          increment: habit.StrengthReward ? habit.StrengthReward : 0,
+        },
+        defenseXp: {
+          increment: habit.DefenseReward ? habit.DefenseReward : 0,
+        },
+        agilityXp: {
+          increment: habit.AgilityReward ? habit.AgilityReward : 0,
+        },
+        vitalityXp: {
+          increment: habit.VitalityReward ? habit.VitalityReward : 0,
+        },
+        enduranceXp: {
+          increment: habit.EnduranceReward ? habit.EnduranceReward : 0,
+        },
+        willXp: {
+          increment: habit.WillReward ? habit.WillReward : 0,
+        },
+      },
+    })
+    .then(() => {
+      return res.status(200).json({ message: "Habit completed successfully" });
+    })
+    .catch((error) => {
+      console.log(error);
+      return res.status(400).json({ error: "Habit Completion Failed" });
+    });
 });
 
 export { router as habitsRouter };
