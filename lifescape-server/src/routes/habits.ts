@@ -428,32 +428,30 @@ router.put("/complete/:userId/:characterId/:habitId", async (req, res) => {
     const currentCompletions = habit.currentCompletions + 1;
     if (currentCompletions >= habit.completionGoalWeekly) {
       // Handle completion goal reached for weekly habit
-    } else {
-      // Update current completions for weekly habit
-      await db.habit.update({
-        where: {
-          id: parseInt(habitId),
-        },
-        data: {
-          currentCompletions: currentCompletions,
-        },
-      });
     }
+    // Update current completions for weekly habit
+    await db.habit.update({
+      where: {
+        id: parseInt(habitId),
+      },
+      data: {
+        currentCompletions: currentCompletions,
+      },
+    });
   } else if (habit.repeat === "MONTHLY" && habit.completionGoalMonthly) {
     const currentCompletions = habit.currentCompletions + 1;
     if (currentCompletions >= habit.completionGoalMonthly) {
       // Handle completion goal reached for monthly habit
-    } else {
-      // Update current completions for monthly habit
-      await db.habit.update({
-        where: {
-          id: parseInt(habitId),
-        },
-        data: {
-          currentCompletions: currentCompletions,
-        },
-      });
     }
+    // Update current completions for monthly habit
+    await db.habit.update({
+      where: {
+        id: parseInt(habitId),
+      },
+      data: {
+        currentCompletions: currentCompletions,
+      },
+    });
   }
 
   await db.character
