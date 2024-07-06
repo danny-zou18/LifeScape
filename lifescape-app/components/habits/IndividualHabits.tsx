@@ -9,6 +9,8 @@ import { Habit } from "@/types/db_types";
 
 import { Swipeable } from "react-native-gesture-handler";
 
+import AntDesign from "@expo/vector-icons/AntDesign";
+
 interface IndividualHabitsProps {
   habit: Habit;
   setHabits: React.Dispatch<React.SetStateAction<Habit[]>>;
@@ -29,7 +31,7 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({
           headers: {
             Authorization: await user.getIdToken(),
           },
-        }
+        },
       );
       if (response.status === 200) {
         console.log("Task deleted successfully");
@@ -51,7 +53,7 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({
 
   const rightSwipe = (
     progress: ReturnType<Animated.Value["interpolate"]>,
-    dragX: ReturnType<Animated.Value["interpolate"]>
+    dragX: ReturnType<Animated.Value["interpolate"]>,
   ) => {
     const scale = dragX.interpolate({
       inputRange: [-100, 0],
@@ -60,9 +62,9 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({
     });
     return (
       <TouchableOpacity activeOpacity={0.6} onPress={() => handleDeleteTask()}>
-        <View className="bg-[#fc4949] flex items-center justify-center h-full w-[70px]">
+        <View className="flex h-full w-[70px] items-center justify-center bg-[#fc4949]">
           <Animated.Text
-            className="text-white font-bold text-lg"
+            className="text-lg font-bold text-white"
             style={{ transform: [{ scale: scale }] }}
           >
             Delete
@@ -74,21 +76,29 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({
   return (
     <Swipeable renderRightActions={rightSwipe} overshootRight={false}>
       {habit.description ? (
-        <View>
+        <View className="flex flex-row">
+          <View className="flex w-[10%] items-center justify-center rounded-l-lg bg-blue-300">
+            <TouchableOpacity
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-red-300"
+              // onPress={handleCompleteTask}
+            >
+              <AntDesign name="plus" size={18} color="black" />
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity
             className={`${
               habit.quitting ? "bg-red-100" : "bg-green-200"
-            } p-4 py-3 rounded-lg overflow-hidden flex flex-row justify-between items-end`}
+            } flex w-[90%] flex-row items-end justify-between overflow-hidden rounded-r-lg p-4 py-3`}
             activeOpacity={1}
             onPress={() => onPressHabit()}
           >
             <View>
               <Text>{habit.title}</Text>
-              <Text className="text-sm mt-1 text-neutral-500">
+              <Text className="mt-1 text-sm text-neutral-500">
                 {habit.description}
               </Text>
             </View>
-            <View className="flex flex-row gap-4 items-center">
+            <View className="flex flex-row items-center gap-4">
               <Text>{habit.difficultyRank}</Text>
               <Text>{habit.streak}</Text>
               {habit.completionGoalWeekly || habit.completionGoalMonthly ? (
@@ -106,18 +116,26 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({
           </TouchableOpacity>
         </View>
       ) : (
-        <View>
+        <View className="flex flex-row">
+          <View className="flex w-[10%] items-center justify-center rounded-l-lg bg-blue-300">
+            <TouchableOpacity
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-red-300"
+              // onPress={handleCompleteTask}
+            >
+              <AntDesign name="plus" size={18} color="black" />
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity
             className={`${
               habit.quitting ? "bg-red-100" : "bg-green-200"
-            } p-4 py-5 rounded-lg overflow-hidden flex flex-row justify-between items-end`}
+            } flex flex-row items-end justify-between overflow-hidden rounded-r-lg p-4 py-5 w-[90%]`}
             activeOpacity={1}
             onPress={() => onPressHabit()}
           >
             <View>
               <Text>{habit.title}</Text>
             </View>
-            <View className="flex flex-row gap-4 items-center">
+            <View className="flex flex-row items-center gap-4">
               <Text>{habit.difficultyRank}</Text>
               <Text>{habit.streak}</Text>
               {habit.completionGoalWeekly || habit.completionGoalMonthly ? (
