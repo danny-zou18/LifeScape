@@ -59,6 +59,22 @@ const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   useEffect(() => {
     const fetchHabits = async () => {
       try {
+        const response = await api.put(`/habits/checkStreaks/${user.uid}/${userCharacter.id}`, {}, {
+          headers: {
+            Authorization: await user.getIdToken(),
+          },
+        });
+        if (response.status === 200) {
+          console.log("Streaks checked");
+        }
+      } catch (error) {
+        if (isAxiosError(error)) {
+          console.log(error.response?.data);
+        } else {
+          console.log(error);
+        }
+      }
+      try {
         const response = await api.get(
           `/habits/get/${user.uid}/${userCharacter.id}`,
           {
