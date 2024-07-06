@@ -80,7 +80,8 @@ const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     };
 
     fetchHabits();
-  }, [user, userCharacter]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   return (
     <HabitContext.Provider

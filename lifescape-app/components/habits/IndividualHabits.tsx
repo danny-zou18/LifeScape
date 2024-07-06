@@ -72,6 +72,17 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({
           );
           if (response.status === 200) {
             setUserCharacter(response.data);
+            setHabits((prev) =>
+              prev.map((h) =>
+                h.id === habit.id
+                  ? {
+                      ...h,
+                      streak: h.streak + 1,
+                      currentCompletions: h.repeat === "WEEKLY" || h.repeat === "MONTHLY" ? h.currentCompletions + 1 : h.currentCompletions,
+                    }
+                  : h
+              )
+            );
             showReward({
               experienceReward: habit.experienceReward,
               goldReward: habit.goldReward,
