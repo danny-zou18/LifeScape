@@ -163,6 +163,9 @@ router.get("/get/:userId/:characterId", async (req, res) => {
       where: {
         CharacterId: parseInt(characterId),
       },
+      orderBy: {
+        id: "asc",
+      },
     })
     .then((habits) => {
       return res.status(200).json(habits);
