@@ -1,20 +1,24 @@
-import { TouchableHighlight, Text } from "react-native";
+import { TouchableHighlight, Text, View } from "react-native";
 import React from "react";
 
 import { useRoutineContext } from "@/context/RoutineProvider";
+
+import { AntDesign } from "@expo/vector-icons";
 
 const CreateRoutineBtn = () => {
   const { setRoutineCreationOpen } = useRoutineContext();
 
   return (
     <TouchableHighlight
-      className="bg-[#FDFDFD] w-[225px] h-[45px] rounded-md mt-4"
-      underlayColor="#FFFFFF"
+      style={{ alignSelf: "flex-start" }}
+      className="bg-[rgb(253,253,253)] p-2 rounded-full shadow-sm"
+      underlayColor="#FFFFFF60"
       onPress={() => setRoutineCreationOpen(true)}
     >
-      <Text className="text-black text-xl font-semibold mx-auto my-auto">
-        Add to Routine
-      </Text>
+      <View className="flex flex-row items-center pl-2">
+        <Text className="mr-2 text-md font-[500]">Create</Text>
+        <AntDesign name="plus" size={24} color="black" />
+      </View>
     </TouchableHighlight>
   );
 };
