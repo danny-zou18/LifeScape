@@ -3,7 +3,7 @@ import React from 'react'
 
 const DisplayTodaysRoutine = () => {
   return (
-    <View>
+    <View className='h-full mt-4 bg-red-400'>
       <Text>DisplayTodaysRoutine</Text>
     </View>
   )
