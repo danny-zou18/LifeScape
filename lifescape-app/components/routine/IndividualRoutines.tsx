@@ -1,19 +1,21 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { View, Text, TouchableOpacity } from "react-native";
+import React from "react";
+import {
 
-import { daysRoutineType } from '@/context/RoutineProvider'
+  EventRenderer
+} from "react-native-big-calendar";
 
-interface IndividualRoutinesProps {
-  item: daysRoutineType
-  styles?: any
-}
+import { CustomEventType } from "@/context/RoutineProvider";
 
-const IndividualRoutines: React.FC<IndividualRoutinesProps> = ({styles, item}) => {
+const IndividualRoutines: EventRenderer<CustomEventType> = (
+  event,
+  touchableOpacityProps
+) => {
   return (
-    <View className=' bg-red-500 rounded-lg' style={{...styles}}>
-      <Text>{item.routine.title}</Text> 
-    </View>
-  )
-}
+    <TouchableOpacity {...touchableOpacityProps}>
+      <Text>{`My custom event: ${event.routine.title} with a color: `}</Text>
+    </TouchableOpacity>
+  );
+};
 
-export default IndividualRoutines
+export default IndividualRoutines;
