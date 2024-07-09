@@ -12,7 +12,7 @@ import { useGlobalContext } from "./GlobalProvider";
 
 import { Routine } from "@/types/db_types";
 
-interface daysRoutineType {
+export interface daysRoutineType {
   routine: Routine;
   startDate: Date;
   endDate: Date;
@@ -36,7 +36,7 @@ const RoutineContext = createContext<RoutineContextTypes>(defaultState);
 export const useRoutineContext = () => useContext(RoutineContext);
 
 const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [todaysRoutine, setTodaysRoutine] = useState<daysRoutineType[]>(defaultState.routines);
+  const [todaysRoutine, setTodaysRoutine] = useState<daysRoutineType[]>(defaultState.todaysRoutine);
   const [routineCreationOpen, setRoutineCreationOpen] = useState<boolean>(
     defaultState.routineCreationOpen
   );

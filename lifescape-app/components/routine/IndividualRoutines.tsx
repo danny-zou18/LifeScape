@@ -1,10 +1,16 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-const IndividualRoutines = () => {
+import { daysRoutineType } from '@/context/RoutineProvider'
+
+interface IndividualRoutinesProps {
+  item: daysRoutineType
+}
+
+const IndividualRoutines: React.FC<IndividualRoutinesProps> = ({item}) => {
   return (
-    <View>
-      <Text>IndividualRoutines</Text>
+    <View className=' bg-red-500 rounded-lg'>
+      <Text>{item.routine.title}</Text>
     </View>
   )
 }
