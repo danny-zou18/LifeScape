@@ -1,4 +1,4 @@
-import { ScrollView } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import React from "react";
 import Timetable from "react-native-calendar-timetable";
 
@@ -10,16 +10,12 @@ const DisplayTodaysRoutine = () => {
   const { todaysRoutine } = useRoutineContext();
 
   return (
-    <ScrollView>
-      <Timetable
-        // these two are required
-        items={todaysRoutine}
-        renderItem={(props) => <IndividualRoutines {...props} />}
-        // provide only one of these
-        date={new Date()}
-      />
+    <ScrollView className="h-full mt-4 max-w-full">
+      
     </ScrollView>
   );
 };
+
+
 
 export default DisplayTodaysRoutine;
