@@ -32,7 +32,7 @@ const timeToMinutes = (time: Date): number => {
 };
 
 const RoutineCreationModal = () => {
-  const { routines, setRoutines, routineCreationOpen, setRoutineCreationOpen } =
+  const { todaysRoutine, setTodaysRoutine, routineCreationOpen, setRoutineCreationOpen } =
     useRoutineContext();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -93,7 +93,7 @@ const RoutineCreationModal = () => {
         }
       );
       if (response.status === 201) {
-        setRoutines([...routines, response.data]);
+        setTodaysRoutine([...todaysRoutine, response.data]);
         setRoutineCreationOpen(false);
         reset();
         setDaysOfWeek([]);

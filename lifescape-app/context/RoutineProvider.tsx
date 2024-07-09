@@ -14,20 +14,20 @@ import { Routine } from "@/types/db_types";
 
 interface daysRoutineType {
   routine: Routine;
-  startTime: Date;
-  endTime: Date;
+  startDate: Date;
+  endDate: Date;
 }
 
 interface RoutineContextTypes {
-  routines: daysRoutineType[];
-  setRoutines: React.Dispatch<React.SetStateAction<daysRoutineType[]>>;
+  todaysRoutine: daysRoutineType[];
+  setTodaysRoutine: React.Dispatch<React.SetStateAction<daysRoutineType[]>>;
   routineCreationOpen: boolean;
   setRoutineCreationOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const defaultState = {
-  routines: [],
-  setRoutines: () => {},
+  todaysRoutine: [],
+  setTodaysRoutine: () => {},
   routineCreationOpen: false,
   setRoutineCreationOpen: () => {},
 };
@@ -36,7 +36,7 @@ const RoutineContext = createContext<RoutineContextTypes>(defaultState);
 export const useRoutineContext = () => useContext(RoutineContext);
 
 const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [routines, setRoutines] = useState<daysRoutineType[]>(defaultState.routines);
+  const [todaysRoutine, setTodaysRoutine] = useState<daysRoutineType[]>(defaultState.routines);
   const [routineCreationOpen, setRoutineCreationOpen] = useState<boolean>(
     defaultState.routineCreationOpen
   );
@@ -56,27 +56,27 @@ const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         );
         if (response.status === 200) {
           const routines = response.data;
-          const updatedRoutines = routines.map((routine: Routine) => {
-            const startTime = new Date();
-            startTime.setHours(Math.floor(routine.startTimeOfDayInMinutes / 60));
-            startTime.setMinutes(routine.startTimeOfDayInMinutes % 60);
-            startTime.setSeconds(0);
-            startTime.setMilliseconds(0);
+          const updatedRoutine = routines.map((routine: Routine) => {
+            const startDate = new Date();
+            startDate.setHours(Math.floor(routine.startTimeOfDayInMinutes / 60));
+            startDate.setMinutes(routine.startTimeOfDayInMinutes % 60);
+            startDate.setSeconds(0);
+            startDate.setMilliseconds(0);
 
-            const endTime = new Date();
-            endTime.setHours(Math.floor(routine.endTimeOfDayInMinutes / 60));
-            endTime.setMinutes(routine.endTimeOfDayInMinutes % 60);
-            endTime.setSeconds(0);
-            endTime.setMilliseconds(0);
+            const endDate = new Date();
+            endDate.setHours(Math.floor(routine.endTimeOfDayInMinutes / 60));
+            endDate.setMinutes(routine.endTimeOfDayInMinutes % 60);
+            endDate.setSeconds(0);
+            endDate.setMilliseconds(0);
 
             return {
               routine,
-              startTime,
-              endTime,
+              startDate,
+              endDate,
             };
           });
-          setRoutines(updatedRoutines);
-          console.log(updatedRoutines);
+          setTodaysRoutine(updatedRoutine);
+          console.log(updatedRoutine);
         }
       } catch (error) {
         if (isAxiosError(error)) {
@@ -92,8 +92,8 @@ const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <RoutineContext.Provider
       value={{
-        routines,
-        setRoutines,
+        todaysRoutine,
+        setTodaysRoutine,
         routineCreationOpen,
         setRoutineCreationOpen,
       }}
