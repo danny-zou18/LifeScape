@@ -20,7 +20,6 @@ const DisplayTodaysRoutine = () => {
       onPressEvent={(event) => {
         console.log(event);
       }}
-      
     />
   );
 };

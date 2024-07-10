@@ -379,6 +379,7 @@ const RoutineEditModal = () => {
                         display="default"
                         value={startTimeOfDay}
                         onChange={onStartTimeChange}
+                        minuteInterval={5}
                       />
                     </View>
                     <View className="bg-red-400 h-[45px] flex flex-row items-center p-2 justify-between">
@@ -389,6 +390,7 @@ const RoutineEditModal = () => {
                         value={endTimeOfDay}
                         minimumDate={startTimeOfDay}
                         onChange={onEndTimeChange}
+                        minuteInterval={5}
                       />
                     </View>
                   </View>

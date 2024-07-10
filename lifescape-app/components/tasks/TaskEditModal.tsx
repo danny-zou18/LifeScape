@@ -213,6 +213,7 @@ const TaskEditModal: React.FC = () => {
                       display="default"
                       onChange={onDateChange}
                       minimumDate={new Date()}
+                      minuteInterval={5}
                     />
                     <DateTimePicker
                       id="dueDate"
@@ -221,6 +222,7 @@ const TaskEditModal: React.FC = () => {
                       display="default"
                       onChange={onDateChange}
                       minimumDate={new Date()}
+                      minuteInterval={5}
                     />
                   </View>
                 ) : (
