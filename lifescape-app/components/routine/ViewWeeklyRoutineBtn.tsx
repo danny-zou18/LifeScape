@@ -5,7 +5,7 @@ import { useRoutineContext } from '@/context/RoutineProvider'
 
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
-const ViewWeeklyRoutine = () => {
+const ViewWeeklyRoutineBtn = () => {
     const { setViewWeeklyRoutineOpen } = useRoutineContext();
 
   return (
@@ -23,4 +23,4 @@ const ViewWeeklyRoutine = () => {
   )
 }
 
-export default ViewWeeklyRoutine
+export default ViewWeeklyRoutineBtn;

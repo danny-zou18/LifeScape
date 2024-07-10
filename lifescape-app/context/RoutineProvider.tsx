@@ -26,6 +26,8 @@ interface RoutineContextTypes {
   setCurrentEditRoutine: React.Dispatch<React.SetStateAction<Routine | null>>;
   editRoutineOpen: boolean;
   setEditRoutineOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  weeklyRoutine: CustomEventType[],
+  setWeeklyRoutine: React.Dispatch<React.SetStateAction<CustomEventType[]>>,
   viewWeeklyRoutineOpen: boolean;
   setViewWeeklyRoutineOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -39,6 +41,8 @@ const defaultState = {
   setCurrentEditRoutine: () => {},
   editRoutineOpen: false,
   setEditRoutineOpen: () => {},
+  weeklyRoutine: [],
+  setWeeklyRoutine: () => {},
   viewWeeklyRoutineOpen: false,
   setViewWeeklyRoutineOpen: () => {},
 };
@@ -59,6 +63,9 @@ const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [editRoutineOpen, setEditRoutineOpen] = useState<boolean>(
     defaultState.editRoutineOpen
   );
+  const [weeklyRoutine, setWeeklyRoutine] = useState<CustomEventType[]>(
+    defaultState.weeklyRoutine
+  );
   const [viewWeeklyRoutineOpen, setViewWeeklyRoutineOpen] = useState<boolean>(
     defaultState.viewWeeklyRoutineOpen
   );
@@ -69,7 +76,7 @@ const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const fetchRoutines = async () => {
       try {
         const response = await api.get(
-          `/routine/get/${user.uid}/${userCharacter.id}`,
+          `/routine/getDay/${user.uid}/${userCharacter.id}`,
           {
             headers: {
               Authorization: await user.getIdToken(),
@@ -125,6 +132,8 @@ const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         setCurrentEditRoutine,
         editRoutineOpen,
         setEditRoutineOpen,
+        weeklyRoutine,
+        setWeeklyRoutine,
         viewWeeklyRoutineOpen,
         setViewWeeklyRoutineOpen,
       }}
