@@ -15,7 +15,7 @@ import { FieldValues, useForm } from "react-hook-form";
 import { isAxiosError } from "axios";
 import api from "@/api/axios";
 
-import { useRoutineContext } from "@/context/RoutineProvider";
+import { useRoutineContext, CustomEventType } from "@/context/RoutineProvider";
 import { useGlobalContext } from "@/context/GlobalProvider";
 
 import { DifficultyRank } from "@/types/db_types";
@@ -97,7 +97,25 @@ const RoutineCreationModal = () => {
         }
       );
       if (response.status === 201) {
-        setTodaysRoutine([...todaysRoutine, response.data]);
+        const routine = response.data;
+        const start = new Date();
+        start.setHours(Math.floor(routine.startTimeOfDayInMinutes / 60));
+        start.setMinutes(routine.startTimeOfDayInMinutes % 60);
+        start.setSeconds(0);
+        start.setMilliseconds(0);
+        const end = new Date();
+        end.setHours(Math.floor(routine.endTimeOfDayInMinutes / 60));
+        end.setMinutes(routine.endTimeOfDayInMinutes % 60);
+        end.setSeconds(0);
+        end.setMilliseconds(0);
+        const updatedRoutine: CustomEventType = {
+          routine,
+          start,
+          end,
+          title: routine.title,
+        };
+
+        setTodaysRoutine([...todaysRoutine, updatedRoutine]);
         setRoutineCreationOpen(false);
         reset();
         setDaysOfWeek([]);
