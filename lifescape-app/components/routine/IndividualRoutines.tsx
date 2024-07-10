@@ -14,6 +14,8 @@ const IndividualRoutines: EventRenderer<CustomEventType> = (
     setEditRoutineOpen(true);
   };
 
+  
+
   const confirmDeletionAlert = () => {
     Alert.alert("Delete this routine?", "This action cannot be undone.", [
       { text: "Delete", onPress: () => console.log("Delete Pressed") },

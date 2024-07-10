@@ -184,6 +184,70 @@ router.get("/get/:userId/:characterId", async (req, res) => {
       res.status(400).json({ error: "Routine Fetch Failed" });
     });
 });
+/** @api {delete} /routine/delete/:userId/:routineId Delete Task
+ *  @apiName DeleteRoutine
+ *  @apiGroup Routine
+ *
+ * @apiDescription Delete a Routine
+ *
+ * @apiParam {String} userId User ID
+ * @apiParam {String} routineId Routine ID
+ *
+ * @apiHeader {String} Authorization Firebase ID Token
+ *
+ * @apiSuccess {Object} message Success message
+ * @apiSuccessExample {json} Success-Response:
+ *      HTTP/1.1 200 OK
+ *      {
+ *        "message": "Routine deleted successfully"
+ *      }
+ * @apiError Unauthorized User is not authorized
+ * @apiErrorExample {json} Unauthorized:
+ *       HTTP/1.1 403 Unauthorized
+ *       {
+ *         "error": "Unauthorized"
+ *       }
+ * @apiError Unauthorized User is not authorized
+ * @apiErrorExample {json} Unauthorized:
+ *       HTTP/1.1 401 Unauthorized
+ *       {
+ *         "error": "Unauthorized"
+ *       }
+ * @apiError InternalServerError Internal Server Error
+ * @apiErrorExample {json} InternalServerError:
+ *       HTTP/1.1 500 Internal Server Error
+ *       {
+ *         "error": "Internal Server Error"
+ *       }
+ */
+router.delete("/delete/:userId/:routineId", async (req, res) => {
+  const authToken = req.headers.authorization;
+  const { userId, routineId } = req.params;
+
+  try {
+    const authUser = await auth().verifyIdToken(authToken as string);
+    if (authUser.uid !== userId) {
+      res.status(403).json({ error: "Unauthorized" });
+    }
+  } catch (e) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  await db.routine
+    .delete({
+      where: {
+        id: parseInt(routineId),
+      },
+    })
+    .then(() => {
+      return res.status(200).json({ message: "Routine deleted successfully" });
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    });
+});
+
 /** @api {put} /routine/update/:userId/:routineId Update Routine
  *  @apiName UpdateRoutine
  *  @apiGroup Routine
