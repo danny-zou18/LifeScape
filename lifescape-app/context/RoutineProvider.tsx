@@ -22,6 +22,10 @@ interface RoutineContextTypes {
   setTodaysRoutine: React.Dispatch<React.SetStateAction<CustomEventType[]>>;
   routineCreationOpen: boolean;
   setRoutineCreationOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  currentEditRoutine: Routine | null;
+  setCurrentEditRoutine: React.Dispatch<React.SetStateAction<Routine | null>>;
+  editRoutineOpen: boolean;
+  setEditRoutineOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const defaultState = {
@@ -29,6 +33,10 @@ const defaultState = {
   setTodaysRoutine: () => {},
   routineCreationOpen: false,
   setRoutineCreationOpen: () => {},
+  currentEditRoutine: null,
+  setCurrentEditRoutine: () => {},
+  editRoutineOpen: false,
+  setEditRoutineOpen: () => {},
 };
 
 const RoutineContext = createContext<RoutineContextTypes>(defaultState);
@@ -38,6 +46,12 @@ const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [todaysRoutine, setTodaysRoutine] = useState<CustomEventType[]>(defaultState.todaysRoutine);
   const [routineCreationOpen, setRoutineCreationOpen] = useState<boolean>(
     defaultState.routineCreationOpen
+  );
+  const [currentEditRoutine, setCurrentEditRoutine] = useState<Routine | null>(
+    defaultState.currentEditRoutine
+  );
+  const [editRoutineOpen, setEditRoutineOpen] = useState<boolean>(
+    defaultState.editRoutineOpen
   );
 
   const { user, userCharacter } = useGlobalContext();
@@ -96,6 +110,10 @@ const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         setTodaysRoutine,
         routineCreationOpen,
         setRoutineCreationOpen,
+        currentEditRoutine,
+        setCurrentEditRoutine,
+        editRoutineOpen,
+        setEditRoutineOpen,
       }}
     >
       {children}
