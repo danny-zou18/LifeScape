@@ -22,13 +22,13 @@ const router = express.Router();
  * @apiBody {Number} startTimeOfDayInMinutes Start time of the routine in minutes
  * @apiBody {Number} endTimeOfDayInMinutes End time of the routine in minutes
  * @apiBody {Number} difficultyRank Difficulty rank of the routine
- * 
+ *
  * @apiSuccess {Object} routine Routine object
  * @apiSuccessExample {json} Success-Response:
  *      HTTP/1.1 201 OK
  *      {
  *        ROUTINE OBJECT
- *      } 
+ *      }
  * @apiError Unauthorized User is not authorized
  * @apiErrorExample {json} Unauthorized:
  *       HTTP/1.1 403 Unauthorized
@@ -47,7 +47,7 @@ const router = express.Router();
  *      {
  *        "error": "Timeslot is not available"
  *      }
- * 
+ *
  * @apiError RoutineCreationFailed Routine creation failed
  * @apiErrorExample {json} RoutineCreationFailed:
  *      HTTP/1.1 400 Bad Request
@@ -129,7 +129,7 @@ router.post("/create/:userId/:characterId", async (req, res) => {
  *      HTTP/1.1 200 OK
  *      [
  *        ROUTINE OBJECTS
- *      ] 
+ *      ]
  * @apiError Unauthorized User is not authorized
  * @apiErrorExample {json} Unauthorized:
  *       HTTP/1.1 403 Unauthorized
@@ -184,14 +184,112 @@ router.get("/get/:userId/:characterId", async (req, res) => {
       res.status(400).json({ error: "Routine Fetch Failed" });
     });
 });
+/** @api {put} /routine/update/:userId/:routineId Update Routine
+ *  @apiName UpdateRoutine
+ *  @apiGroup Routine
+ *
+ * @apiDescription Update a routine
+ *
+ * @apiParam {String} userId User ID
+ * @apiParam {String} routineId Routine ID
+ *
+ * @apiHeader {String} Authorization Firebase ID Token
+ *
+ * @apiBody {String} title Title of the routine
+ * @apiBody {String} description Description of the routine
+ * @apiBody {Number[]} daysOfWeek Days of the week the routine is scheduled
+ * @apiBody {Number} startTimeOfDayInMinutes Start time of the routine in minutes
+ * @apiBody {Number} endTimeOfDayInMinutes End time of the routine in minutes
+ * @apiBody {Number} difficultyRank Difficulty rank of the routine
+ *
+ * @apiSuccess {Object} routine Routine object
+ * @apiSuccessExample {json} Success-Response:
+ *      HTTP/1.1 200 OK
+ *      {
+ *        ROUTINE OBJECT
+ *      }
+ * @apiError Unauthorized User is not authorized
+ * @apiErrorExample {json} Unauthorized:
+ *       HTTP/1.1 403 Unauthorized
+ *       {
+ *         "error": "Unauthorized"
+ *       }
+ * @apiError Unauthorized User is not authorized
+ * @apiErrorExample {json} Unauthorized:
+ *       HTTP/1.1 401 Unauthorized
+ *       {
+ *         "error": "Unauthorized"
+ *       }
+ * @apiError RoutineUpdateFailed Routine update failed
+ * @apiErrorExample {json} RoutineUpdateFailed:
+ *      HTTP/1.1 400 Bad Request
+ *      {
+ *        "error": "Routine Update Failed"
+ *      }
+ */
+router.put("/update/:userId/:routineId", async (req, res) => {
+  const authToken = req.headers.authorization;
+  const { userId, routineId } = req.params;
+
+  try {
+    const authUser = await auth().verifyIdToken(authToken as string);
+    if (authUser.uid !== userId) {
+      res.status(403).json({ error: "Unauthorized" });
+    }
+  } catch (e) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  const {
+    title,
+    description,
+    daysOfWeek,
+    startTimeOfDayInMinutes,
+    endTimeOfDayInMinutes,
+    difficultyRank,
+  } = req.body;
+
+  const available = await isTimeslotAvailable(
+    daysOfWeek,
+    startTimeOfDayInMinutes,
+    endTimeOfDayInMinutes,
+    parseInt(routineId)
+  );
+
+  if (!available) {
+    return res.status(400).json({ error: "Timeslot is not available" });
+  }
+
+  await db.routine
+    .update({
+      where: {
+        id: parseInt(routineId),
+      },
+      data: {
+        title: title,
+        description: description,
+        daysOfWeek: daysOfWeek,
+        startTimeOfDayInMinutes: startTimeOfDayInMinutes,
+        endTimeOfDayInMinutes: endTimeOfDayInMinutes,
+        difficultyRank: difficultyRank,
+      },
+    })
+    .then((routine) => {
+      return res.status(200).json(routine);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(400).json({ error: "Routine Update Failed" });
+    });
+});
 
 /** Checks if time slot is available for a routine to be added
- * 
+ *
  * @param daysOfWeek     Array of days of the week, represented as integers 1 - 7, where 1 is Sunday, 2 is Monday, etc.
  * @param startTime      Start time of the routine in minutes
- * @param endTime        End time of the routine in minutes 
+ * @param endTime        End time of the routine in minutes
  * @param characterId    ID of the character
- * @returns 
+ * @returns
  */
 async function isTimeslotAvailable(
   daysOfWeek: number[],
