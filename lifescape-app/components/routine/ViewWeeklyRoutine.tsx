@@ -6,12 +6,14 @@ import { useRoutineContext } from '@/context/RoutineProvider'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 const ViewWeeklyRoutine = () => {
+    const { setViewWeeklyRoutineOpen } = useRoutineContext();
+
   return (
     <TouchableHighlight
       style={{ alignSelf: "flex-start" }}
       className="p-1 my-auto border-b-[.5px]"
       underlayColor="#FFFFFF60"
-    //   onPress={() => setRoutineCreationOpen(true)}
+      onPress={() => setViewWeeklyRoutineOpen(true)}
     >
       <View className="flex flex-row items-center  pr-3">
         <MaterialCommunityIcons name="view-column-outline" size={24} color="black" />

@@ -26,6 +26,8 @@ interface RoutineContextTypes {
   setCurrentEditRoutine: React.Dispatch<React.SetStateAction<Routine | null>>;
   editRoutineOpen: boolean;
   setEditRoutineOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  viewWeeklyRoutineOpen: boolean;
+  setViewWeeklyRoutineOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const defaultState = {
@@ -37,6 +39,8 @@ const defaultState = {
   setCurrentEditRoutine: () => {},
   editRoutineOpen: false,
   setEditRoutineOpen: () => {},
+  viewWeeklyRoutineOpen: false,
+  setViewWeeklyRoutineOpen: () => {},
 };
 
 const RoutineContext = createContext<RoutineContextTypes>(defaultState);
@@ -54,6 +58,9 @@ const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   );
   const [editRoutineOpen, setEditRoutineOpen] = useState<boolean>(
     defaultState.editRoutineOpen
+  );
+  const [viewWeeklyRoutineOpen, setViewWeeklyRoutineOpen] = useState<boolean>(
+    defaultState.viewWeeklyRoutineOpen
   );
 
   const { user, userCharacter } = useGlobalContext();
@@ -118,6 +125,8 @@ const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         setCurrentEditRoutine,
         editRoutineOpen,
         setEditRoutineOpen,
+        viewWeeklyRoutineOpen,
+        setViewWeeklyRoutineOpen,
       }}
     >
       {children}
