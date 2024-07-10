@@ -11,7 +11,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { FieldValues, useForm } from "react-hook-form";
+import { FieldValues, useForm, Controller } from "react-hook-form";
 import { isAxiosError } from "axios";
 import api from "@/api/axios";
 
@@ -42,7 +42,7 @@ const RoutineEditModal = () => {
   } = useRoutineContext();
 
   const [loading, setLoading] = useState<boolean>(false);
-  const { user } = useGlobalContext();
+  const { user, userCharacter } = useGlobalContext();
   const [routineId, setRoutineId] = useState<number | null>(null);
 
   const [daysOfWeek, setDaysOfWeek] = useState<number[]>([]);
@@ -63,6 +63,7 @@ const RoutineEditModal = () => {
     setValue,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
@@ -83,7 +84,7 @@ const RoutineEditModal = () => {
     }
     try {
       const response = await api.put(
-        `/routine/update/${user.uid}/${routineId?.toString()}`,
+        `/routine/update/${user.uid}/${userCharacter.id}/${routineId?.toString()}`,
         {
           title,
           description,
@@ -116,7 +117,14 @@ const RoutineEditModal = () => {
           end,
           title: routine.title,
         };
-        setTodaysRoutine([...todaysRoutine, updatedRoutine]);
+        const updatedRoutines = todaysRoutine.map((r) => {
+            if (r.routine.id === routine.id) {
+                return updatedRoutine;
+            }
+            return r;
+            }
+        );
+        setTodaysRoutine(updatedRoutines);
         setEditRoutineOpen(false);
         setCurrentEditRoutine(null);
       }
@@ -138,6 +146,7 @@ const RoutineEditModal = () => {
 
   useEffect(() => {
     if (currentEditRoutine) {
+        setRoutineId(currentEditRoutine.id);
       setValue("title", currentEditRoutine.title);
       setValue("description", currentEditRoutine.description);
       setDaysOfWeek(currentEditRoutine.daysOfWeek);
@@ -207,23 +216,38 @@ const RoutineEditModal = () => {
           <View className="flex items-center justify-center mt-5">
             <View className="w-[85%]">
               <Text className="ml-2 text-md text-neutral-700 pb-1">Title</Text>
-              <TextInput
-                id="title"
-                autoCapitalize="none"
-                onChangeText={(text) => setValue("title", text)}
-                autoComplete="name"
-                className="w-full h-[50px] bg-black rounded-lg text-white px-3"
+              <Controller
+                control={control}
+                name="title"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    id="title"
+                    autoCapitalize="none"
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    autoComplete="name"
+                    className="w-full h-[50px] bg-black rounded-lg text-white px-3"
+                  />
+                )}
               />
             </View>
             <View className="mt-5 w-[85%]">
               <Text className="ml-2 text-md text-neutral-700 pb-1">Notes</Text>
-              <TextInput
-                id="description"
-                autoCapitalize="none"
-                onChangeText={(text) => setValue("description", text)}
-                autoComplete="name"
-                className="h-[50px] bg-black rounded-lg text-white px-3"
-                numberOfLines={2}
+              <Controller
+                control={control}
+                name="description"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    id="decription"
+                    autoCapitalize="none"
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    autoComplete="name"
+                    className="w-full h-[50px] bg-black rounded-lg text-white px-3"
+                  />
+                )}
               />
             </View>
             <View className="mt-5 w-[85%]">

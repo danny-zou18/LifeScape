@@ -227,9 +227,9 @@ router.get("/get/:userId/:characterId", async (req, res) => {
  *        "error": "Routine Update Failed"
  *      }
  */
-router.put("/update/:userId/:routineId", async (req, res) => {
+router.put("/update/:userId/:characterId/:routineId", async (req, res) => {
   const authToken = req.headers.authorization;
-  const { userId, routineId } = req.params;
+  const { userId, characterId, routineId } = req.params;
 
   try {
     const authUser = await auth().verifyIdToken(authToken as string);
@@ -249,10 +249,11 @@ router.put("/update/:userId/:routineId", async (req, res) => {
     difficultyRank,
   } = req.body;
 
-  const available = await isTimeslotAvailable(
+  const available = await isTimeslotAvailableForUpdate(
     daysOfWeek,
     startTimeOfDayInMinutes,
     endTimeOfDayInMinutes,
+    parseInt(characterId),
     parseInt(routineId)
   );
 
@@ -330,6 +331,71 @@ async function isTimeslotAvailable(
             },
           },
         ],
+      },
+    },
+  });
+
+  return overlappingRoutines.length === 0;
+}
+
+/** Checks if time slot is available for a routine to be updated
+ *
+ * @param daysOfWeek     Array of days of the week, represented as integers 1 - 7, where 1 is Sunday, 2 is Monday, etc.
+ * @param startTime      Start time of the routine in minutes
+ * @param endTime        End time of the routine in minutes
+ * @param characterId    ID of the character
+ * @param routineId      ID of the routine being updated
+ * @returns
+ */
+async function isTimeslotAvailableForUpdate(
+  daysOfWeek: number[],
+  startTime: number,
+  endTime: number,
+  characterId: number,
+  routineId: number
+) {
+  const overlappingRoutines = await db.routine.findMany({
+    where: {
+      CharacterId: characterId,
+      AND: [
+        {
+          daysOfWeek: {
+            hasSome: daysOfWeek,
+          },
+        },
+        {
+          OR: [
+            {
+              startTimeOfDayInMinutes: {
+                lte: endTime,
+              },
+              endTimeOfDayInMinutes: {
+                gte: startTime,
+              },
+            },
+            {
+              startTimeOfDayInMinutes: {
+                lte: startTime,
+              },
+              endTimeOfDayInMinutes: {
+                gte: startTime,
+              },
+            },
+            {
+              startTimeOfDayInMinutes: {
+                lte: endTime,
+              },
+              endTimeOfDayInMinutes: {
+                gte: endTime,
+              },
+            },
+          ],
+        },
+      ],
+      NOT: {
+        id: {
+          equals: routineId,
+        },
       },
     },
   });
