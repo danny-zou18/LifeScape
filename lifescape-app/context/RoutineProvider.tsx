@@ -7,32 +7,53 @@ import React, {
 } from "react";
 import { isAxiosError } from "axios";
 import api from "@/api/axios";
+import { ICalendarEventBase } from "react-native-big-calendar";
 
 import { useGlobalContext } from "./GlobalProvider";
 
 import { Routine } from "@/types/db_types";
 
+export interface CustomEventType extends ICalendarEventBase {
+  routine: Routine;
+}
+
 interface RoutineContextTypes {
-  routines: Routine[];
-  setRoutines: React.Dispatch<React.SetStateAction<Routine[]>>;
+  todaysRoutine: CustomEventType[];
+  setTodaysRoutine: React.Dispatch<React.SetStateAction<CustomEventType[]>>;
   routineCreationOpen: boolean;
   setRoutineCreationOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  currentEditRoutine: Routine | null;
+  setCurrentEditRoutine: React.Dispatch<React.SetStateAction<Routine | null>>;
+  editRoutineOpen: boolean;
+  setEditRoutineOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const defaultState = {
-  routines: [],
-  setRoutines: () => {},
+  todaysRoutine: [],
+  setTodaysRoutine: () => {},
   routineCreationOpen: false,
   setRoutineCreationOpen: () => {},
+  currentEditRoutine: null,
+  setCurrentEditRoutine: () => {},
+  editRoutineOpen: false,
+  setEditRoutineOpen: () => {},
 };
 
 const RoutineContext = createContext<RoutineContextTypes>(defaultState);
 export const useRoutineContext = () => useContext(RoutineContext);
 
 const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [routines, setRoutines] = useState<Routine[]>(defaultState.routines);
+  const [todaysRoutine, setTodaysRoutine] = useState<CustomEventType[]>(
+    defaultState.todaysRoutine
+  );
   const [routineCreationOpen, setRoutineCreationOpen] = useState<boolean>(
     defaultState.routineCreationOpen
+  );
+  const [currentEditRoutine, setCurrentEditRoutine] = useState<Routine | null>(
+    defaultState.currentEditRoutine
+  );
+  const [editRoutineOpen, setEditRoutineOpen] = useState<boolean>(
+    defaultState.editRoutineOpen
   );
 
   const { user, userCharacter } = useGlobalContext();
@@ -49,7 +70,31 @@ const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
           }
         );
         if (response.status === 200) {
-          setRoutines(response.data);
+          const routines = response.data;
+          const updatedRoutine: CustomEventType[] = routines.map(
+            (routine: Routine) => {
+              const start = new Date();
+              start.setHours(Math.floor(routine.startTimeOfDayInMinutes / 60));
+              start.setMinutes(routine.startTimeOfDayInMinutes % 60);
+              start.setSeconds(0);
+              start.setMilliseconds(0);
+
+              const end = new Date();
+              end.setHours(Math.floor(routine.endTimeOfDayInMinutes / 60));
+              end.setMinutes(routine.endTimeOfDayInMinutes % 60);
+              end.setSeconds(0);
+              end.setMilliseconds(0);
+
+              return {
+                routine,
+                start,
+                end,
+                title: routine.title,
+              };
+            }
+          );
+          setTodaysRoutine(updatedRoutine);
+          console.log(updatedRoutine);
         }
       } catch (error) {
         if (isAxiosError(error)) {
@@ -65,10 +110,14 @@ const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <RoutineContext.Provider
       value={{
-        routines,
-        setRoutines,
+        todaysRoutine,
+        setTodaysRoutine,
         routineCreationOpen,
         setRoutineCreationOpen,
+        currentEditRoutine,
+        setCurrentEditRoutine,
+        editRoutineOpen,
+        setEditRoutineOpen,
       }}
     >
       {children}

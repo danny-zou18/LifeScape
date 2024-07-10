@@ -1,12 +1,28 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import React from "react";
+import { Calendar } from "react-native-big-calendar";
+
+import IndividualRoutines from "./IndividualRoutines";
+
+import { useRoutineContext } from "@/context/RoutineProvider";
 
 const DisplayTodaysRoutine = () => {
-  return (
-    <View>
-      <Text>DisplayTodaysRoutine</Text>
-    </View>
-  )
-}
+  const { todaysRoutine } = useRoutineContext();
 
-export default DisplayTodaysRoutine
+  return (
+    <Calendar
+      events={todaysRoutine}
+      height={700}
+      mode="day"
+      renderEvent={IndividualRoutines}
+      swipeEnabled={false}
+      dayHeaderStyle={{ display: "none" }}
+      headerContainerStyle={{ display: "none" }}
+      onPressEvent={(event) => {
+        console.log(event);
+      }}
+      hourRowHeight={80}
+    />
+  );
+};
+
+export default DisplayTodaysRoutine;

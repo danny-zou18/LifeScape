@@ -10,8 +10,8 @@ import {
   Dimensions,
   ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
-import { FieldValues, useForm } from "react-hook-form";
+import React, { useEffect, useState } from "react";
+import { FieldValues, useForm, Controller } from "react-hook-form";
 import { isAxiosError } from "axios";
 import api from "@/api/axios";
 
@@ -31,16 +31,19 @@ const timeToMinutes = (time: Date): number => {
   return time.getHours() * 60 + time.getMinutes();
 };
 
-const RoutineCreationModal = () => {
+const RoutineEditModal = () => {
   const {
     todaysRoutine,
     setTodaysRoutine,
-    routineCreationOpen,
-    setRoutineCreationOpen,
+    editRoutineOpen,
+    setEditRoutineOpen,
+    currentEditRoutine,
+    setCurrentEditRoutine,
   } = useRoutineContext();
 
   const [loading, setLoading] = useState<boolean>(false);
   const { user, userCharacter } = useGlobalContext();
+  const [routineId, setRoutineId] = useState<number | null>(null);
 
   const [daysOfWeek, setDaysOfWeek] = useState<number[]>([]);
 
@@ -60,6 +63,7 @@ const RoutineCreationModal = () => {
     setValue,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
@@ -78,10 +82,11 @@ const RoutineCreationModal = () => {
       setShowTimeError(true);
       return;
     }
-
     try {
-      const response = await api.post(
-        `/routine/create/${user.uid}/${userCharacter.id}`,
+      const response = await api.put(
+        `/routine/update/${user.uid}/${
+          userCharacter.id
+        }/${routineId?.toString()}`,
         {
           title,
           description,
@@ -96,7 +101,7 @@ const RoutineCreationModal = () => {
           },
         }
       );
-      if (response.status === 201) {
+      if (response.status === 200) {
         const routine = response.data;
         const start = new Date();
         start.setHours(Math.floor(routine.startTimeOfDayInMinutes / 60));
@@ -114,14 +119,15 @@ const RoutineCreationModal = () => {
           end,
           title: routine.title,
         };
-
-        setTodaysRoutine([...todaysRoutine, updatedRoutine]);
-        setRoutineCreationOpen(false);
-        reset();
-        setDaysOfWeek([]);
-        setStartTimeOfDay(new Date(0, 0, 0, 0, 0, 0, 0));
-        setEndTimeOfDay(new Date(0, 0, 0, 0, 0, 0, 0));
-        setDifficulty(DifficultyRank.E);
+        const updatedRoutines = todaysRoutine.map((r) => {
+          if (r.routine.id === routine.id) {
+            return updatedRoutine;
+          }
+          return r;
+        });
+        setTodaysRoutine(updatedRoutines);
+        setEditRoutineOpen(false);
+        setCurrentEditRoutine(null);
       }
     } catch (error) {
       if (isAxiosError(error)) {
@@ -135,13 +141,50 @@ const RoutineCreationModal = () => {
   };
 
   const onCancel = () => {
-    setRoutineCreationOpen(false);
-    reset();
-    setDaysOfWeek([]);
-    setStartTimeOfDay(new Date(0, 0, 0, 0, 0, 0, 0));
-    setEndTimeOfDay(new Date(0, 0, 0, 0, 0, 0, 0));
-    setDifficulty(DifficultyRank.E);
+    setEditRoutineOpen(false);
+    setCurrentEditRoutine(null);
   };
+
+  useEffect(() => {
+    if (currentEditRoutine) {
+      setRoutineId(currentEditRoutine.id);
+      setValue("title", currentEditRoutine.title);
+      setValue("description", currentEditRoutine.description);
+      setDaysOfWeek(currentEditRoutine.daysOfWeek);
+      setStartTimeOfDay(
+        new Date(
+          0,
+          0,
+          0,
+          Math.floor(currentEditRoutine.startTimeOfDayInMinutes / 60),
+          currentEditRoutine.startTimeOfDayInMinutes % 60,
+          0,
+          0
+        )
+      );
+      setEndTimeOfDay(
+        new Date(
+          0,
+          0,
+          0,
+          Math.floor(currentEditRoutine.endTimeOfDayInMinutes / 60),
+          currentEditRoutine.endTimeOfDayInMinutes % 60,
+          0,
+          0
+        )
+      );
+      setDifficulty(currentEditRoutine.difficultyRank);
+    } else {
+      reset();
+      setDaysOfWeek([]);
+      setStartTimeOfDay(new Date(0, 0, 0, 0, 0, 0, 0));
+      setEndTimeOfDay(new Date(0, 0, 0, 0, 0, 0, 0));
+      setDifficulty(DifficultyRank.E);
+      setRoutineId(null);
+      setEditRoutineOpen(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentEditRoutine]);
 
   const onStartTimeChange = (
     event: DateTimePickerEvent,
@@ -163,7 +206,7 @@ const RoutineCreationModal = () => {
   return (
     <Modal
       animationType="slide"
-      visible={routineCreationOpen}
+      visible={editRoutineOpen}
       onRequestClose={onCancel}
     >
       <SafeAreaView>
@@ -174,23 +217,38 @@ const RoutineCreationModal = () => {
           <View className="flex items-center justify-center mt-5">
             <View className="w-[85%]">
               <Text className="ml-2 text-md text-neutral-700 pb-1">Title</Text>
-              <TextInput
-                id="title"
-                autoCapitalize="none"
-                onChangeText={(text) => setValue("title", text)}
-                autoComplete="name"
-                className="w-full h-[50px] bg-black rounded-lg text-white px-3"
+              <Controller
+                control={control}
+                name="title"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    id="title"
+                    autoCapitalize="none"
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    autoComplete="name"
+                    className="w-full h-[50px] bg-black rounded-lg text-white px-3"
+                  />
+                )}
               />
             </View>
             <View className="mt-5 w-[85%]">
               <Text className="ml-2 text-md text-neutral-700 pb-1">Notes</Text>
-              <TextInput
-                id="description"
-                autoCapitalize="none"
-                onChangeText={(text) => setValue("description", text)}
-                autoComplete="name"
-                className="h-[50px] bg-black rounded-lg text-white px-3"
-                numberOfLines={2}
+              <Controller
+                control={control}
+                name="description"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    id="decription"
+                    autoCapitalize="none"
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    autoComplete="name"
+                    className="w-full h-[50px] bg-black rounded-lg text-white px-3"
+                  />
+                )}
               />
             </View>
             <View className="mt-5 w-[85%]">
@@ -353,7 +411,7 @@ const RoutineCreationModal = () => {
                   onPress={handleSubmit(submitHandler)}
                 >
                   <Text className="text-white text-xl font-semibold mx-auto my-auto">
-                    Add to Routine
+                    Update Routine
                   </Text>
                 </TouchableHighlight>
               </>
@@ -365,4 +423,4 @@ const RoutineCreationModal = () => {
   );
 };
 
-export default RoutineCreationModal;
+export default RoutineEditModal;

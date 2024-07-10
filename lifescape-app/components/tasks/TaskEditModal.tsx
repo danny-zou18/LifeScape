@@ -99,12 +99,12 @@ const TaskEditModal: React.FC = () => {
       );
       if (response.status === 200) {
         console.log("Task updated successfully");
-          const updatedTasks = tasks.map((task) => {
-            if (task.id === taskId) {
-              return response.data;
-            }
-            return task;
-          });
+        const updatedTasks = tasks.map((task) => {
+          if (task.id === taskId) {
+            return response.data;
+          }
+          return task;
+        });
         setTasks(updatedTasks);
         setEditTaskOpen(false);
         setCurrentEditTask(null);
@@ -213,6 +213,7 @@ const TaskEditModal: React.FC = () => {
                       display="default"
                       onChange={onDateChange}
                       minimumDate={new Date()}
+                      minuteInterval={5}
                     />
                     <DateTimePicker
                       id="dueDate"
@@ -221,6 +222,7 @@ const TaskEditModal: React.FC = () => {
                       display="default"
                       onChange={onDateChange}
                       minimumDate={new Date()}
+                      minuteInterval={5}
                     />
                   </View>
                 ) : (
