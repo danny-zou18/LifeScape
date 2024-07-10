@@ -11,7 +11,7 @@ const DisplayTodaysRoutine = () => {
   return (
     <Calendar
       events={todaysRoutine}
-      height={600}
+      height={700}
       mode="day"
       renderEvent={IndividualRoutines}
       swipeEnabled={false}
@@ -20,6 +20,7 @@ const DisplayTodaysRoutine = () => {
       onPressEvent={(event) => {
         console.log(event);
       }}
+      hourRowHeight={80}
     />
   );
 };
