@@ -113,7 +113,78 @@ router.post("/create/:userId/:characterId", async (req, res) => {
     });
 });
 
-/** @api {get} /routine/get/:userId/:characterId Get Routines
+/** @api {get} /routine/getDay/:userId/:characterId Get Routines for current Day
+ *  @apiName GetRoutinesForDay
+ *  @apiGroup Routine
+ *
+ * @apiDescription Get routines for a character on a particular weekday
+ *
+ * @apiParam {String} userId User ID
+ * @apiParam {String} characterId Character ID
+ *
+ * @apiHeader {String} Authorization Firebase ID Token
+ *
+ * @apiSuccess {Object[]} routines Array of routine objects
+ * @apiSuccessExample {json} Success-Response:
+ *      HTTP/1.1 200 OK
+ *      [
+ *        ROUTINE OBJECTS
+ *      ]
+ * @apiError Unauthorized User is not authorized
+ * @apiErrorExample {json} Unauthorized:
+ *       HTTP/1.1 403 Unauthorized
+ *       {
+ *         "error": "Unauthorized"
+ *       }
+ * @apiError Unauthorized User is not authorized
+ * @apiErrorExample {json} Unauthorized:
+ *       HTTP/1.1 401 Unauthorized
+ *       {
+ *         "error": "Unauthorized"
+ *       }
+ * @apiError RoutineFetchFailed Routine fetch failed
+ * @apiErrorExample {json} RoutineFetchFailed:
+ *      HTTP/1.1 400 Bad Request
+ *      {
+ *        "error": "Routine Fetch Failed"
+ *      }
+ */
+router.get("/getDay/:userId/:characterId", async (req, res) => {
+  const authToken = req.headers.authorization;
+  const { userId, characterId } = req.params;
+
+  try {
+    const authUser = await auth().verifyIdToken(authToken as string);
+    if (authUser.uid !== userId) {
+      res.status(403).json({ error: "Unauthorized" });
+    }
+  } catch (e) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  const currentDay = new Date().getDay() + 1;
+
+  await db.routine
+    .findMany({
+      where: {
+        CharacterId: parseInt(characterId),
+        daysOfWeek: {
+          has: currentDay,
+        },
+      },
+      orderBy: {
+        startTimeOfDayInMinutes: "asc", // Sort by startTimeOfDayInMinutes in ascending order
+      },
+    })
+    .then((routines) => {
+      return res.status(200).json(routines);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(400).json({ error: "Routine Fetch Failed" });
+    });
+});
+/** @api {get} /routine/getAll:userId/:characterId Get All Routines
  *  @apiName GetRoutines
  *  @apiGroup Routine
  *
@@ -149,7 +220,7 @@ router.post("/create/:userId/:characterId", async (req, res) => {
  *        "error": "Routine Fetch Failed"
  *      }
  */
-router.get("/get/:userId/:characterId", async (req, res) => {
+router.get("/getAll/:userId/:characterId", async (req, res) => {
   const authToken = req.headers.authorization;
   const { userId, characterId } = req.params;
 
@@ -162,15 +233,10 @@ router.get("/get/:userId/:characterId", async (req, res) => {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
-  const currentDay = new Date().getDay() + 1;
-
   await db.routine
     .findMany({
       where: {
         CharacterId: parseInt(characterId),
-        daysOfWeek: {
-          has: currentDay,
-        },
       },
       orderBy: {
         startTimeOfDayInMinutes: "asc", // Sort by startTimeOfDayInMinutes in ascending order
