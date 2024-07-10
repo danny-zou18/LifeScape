@@ -43,7 +43,9 @@ const TaskCreationModal: React.FC = () => {
   const [date, setDate] = useState(roundToNextHour(new Date()));
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
 
-  const [difficultyRank, setDifficultyRank] = useState<DifficultyRank>(DifficultyRank.E);
+  const [difficultyRank, setDifficultyRank] = useState<DifficultyRank>(
+    DifficultyRank.E
+  );
 
   const onDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     if (selectedDate) {
@@ -189,7 +191,10 @@ const TaskCreationModal: React.FC = () => {
                 )}
               </View>
             </View>
-            <DifficultySelection difficulty={difficultyRank} setDifficulty={setDifficultyRank} />
+            <DifficultySelection
+              difficulty={difficultyRank}
+              setDifficulty={setDifficultyRank}
+            />
 
             {loading ? (
               <ActivityIndicator size="large" color="#0000ff" />

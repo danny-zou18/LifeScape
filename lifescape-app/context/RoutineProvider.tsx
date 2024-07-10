@@ -14,7 +14,7 @@ import { useGlobalContext } from "./GlobalProvider";
 import { Routine } from "@/types/db_types";
 
 export interface CustomEventType extends ICalendarEventBase {
- routine: Routine;
+  routine: Routine;
 }
 
 interface RoutineContextTypes {
@@ -43,7 +43,9 @@ const RoutineContext = createContext<RoutineContextTypes>(defaultState);
 export const useRoutineContext = () => useContext(RoutineContext);
 
 const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [todaysRoutine, setTodaysRoutine] = useState<CustomEventType[]>(defaultState.todaysRoutine);
+  const [todaysRoutine, setTodaysRoutine] = useState<CustomEventType[]>(
+    defaultState.todaysRoutine
+  );
   const [routineCreationOpen, setRoutineCreationOpen] = useState<boolean>(
     defaultState.routineCreationOpen
   );
@@ -69,26 +71,28 @@ const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         );
         if (response.status === 200) {
           const routines = response.data;
-          const updatedRoutine: CustomEventType[] = routines.map((routine: Routine) => {
-            const start = new Date();
-            start.setHours(Math.floor(routine.startTimeOfDayInMinutes / 60));
-            start.setMinutes(routine.startTimeOfDayInMinutes % 60);
-            start.setSeconds(0);
-            start.setMilliseconds(0);
+          const updatedRoutine: CustomEventType[] = routines.map(
+            (routine: Routine) => {
+              const start = new Date();
+              start.setHours(Math.floor(routine.startTimeOfDayInMinutes / 60));
+              start.setMinutes(routine.startTimeOfDayInMinutes % 60);
+              start.setSeconds(0);
+              start.setMilliseconds(0);
 
-            const end = new Date();
-            end.setHours(Math.floor(routine.endTimeOfDayInMinutes / 60));
-            end.setMinutes(routine.endTimeOfDayInMinutes % 60);
-            end.setSeconds(0);
-            end.setMilliseconds(0);
+              const end = new Date();
+              end.setHours(Math.floor(routine.endTimeOfDayInMinutes / 60));
+              end.setMinutes(routine.endTimeOfDayInMinutes % 60);
+              end.setSeconds(0);
+              end.setMilliseconds(0);
 
-            return {
-              routine,
-              start,
-              end,
-              title: routine.title,
-            };
-          });
+              return {
+                routine,
+                start,
+                end,
+                title: routine.title,
+              };
+            }
+          );
           setTodaysRoutine(updatedRoutine);
           console.log(updatedRoutine);
         }

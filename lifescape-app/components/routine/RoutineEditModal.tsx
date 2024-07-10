@@ -84,7 +84,9 @@ const RoutineEditModal = () => {
     }
     try {
       const response = await api.put(
-        `/routine/update/${user.uid}/${userCharacter.id}/${routineId?.toString()}`,
+        `/routine/update/${user.uid}/${
+          userCharacter.id
+        }/${routineId?.toString()}`,
         {
           title,
           description,
@@ -118,12 +120,11 @@ const RoutineEditModal = () => {
           title: routine.title,
         };
         const updatedRoutines = todaysRoutine.map((r) => {
-            if (r.routine.id === routine.id) {
-                return updatedRoutine;
-            }
-            return r;
-            }
-        );
+          if (r.routine.id === routine.id) {
+            return updatedRoutine;
+          }
+          return r;
+        });
         setTodaysRoutine(updatedRoutines);
         setEditRoutineOpen(false);
         setCurrentEditRoutine(null);
@@ -146,7 +147,7 @@ const RoutineEditModal = () => {
 
   useEffect(() => {
     if (currentEditRoutine) {
-        setRoutineId(currentEditRoutine.id);
+      setRoutineId(currentEditRoutine.id);
       setValue("title", currentEditRoutine.title);
       setValue("description", currentEditRoutine.description);
       setDaysOfWeek(currentEditRoutine.daysOfWeek);

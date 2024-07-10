@@ -32,8 +32,12 @@ const timeToMinutes = (time: Date): number => {
 };
 
 const RoutineCreationModal = () => {
-  const { todaysRoutine, setTodaysRoutine, routineCreationOpen, setRoutineCreationOpen } =
-    useRoutineContext();
+  const {
+    todaysRoutine,
+    setTodaysRoutine,
+    routineCreationOpen,
+    setRoutineCreationOpen,
+  } = useRoutineContext();
 
   const [loading, setLoading] = useState<boolean>(false);
   const { user, userCharacter } = useGlobalContext();
@@ -51,8 +55,6 @@ const RoutineCreationModal = () => {
   );
 
   const [showTimeError, setShowTimeError] = useState<boolean>(false);
-
-  
 
   const {
     setValue,
@@ -328,7 +330,7 @@ const RoutineCreationModal = () => {
                 <TouchableHighlight
                   className="bg-[#000000] w-[225px] h-[45px] rounded-md mt-10"
                   underlayColor="#FFFFFF"
-                    onPress={handleSubmit(submitHandler)}
+                  onPress={handleSubmit(submitHandler)}
                 >
                   <Text className="text-white text-xl font-semibold mx-auto my-auto">
                     Add to Routine

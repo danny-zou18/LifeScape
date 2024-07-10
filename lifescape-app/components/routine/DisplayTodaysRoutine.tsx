@@ -16,10 +16,9 @@ const DisplayTodaysRoutine = () => {
       renderEvent={IndividualRoutines}
       swipeEnabled={false}
       dayHeaderStyle={{ display: "none" }}
-      headerContainerStyle={{display: "none"}}
+      headerContainerStyle={{ display: "none" }}
       onPressEvent={(event) => {
         console.log(event);
-      
       }}
     />
   );
