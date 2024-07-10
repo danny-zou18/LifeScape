@@ -12,7 +12,8 @@ const IndividualRoutines: EventRenderer<CustomEventType> = (
   touchableOpacityProps
 ) => {
   const { user } = useGlobalContext();
-  const { setEditRoutineOpen, setCurrentEditRoutine, setTodaysRoutine } = useRoutineContext();
+  const { setEditRoutineOpen, setCurrentEditRoutine, setTodaysRoutine } =
+    useRoutineContext();
 
   const onPressEvent = () => {
     setCurrentEditRoutine(event.routine);
@@ -35,15 +36,14 @@ const IndividualRoutines: EventRenderer<CustomEventType> = (
           prev.filter((r) => r.routine.id !== event.routine.id)
         );
       }
-    } catch(error) {
+    } catch (error) {
       if (isAxiosError(error)) {
         console.log(error.response?.data);
       } else {
         console.log(error);
       }
     }
-  }
-
+  };
 
   const confirmDeletionAlert = () => {
     Alert.alert("Delete this routine?", "This action cannot be undone.", [
@@ -61,8 +61,22 @@ const IndividualRoutines: EventRenderer<CustomEventType> = (
       {...touchableOpacityProps}
       onPress={onPressEvent}
       onLongPress={confirmDeletionAlert}
+      className="p-4 relative"
     >
-      <Text>{`My custom event: ${event.routine.title} with a color: `}</Text>
+      <View className="max-w-[70%] flex flex-col p-1">
+        <Text>{event.title}</Text>
+        {event.routine.description ? (
+          <Text className="text-sm text-neutral-400">
+            {event.routine.description}
+          </Text>
+        ) : null}
+      </View>
+      <View className="flex flex-row gap-2 absolute top-1 right-1">
+        <Text className="text-xs">{event.start.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })} - {event.end.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</Text>
+      </View>
+      <View className="flex flex-row gap-2 absolute bottom-2 right-2">
+        <Text className="text-sm">{event.routine.difficultyRank}</Text>
+      </View>
     </TouchableOpacity>
   );
 };
