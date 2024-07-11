@@ -29,11 +29,13 @@ const WeeklyRoutineModal = () => {
           height={780}
           renderEvent={IndividualRoutinesWeekly}
           mode="week"
-          dayHeaderStyle={{ display: "none" }}
-        //   headerContainerStyle={{ display: "none" }}
+          swipeEnabled={false}
+          dayHeaderStyle={{ flex: 1, justifyContent: "center"}}
+          // headerContainerStyle={{ display: "none" }}
           onPressEvent={(event) => {
             console.log(event);
           }}
+          hourRowHeight={60}
         />
       </SafeAreaView>
     </Modal>
