@@ -166,7 +166,6 @@ const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
               });
             });
           });
-
           setWeeklyRoutine(updatedRoutine);
           console.log(updatedRoutine);
         }

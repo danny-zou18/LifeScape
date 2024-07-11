@@ -35,6 +35,8 @@ const RoutineCreationModal = () => {
   const {
     todaysRoutine,
     setTodaysRoutine,
+    weeklyRoutine,
+    setWeeklyRoutine,
     routineCreationOpen,
     setRoutineCreationOpen,
   } = useRoutineContext();
@@ -115,7 +117,46 @@ const RoutineCreationModal = () => {
           title: routine.title,
         };
 
-        setTodaysRoutine([...todaysRoutine, updatedRoutine]);
+        if (daysOfWeek.includes(new Date().getDay() + 1)) {
+          setTodaysRoutine([...todaysRoutine, updatedRoutine]);
+        }
+
+        const updatedRoutineWeekly: CustomEventType[] = [];
+
+        routine.daysOfWeek.forEach((dayOfWeek: number) => {
+          const start = new Date();
+          const end = new Date();
+
+          // Get the current day of the week (0-6, where 0 is Sunday)
+          const currentDayOfWeek = start.getDay() + 1;
+
+          // Calculate the number of days to add or subtract from the current date
+          let daysToAdd = currentDayOfWeek - dayOfWeek;
+
+          // Add or subtract the days from the current date to get the appropriate date
+          start.setDate(start.getDate() - daysToAdd);
+          end.setDate(start.getDate());
+
+          start.setHours(Math.floor(routine.startTimeOfDayInMinutes / 60));
+          start.setMinutes(routine.startTimeOfDayInMinutes % 60);
+          start.setSeconds(0);
+          start.setMilliseconds(0);
+
+          end.setHours(Math.floor(routine.endTimeOfDayInMinutes / 60));
+          end.setMinutes(routine.endTimeOfDayInMinutes % 60);
+          end.setSeconds(0);
+          end.setMilliseconds(0);
+
+          updatedRoutineWeekly.push({
+            routine,
+            start,
+            end,
+            title: routine.title,
+          });
+        });
+
+        setWeeklyRoutine([...weeklyRoutine, ...updatedRoutineWeekly]);
+
         setRoutineCreationOpen(false);
         reset();
         setDaysOfWeek([]);
