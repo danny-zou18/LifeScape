@@ -18,7 +18,7 @@ import api from "@/api/axios";
 import { useRoutineContext, CustomEventType } from "@/context/RoutineProvider";
 import { useGlobalContext } from "@/context/GlobalProvider";
 
-import { DifficultyRank } from "@/types/db_types";
+import { DifficultyRank, Routine } from "@/types/db_types";
 
 import DifficultySelection from "../general/DifficultySelection";
 import DateTimePicker, {
@@ -129,50 +129,67 @@ const RoutineEditModal = () => {
         });
         setTodaysRoutine(updatedRoutines);
 
-        const updatedRoutineWeekly: CustomEventType[] = [];
+        const fetchRoutinesWeek = async () => {
+          try {
+            const response = await api.get(
+              `/routine/getAll/${user.uid}/${userCharacter.id}`,
+              {
+                headers: {
+                  Authorization: await user.getIdToken(),
+                },
+              }
+            );
+            if (response.status === 200) {
+              const routines = response.data;
+              const updatedRoutine: CustomEventType[] = [];
 
-        routine.daysOfWeek.forEach((dayOfWeek: number) => {
-          const start = new Date();
-          const end = new Date();
+              routines.forEach((routine: Routine) => {
+                routine.daysOfWeek.forEach((dayOfWeek: number) => {
+                  const start = new Date();
+                  const end = new Date();
 
-          // Get the current day of the week (0-6, where 0 is Sunday)
-          const currentDayOfWeek = start.getDay() + 1;
+                  // Get the current day of the week (0-6, where 0 is Sunday)
+                  const currentDayOfWeek = start.getDay() + 1;
 
-          // Calculate the number of days to add or subtract from the current date
-          let daysToAdd = currentDayOfWeek - dayOfWeek;
+                  // Calculate the number of days to add or subtract from the current date
+                  let daysToAdd = currentDayOfWeek - dayOfWeek;
 
-          // Add or subtract the days from the current date to get the appropriate date
-          start.setDate(start.getDate() - daysToAdd);
-          end.setDate(start.getDate());
+                  // Add or subtract the days from the current date to get the appropriate date
+                  start.setDate(start.getDate() - daysToAdd);
+                  end.setDate(start.getDate());
 
-          start.setHours(Math.floor(routine.startTimeOfDayInMinutes / 60));
-          start.setMinutes(routine.startTimeOfDayInMinutes % 60);
-          start.setSeconds(0);
-          start.setMilliseconds(0);
+                  start.setHours(
+                    Math.floor(routine.startTimeOfDayInMinutes / 60)
+                  );
+                  start.setMinutes(routine.startTimeOfDayInMinutes % 60);
+                  start.setSeconds(0);
+                  start.setMilliseconds(0);
 
-          end.setHours(Math.floor(routine.endTimeOfDayInMinutes / 60));
-          end.setMinutes(routine.endTimeOfDayInMinutes % 60);
-          end.setSeconds(0);
-          end.setMilliseconds(0);
+                  end.setHours(Math.floor(routine.endTimeOfDayInMinutes / 60));
+                  end.setMinutes(routine.endTimeOfDayInMinutes % 60);
+                  end.setSeconds(0);
+                  end.setMilliseconds(0);
 
-          updatedRoutineWeekly.push({
-            routine,
-            start,
-            end,
-            title: routine.title,
-          });
-        });
-
-        updatedRoutineWeekly.forEach((r) => {
-          const updatedWeeklyRoutines = weeklyRoutine.map((wr) => {
-            if (wr.routine.id === r.routine.id) {
-              return r;
+                  updatedRoutine.push({
+                    routine,
+                    start,
+                    end,
+                    title: routine.title,
+                  });
+                });
+              });
+              setWeeklyRoutine(updatedRoutine);
+              console.log(updatedRoutine);
             }
-            return wr;
-          });
-          setWeeklyRoutine(updatedWeeklyRoutines);
-        });
-
+          } catch (error) {
+            if (isAxiosError(error)) {
+              console.log(error.response?.data);
+            } else {
+              console.log(error);
+            }
+          }
+        };
+        fetchRoutinesWeek();
         setEditRoutineOpen(false);
         setCurrentEditRoutine(null);
       }

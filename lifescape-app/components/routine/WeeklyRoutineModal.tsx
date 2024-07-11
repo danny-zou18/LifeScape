@@ -2,6 +2,7 @@ import { Modal, SafeAreaView, View, Button } from "react-native";
 import React from "react";
 import { Calendar } from "react-native-big-calendar";
 import IndividualRoutinesWeekly from "./IndividualRoutinesWeekly";
+import RoutineEditModal from "./RoutineEditModal";
 
 import { useRoutineContext } from "@/context/RoutineProvider";
 
@@ -15,6 +16,7 @@ const WeeklyRoutineModal = () => {
       visible={viewWeeklyRoutineOpen}
       onRequestClose={() => setViewWeeklyRoutineOpen(false)}
     >
+      <RoutineEditModal />
       <SafeAreaView>
         <View className="flex flex-row mb-2 ml-5">
           <Button
