@@ -121,9 +121,7 @@ const TaskCreationModal: React.FC = () => {
     <Modal
       animationType="slide"
       visible={taskCreationOpen}
-      onRequestClose={() => {
-        setTaskCreationOpen(false);
-      }}
+      onRequestClose={onCancel}
     >
       <SafeAreaView>
         <View className="flex flex-row">

@@ -153,9 +153,7 @@ const TaskEditModal: React.FC = () => {
     <Modal
       animationType="slide"
       visible={editTaskOpen}
-      onRequestClose={() => {
-        setEditTaskOpen(false);
-      }}
+      onRequestClose={onCancel}
     >
       <SafeAreaView>
         <View className="flex flex-row">

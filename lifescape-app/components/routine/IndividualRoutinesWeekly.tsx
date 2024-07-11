@@ -7,12 +7,12 @@ import { isAxiosError } from "axios";
 
 import { useGlobalContext } from "@/context/GlobalProvider";
 
-const IndividualRoutines: EventRenderer<CustomEventType> = (
+const IndividualRoutinesWeekly: EventRenderer<CustomEventType> = (
   event,
   touchableOpacityProps
 ) => {
   const { user } = useGlobalContext();
-  const { setEditRoutineOpen, setCurrentEditRoutine, setTodaysRoutine } =
+  const { setEditRoutineOpen, setCurrentEditRoutine, setWeeklyRoutine } =
     useRoutineContext();
 
   const onPressEvent = () => {
@@ -32,7 +32,7 @@ const IndividualRoutines: EventRenderer<CustomEventType> = (
       );
       if (response.status === 200) {
         console.log("Routine deleted successfully");
-        setTodaysRoutine((prev) =>
+        setWeeklyRoutine((prev) =>
           prev.filter((r) => r.routine.id !== event.routine.id)
         );
       }
@@ -63,22 +63,17 @@ const IndividualRoutines: EventRenderer<CustomEventType> = (
       onLongPress={confirmDeletionAlert}
       className="p-4 relative"
     >
-      <View className="max-w-[70%] flex flex-col p-1">
+      <View className=" flex flex-col p-1">
         <Text>{event.title}</Text>
-        {event.routine.description ? (
+        {/* {event.routine.description ? (
           <Text className="text-sm text-neutral-400">
             {event.routine.description}
           </Text>
-        ) : null}
+        ) : null} */}
       </View>
-      <View className="flex flex-row gap-2 absolute top-1 right-1">
-        <Text className="text-xs">{event.start.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })} - {event.end.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</Text>
-      </View>
-      <View className="flex flex-row gap-2 absolute bottom-2 right-2">
-        <Text className="text-sm">{event.routine.difficultyRank}</Text>
-      </View>
+ 
     </TouchableOpacity>
   );
 };
 
-export default IndividualRoutines;
+export default IndividualRoutinesWeekly;

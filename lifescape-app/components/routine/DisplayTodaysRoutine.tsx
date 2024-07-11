@@ -1,7 +1,7 @@
 import React from "react";
 import { Calendar } from "react-native-big-calendar";
 
-import IndividualRoutines from "./IndividualRoutines";
+import IndividualRoutinesDaily from "./IndividualRoutinesDaily";
 
 import { useRoutineContext } from "@/context/RoutineProvider";
 
@@ -13,7 +13,7 @@ const DisplayTodaysRoutine = () => {
       events={todaysRoutine}
       height={700}
       mode="day"
-      renderEvent={IndividualRoutines}
+      renderEvent={IndividualRoutinesDaily}
       swipeEnabled={false}
       dayHeaderStyle={{ display: "none" }}
       headerContainerStyle={{ display: "none" }}

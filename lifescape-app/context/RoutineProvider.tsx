@@ -26,6 +26,10 @@ interface RoutineContextTypes {
   setCurrentEditRoutine: React.Dispatch<React.SetStateAction<Routine | null>>;
   editRoutineOpen: boolean;
   setEditRoutineOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  weeklyRoutine: CustomEventType[];
+  setWeeklyRoutine: React.Dispatch<React.SetStateAction<CustomEventType[]>>;
+  viewWeeklyRoutineOpen: boolean;
+  setViewWeeklyRoutineOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const defaultState = {
@@ -37,6 +41,10 @@ const defaultState = {
   setCurrentEditRoutine: () => {},
   editRoutineOpen: false,
   setEditRoutineOpen: () => {},
+  weeklyRoutine: [],
+  setWeeklyRoutine: () => {},
+  viewWeeklyRoutineOpen: false,
+  setViewWeeklyRoutineOpen: () => {},
 };
 
 const RoutineContext = createContext<RoutineContextTypes>(defaultState);
@@ -55,14 +63,20 @@ const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [editRoutineOpen, setEditRoutineOpen] = useState<boolean>(
     defaultState.editRoutineOpen
   );
+  const [weeklyRoutine, setWeeklyRoutine] = useState<CustomEventType[]>(
+    defaultState.weeklyRoutine
+  );
+  const [viewWeeklyRoutineOpen, setViewWeeklyRoutineOpen] = useState<boolean>(
+    defaultState.viewWeeklyRoutineOpen
+  );
 
   const { user, userCharacter } = useGlobalContext();
 
   useEffect(() => {
-    const fetchRoutines = async () => {
+    const fetchRoutinesDay = async () => {
       try {
         const response = await api.get(
-          `/routine/get/${user.uid}/${userCharacter.id}`,
+          `/routine/getDay/${user.uid}/${userCharacter.id}`,
           {
             headers: {
               Authorization: await user.getIdToken(),
@@ -94,6 +108,65 @@ const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
             }
           );
           setTodaysRoutine(updatedRoutine);
+        }
+      } catch (error) {
+        if (isAxiosError(error)) {
+          console.log(error.response?.data);
+        } else {
+          console.log(error);
+        }
+      }
+    };
+    fetchRoutinesDay();
+
+    const fetchRoutinesWeek = async () => {
+      try {
+        const response = await api.get(
+          `/routine/getAll/${user.uid}/${userCharacter.id}`,
+          {
+            headers: {
+              Authorization: await user.getIdToken(),
+            },
+          }
+        );
+        if (response.status === 200) {
+          const routines = response.data;
+          const updatedRoutine: CustomEventType[] = [];
+
+          routines.forEach((routine: Routine) => {
+            routine.daysOfWeek.forEach((dayOfWeek: number) => {
+              const start = new Date();
+              const end = new Date();
+
+              // Get the current day of the week (0-6, where 0 is Sunday)
+              const currentDayOfWeek = start.getDay() + 1;
+
+              // Calculate the number of days to add or subtract from the current date
+              let daysToAdd = currentDayOfWeek - dayOfWeek;
+
+              // Add or subtract the days from the current date to get the appropriate date
+              start.setDate(start.getDate() - daysToAdd);
+              end.setDate(start.getDate());
+
+              start.setHours(Math.floor(routine.startTimeOfDayInMinutes / 60));
+              start.setMinutes(routine.startTimeOfDayInMinutes % 60);
+              start.setSeconds(0);
+              start.setMilliseconds(0);
+
+              end.setHours(Math.floor(routine.endTimeOfDayInMinutes / 60));
+              end.setMinutes(routine.endTimeOfDayInMinutes % 60);
+              end.setSeconds(0);
+              end.setMilliseconds(0);
+
+              updatedRoutine.push({
+                routine,
+                start,
+                end,
+                title: routine.title,
+              });
+            });
+          });
+          setWeeklyRoutine(updatedRoutine);
           console.log(updatedRoutine);
         }
       } catch (error) {
@@ -104,7 +177,7 @@ const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         }
       }
     };
-    fetchRoutines();
+    fetchRoutinesWeek();
   }, [user, userCharacter]);
 
   return (
@@ -118,6 +191,10 @@ const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         setCurrentEditRoutine,
         editRoutineOpen,
         setEditRoutineOpen,
+        weeklyRoutine,
+        setWeeklyRoutine,
+        viewWeeklyRoutineOpen,
+        setViewWeeklyRoutineOpen,
       }}
     >
       {children}
