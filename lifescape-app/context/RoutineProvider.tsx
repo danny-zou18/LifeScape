@@ -167,7 +167,6 @@ const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
             });
           });
           setWeeklyRoutine(updatedRoutine);
-          console.log(updatedRoutine);
         }
       } catch (error) {
         if (isAxiosError(error)) {

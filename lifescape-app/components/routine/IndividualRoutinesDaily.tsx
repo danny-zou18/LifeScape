@@ -125,34 +125,47 @@ const IndividualRoutinesDaily: EventRenderer<CustomEventType> = (
       {...touchableOpacityProps}
       onPress={onPressEvent}
       onLongPress={confirmDeletionAlert}
-      className="p-4 relative"
-    >
-      <View className="max-w-[70%] flex flex-col p-1">
-        <Text>{event.title}</Text>
-        {event.routine.description ? (
-          <Text className="text-sm text-neutral-400">
-            {event.routine.description}
+      className="flex flex-row p-0"
+    > 
+      <TouchableOpacity
+        onPress={handleCompleteRoutine}
+        className="w-[15%] h-full bg-green-200 rounded-sm"
+        disabled={
+          !!event.routine.lastCompleted &&
+          new Date(event.routine.lastCompleted).getDate() === new Date().getDate()
+        }
+      >
+      </TouchableOpacity>
+      <View className="w-[85%] relative pl-2 pt-1">
+        <View className="max-w-[70%] flex flex-col">
+          <Text>{event.title}</Text>
+          {event.routine.description ? (
+            <Text className="text-sm text-neutral-400">
+              {event.routine.description}
+            </Text>
+          ) : null}
+        </View>
+        <View className="flex flex-row gap-2 absolute top-1 right-1">
+          <Text className="text-xs">
+            {event.start.toLocaleTimeString([], {
+              hour: "numeric",
+              minute: "2-digit",
+            })}{" "}
+            -{" "}
+            {event.end.toLocaleTimeString([], {
+              hour: "numeric",
+              minute: "2-digit",
+            })}
           </Text>
-        ) : null}
-      </View>
-      <View className="flex flex-row gap-2 absolute top-1 right-1">
-        <Text className="text-xs">
-          {event.start.toLocaleTimeString([], {
-            hour: "numeric",
-            minute: "2-digit",
-          })}{" "}
-          -{" "}
-          {event.end.toLocaleTimeString([], {
-            hour: "numeric",
-            minute: "2-digit",
-          })}
-        </Text>
-      </View>
-      <View className="flex flex-row gap-2 absolute bottom-2 right-2">
-        <Text className="text-sm">{event.routine.difficultyRank}</Text>
+        </View>
+        <View className="flex flex-row gap-2 absolute bottom-2 right-2">
+          <Text className="text-sm">{event.routine.difficultyRank}</Text>
+        </View>
       </View>
     </TouchableOpacity>
   );
 };
+
+
 
 export default IndividualRoutinesDaily;
