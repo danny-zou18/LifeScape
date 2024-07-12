@@ -126,16 +126,22 @@ const IndividualRoutinesDaily: EventRenderer<CustomEventType> = (
       onPress={onPressEvent}
       onLongPress={confirmDeletionAlert}
       className="flex flex-row p-0"
-    > 
+    >
       <TouchableOpacity
         onPress={handleCompleteRoutine}
-        className="w-[15%] h-full bg-green-200 rounded-sm"
+        className={`w-[15%] h-full ${
+          !!event.routine.lastCompleted &&
+          new Date(event.routine.lastCompleted).getDate() ===
+            new Date().getDate()
+            ? "bg-neutral-600"
+            : "bg-green-200"
+        } rounded-sm`}
         disabled={
           !!event.routine.lastCompleted &&
-          new Date(event.routine.lastCompleted).getDate() === new Date().getDate()
+          new Date(event.routine.lastCompleted).getDate() ===
+            new Date().getDate()
         }
-      >
-      </TouchableOpacity>
+      ></TouchableOpacity>
       <View className="w-[85%] relative pl-2 pt-1">
         <View className="max-w-[70%] flex flex-col">
           <Text>{event.title}</Text>
@@ -165,7 +171,5 @@ const IndividualRoutinesDaily: EventRenderer<CustomEventType> = (
     </TouchableOpacity>
   );
 };
-
-
 
 export default IndividualRoutinesDaily;
