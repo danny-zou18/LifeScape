@@ -6,6 +6,7 @@ import api from "@/api/axios";
 import { isAxiosError } from "axios";
 
 import { useGlobalContext } from "@/context/GlobalProvider";
+import { useHomeContext } from "@/context/HomeProvider";
 
 const IndividualRoutinesDaily: EventRenderer<CustomEventType> = (
   event,
@@ -14,6 +15,7 @@ const IndividualRoutinesDaily: EventRenderer<CustomEventType> = (
   const { user } = useGlobalContext();
   const { setEditRoutineOpen, setCurrentEditRoutine, setTodaysRoutine } =
     useRoutineContext();
+  const { showReward } = useHomeContext();
 
   const onPressEvent = () => {
     setCurrentEditRoutine(event.routine);
