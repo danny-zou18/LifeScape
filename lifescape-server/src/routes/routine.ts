@@ -421,61 +421,6 @@ router.put("/update/:userId/:characterId/:routineId", async (req, res) => {
       res.status(400).json({ error: "Routine Update Failed" });
     });
 });
-
-/** Checks if time slot is available for a routine to be added
- *
- * @param daysOfWeek     Array of days of the week, represented as integers 1 - 7, where 1 is Sunday, 2 is Monday, etc.
- * @param startTime      Start time of the routine in minutes
- * @param endTime        End time of the routine in minutes
- * @param characterId    ID of the character
- * @returns
- */
-async function isTimeslotAvailable(
-  daysOfWeek: number[],
-  startTime: number,
-  endTime: number,
-  characterId: number
-) {
-  const overlappingRoutines = await db.routine.findMany({
-    where: {
-      CharacterId: characterId,
-      AND: {
-        daysOfWeek: {
-          hasSome: daysOfWeek,
-        },
-        OR: [
-          {
-            startTimeOfDayInMinutes: {
-              lte: endTime,
-            },
-            endTimeOfDayInMinutes: {
-              gte: startTime,
-            },
-          },
-          {
-            startTimeOfDayInMinutes: {
-              lte: startTime,
-            },
-            endTimeOfDayInMinutes: {
-              gte: startTime,
-            },
-          },
-          {
-            startTimeOfDayInMinutes: {
-              lte: endTime,
-            },
-            endTimeOfDayInMinutes: {
-              gte: endTime,
-            },
-          },
-        ],
-      },
-    },
-  });
-
-  return overlappingRoutines.length === 0;
-}
-
 /** @api {put} /routine/complete/:userId/:characterId/:routineId Complete Routine
  *  @apiName CompleteRoutine
  *  @apiGroup Routine
@@ -612,7 +557,59 @@ router.put("/complete/:userId/:characterId/:routineId", async (req, res) => {
       return res.status(400).json({ error: "Routine Completion Failed" });
     });
 });
+/** Checks if time slot is available for a routine to be added
+ *
+ * @param daysOfWeek     Array of days of the week, represented as integers 1 - 7, where 1 is Sunday, 2 is Monday, etc.
+ * @param startTime      Start time of the routine in minutes
+ * @param endTime        End time of the routine in minutes
+ * @param characterId    ID of the character
+ * @returns
+ */
+async function isTimeslotAvailable(
+  daysOfWeek: number[],
+  startTime: number,
+  endTime: number,
+  characterId: number
+) {
+  const overlappingRoutines = await db.routine.findMany({
+    where: {
+      CharacterId: characterId,
+      AND: {
+        daysOfWeek: {
+          hasSome: daysOfWeek,
+        },
+        OR: [
+          {
+            startTimeOfDayInMinutes: {
+              lt: endTime,
+            },
+            endTimeOfDayInMinutes: {
+              gt: startTime,
+            },
+          },
+          {
+            startTimeOfDayInMinutes: {
+              lt: startTime,
+            },
+            endTimeOfDayInMinutes: {
+              gt: startTime,
+            },
+          },
+          {
+            startTimeOfDayInMinutes: {
+              lt: endTime,
+            },
+            endTimeOfDayInMinutes: {
+              gt: endTime,
+            },
+          },
+        ],
+      },
+    },
+  });
 
+  return overlappingRoutines.length === 0;
+}
 /** Checks if time slot is available for a routine to be updated
  *
  * @param daysOfWeek     Array of days of the week, represented as integers 1 - 7, where 1 is Sunday, 2 is Monday, etc.
@@ -642,26 +639,26 @@ async function isTimeslotAvailableForUpdate(
           OR: [
             {
               startTimeOfDayInMinutes: {
-                lte: endTime,
+                lt: endTime,
               },
               endTimeOfDayInMinutes: {
-                gte: startTime,
+                gt: startTime,
               },
             },
             {
               startTimeOfDayInMinutes: {
-                lte: startTime,
+                lt: startTime,
               },
               endTimeOfDayInMinutes: {
-                gte: startTime,
+                gt: startTime,
               },
             },
             {
               startTimeOfDayInMinutes: {
-                lte: endTime,
+                lt: endTime,
               },
               endTimeOfDayInMinutes: {
-                gte: endTime,
+                gt: endTime,
               },
             },
           ],
