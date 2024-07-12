@@ -142,7 +142,7 @@ const IndividualRoutinesDaily: EventRenderer<CustomEventType> = (
             new Date().getDate()
         }
       ></TouchableOpacity>
-      <View className="w-[85%] relative pl-2 pt-1">
+      <View className="w-[85%] relative pl-2">
         <View className="max-w-[70%] flex flex-col">
           <Text>{event.title}</Text>
           {event.routine.description ? (
