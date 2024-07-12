@@ -7,14 +7,14 @@ export default function OverviewLayout() {
       <Stack.Screen 
         name="index" 
         options={{ 
-          headerShown: false,
+          headerShown: true,
           title: "Overview"
         }} 
       />
       <Stack.Screen 
         name="account/index" 
         options={{
-          headerShown: false,
+          headerShown: true,
           title: "Account",
           headerBackTitle: "Overview",
         }} 
@@ -22,7 +22,7 @@ export default function OverviewLayout() {
       <Stack.Screen 
         name="history/index" 
         options={{
-          headerShown: false,
+          headerShown: true,
           title: "History",
           headerBackTitle: "Overview",
         }} 

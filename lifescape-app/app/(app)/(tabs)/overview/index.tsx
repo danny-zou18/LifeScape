@@ -1,5 +1,12 @@
-import { View, Text, ActivityIndicator, Button } from "react-native";
+import {
+  SafeAreaView,
+  View,
+  Text,
+  ActivityIndicator,
+  Button,
+} from "react-native";
 import React, { useState } from "react";
+import { Link } from "expo-router";
 
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { signOut } from "firebase/auth";
@@ -36,8 +43,23 @@ const Overview = () => {
   };
 
   return (
-    <View>
-      <Text>Overview</Text>
+    <SafeAreaView className="bg-red-400 mx-auto w-[90%]">
+      <View className="w-full rounded-lg overflow-hidden bg-black">
+        <Link
+          href="/overview/account"
+          className="p-4 border-b-2 border-white w-full"
+        >
+          <Text className="text-white">Account</Text>
+        </Link>
+        <View className="w-full h-[1px] bg-white"></View>
+        <Link
+          href="/overview/history"
+         className="p-4  border-b-2 border-b-white w-full"
+        >
+          <Text className="text-white">History</Text>
+        </Link>
+      </View>
+
       {isSigningIn ? (
         <ActivityIndicator size="large" color="#0000ff" />
       ) : (
@@ -50,7 +72,7 @@ const Overview = () => {
           ></Button>
         </>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 export default Overview;
