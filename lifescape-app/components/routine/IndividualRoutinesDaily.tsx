@@ -151,7 +151,7 @@ const IndividualRoutinesDaily: EventRenderer<CustomEventType> = (
             </Text>
           ) : null}
         </View>
-        <View className="flex flex-row gap-2 absolute top-1 right-1">
+        <View className="flex flex-row gap-2 absolute top-0 right-0">
           <Text className="text-xs">
             {event.start.toLocaleTimeString([], {
               hour: "numeric",
@@ -164,7 +164,7 @@ const IndividualRoutinesDaily: EventRenderer<CustomEventType> = (
             })}
           </Text>
         </View>
-        <View className="flex flex-row gap-2 absolute bottom-2 right-2">
+        <View className="flex flex-row gap-2 absolute bottom-1 right-1">
           <Text className="text-sm">{event.routine.difficultyRank}</Text>
         </View>
       </View>
