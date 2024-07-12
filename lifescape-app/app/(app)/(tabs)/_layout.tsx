@@ -47,6 +47,7 @@ function TabBarIcon(props: {
           name="overview"
           options={{
             title: 'Overview',
+            
           }}
         />
       </Tabs>

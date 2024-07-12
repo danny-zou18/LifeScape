@@ -53,5 +53,4 @@ const Overview = () => {
     </View>
   );
 };
-
 export default Overview;
