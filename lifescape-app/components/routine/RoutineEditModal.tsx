@@ -179,7 +179,6 @@ const RoutineEditModal = () => {
                 });
               });
               setWeeklyRoutine(updatedRoutine);
-              console.log(updatedRoutine);
             }
           } catch (error) {
             if (isAxiosError(error)) {
