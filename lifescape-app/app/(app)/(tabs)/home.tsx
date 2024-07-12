@@ -1,12 +1,9 @@
-import {
-  View,
-  SafeAreaView,
-  FlatList,
-} from "react-native";
+import { View, SafeAreaView, FlatList } from "react-native";
 
 import React, { useState, useRef } from "react";
 
 import { useGlobalContext } from "@/context/GlobalProvider";
+import HomeProvider from "@/context/HomeProvider";
 
 import CharacterCreationModal from "@/components/home/CharacterCreationModal";
 import CharacterOverview from "@/components/home/CharacterOverview";
@@ -14,6 +11,7 @@ import CharacterOverview from "@/components/home/CharacterOverview";
 import ViewSelectionBtns from "@/components/home/ViewSelectionBtns";
 import TasksHabitsRoutine from "@/components/home/TasksHabitsRoutine";
 
+import RewardsManager from "@/components/home/RewardsManager";
 
 const Home = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -28,20 +26,23 @@ const Home = () => {
   return (
     <SafeAreaView>
       {userCharacter ? (
-        <View className="flex items-center">
-          <CharacterOverview />
-          <View className="w-[95vw] flex mt-1">
-            <ViewSelectionBtns
-              currentView={currentlyOpen}
-              setCurrentView={setCurrentlyOpen}
-              flatListRef={flatListRef}
-            />
-            <TasksHabitsRoutine
-              currentlyOpen={currentlyOpen}
-              flatListRef={flatListRef}
-            />
+        <HomeProvider>
+          <View className="flex items-center relative">
+            <CharacterOverview />
+            <View className="flex w-[95vw] ">
+              <ViewSelectionBtns
+                currentView={currentlyOpen}
+                setCurrentView={setCurrentlyOpen}
+                flatListRef={flatListRef}
+              />
+              <TasksHabitsRoutine
+                currentlyOpen={currentlyOpen}
+                flatListRef={flatListRef}
+              />
+            </View>
+            <RewardsManager />
           </View>
-        </View>
+        </HomeProvider>
       ) : (
         <CharacterCreationModal
           isOpen={characterCreationModalVisible}

@@ -41,11 +41,17 @@ model Character {
 
   Strength  Int @default(10)
   Defense   Int @default(10)
-  Dexterity Int @default(10)
   Agility   Int @default(10)
   Vitality  Int @default(10)
   Endurance Int @default(10)
   Will      Int @default(10)
+
+  strengthXp  Float @default(0) //Created trigger function for this.
+  defenseXp   Float @default(0) //Created trigger function for this.
+  agilityXp   Float @default(0) //Created trigger function for this.
+  vitalityXp  Float @default(0) //Created trigger function for this.
+  enduranceXp Float @default(0) //Created trigger function for this.
+  willXp      Float @default(0) //Created trigger function for this.
 
   Owner    users     @relation(fields: [OwnerId], references: [id])
   OwnerId  String    @unique
@@ -70,7 +76,6 @@ model Task {
   goldReward       Int?
   StrengthReward   Int?
   DefenseReward    Int?
-  DexterityReward  Int?
   AgilityReward    Int?
   VitalityReward   Int?
   EnduranceReward  Int?
@@ -86,11 +91,14 @@ model Habit {
   title       String
   description String?
 
-  createdAt DateTime @default(now())
-  streak    Int      @default(0)
+  createdAt       DateTime  @default(now())
+  lastCompleted   DateTime?
+  completeBy      DateTime?
+  totalCompletion Int       @default(0)
+  streak          Int       @default(0)
 
   repeat                Repeat @default(DAILY)
-  currentCompletions    Int   @default(0)
+  currentCompletions    Int    @default(0)
   completionGoalWeekly  Int?
   completionGoalMonthly Int?
 
@@ -102,7 +110,6 @@ model Habit {
   goldReward       Int?
   StrengthReward   Int?
   DefenseReward    Int?
-  DexterityReward  Int?
   AgilityReward    Int?
   VitalityReward   Int?
   EnduranceReward  Int?
@@ -119,6 +126,7 @@ model Routine {
   description String?
 
   createdAt DateTime @default(now())
+  lastCompleted DateTime?
 
   daysOfWeek              Int[]
   startTimeOfDayInMinutes Int
@@ -130,7 +138,6 @@ model Routine {
   goldReward       Int?
   StrengthReward   Int?
   DefenseReward    Int?
-  DexterityReward  Int?
   AgilityReward    Int?
   VitalityReward   Int?
   EnduranceReward  Int?

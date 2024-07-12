@@ -5,6 +5,46 @@ import { getAuth } from "firebase-admin/auth";
 
 const router = express.Router();
 
+/** @api {post} /users/register Register User
+ * @apiName RegisterUser
+ * @apiGroup User
+ * 
+ * @apiDescription Register a user
+ * 
+ * @apiBody {String} name Name of the user
+ * @apiBody {String} username Username of the user
+ * @apiBody {String} email Email of the user
+ * @apiBody {String} password Password of the user
+ * 
+ * @apiSuccess {String} message Success message
+ * @apiSuccess {Boolean} success Success status
+ * @apiSuccess {Object} newUser New user object
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "message": "User Registered Successfully!",
+ *       "success": true,
+ *       "user": USEROBJECT
+ *     }
+ * @apiError UsernameAlreadyExists Username already exists
+ * @apiErrorExample {json} UsernameAlreadyExists:
+ *    HTTP/1.1 400 Bad Request
+ *    {
+ *      "error": "Username already exists"
+ *    }
+ * @apiError EmailAlreadyExists Email already exists
+ * @apiErrorExample {json} EmailAlreadyExists:
+ *   HTTP/1.1 400 Bad Request
+ *   {
+ *     "error": "Email already exists"
+ *   }
+ * @apiError UserCreationFailed User creation failed
+ * @apiErrorExample {json} UserCreationFailed:
+ *   HTTP/1.1 400 Bad Request
+ *   {
+ *     "error": "User Creation Failed"
+ *   } 
+ */
 router.post("/register", async (req, res) => {
   const { name, username, email, password } = req.body;
 

@@ -52,7 +52,6 @@ const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     console.log("Setting up onAuthStateChanged listener");
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, async (user) => {
       if (user) {
-        console.log("User logged in:", user);
         setLoggedIn(true);
         setUser(user);
         try {
@@ -66,7 +65,6 @@ const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
           );
           if (response.status === 200) {
             setUserCharacter(response.data);
-            console.log("Character fetched: ", response.data);
           }
         } catch (error) {
           if (isAxiosError(error)) {

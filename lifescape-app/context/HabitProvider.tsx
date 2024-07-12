@@ -19,6 +19,10 @@ interface HabitContextTypes {
   setHabitCreationOpen: React.Dispatch<React.SetStateAction<boolean>>;
   sortBy: string;
   setSortBy: React.Dispatch<React.SetStateAction<string>>;
+  currentEditHabit: Habit | null;
+  setCurrentEditHabit: React.Dispatch<React.SetStateAction<Habit | null>>;
+  editHabitOpen: boolean;
+  setEditHabitOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const defaultState = {
@@ -28,6 +32,10 @@ const defaultState = {
   setHabitCreationOpen: () => {},
   sortBy: "",
   setSortBy: () => {},
+  editHabitOpen: false,
+  setEditHabitOpen: () => {},
+  currentEditHabit: null,
+  setCurrentEditHabit: () => {},
 };
 
 const HabitContext = createContext<HabitContextTypes>(defaultState);
@@ -39,11 +47,33 @@ const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     defaultState.habitCreationOpen
   );
   const [sortBy, setSortBy] = useState<string>(defaultState.sortBy);
+  const [currentEditHabit, setCurrentEditHabit] = useState<Habit | null>(
+    defaultState.currentEditHabit
+  );
+  const [editHabitOpen, setEditHabitOpen] = useState<boolean>(
+    defaultState.editHabitOpen
+  );
 
   const { user, userCharacter } = useGlobalContext();
 
   useEffect(() => {
     const fetchHabits = async () => {
+      try {
+        const response = await api.put(`/habits/checkStreaks/${user.uid}/${userCharacter.id}`, {}, {
+          headers: {
+            Authorization: await user.getIdToken(),
+          },
+        });
+        if (response.status === 200) {
+          console.log("Streaks checked");
+        }
+      } catch (error) {
+        if (isAxiosError(error)) {
+          console.log(error.response?.data);
+        } else {
+          console.log(error);
+        }
+      }
       try {
         const response = await api.get(
           `/habits/get/${user.uid}/${userCharacter.id}`,
@@ -55,7 +85,6 @@ const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         );
         if (response.status === 200) {
           setHabits(response.data);
-          console.log(response.data);
         }
       } catch (error) {
         if (isAxiosError(error)) {
@@ -67,7 +96,8 @@ const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     };
 
     fetchHabits();
-  }, [user, userCharacter]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   return (
     <HabitContext.Provider
@@ -78,6 +108,10 @@ const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         setHabitCreationOpen,
         sortBy,
         setSortBy,
+        currentEditHabit,
+        setCurrentEditHabit,
+        editHabitOpen,
+        setEditHabitOpen,
       }}
     >
       {children}

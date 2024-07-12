@@ -3,10 +3,14 @@ import React from "react";
 import { isAxiosError } from "axios";
 import api from "@/api/axios";
 import { useGlobalContext } from "@/context/GlobalProvider";
+import { useTaskContext } from "@/context/TaskProvider";
+import { useHomeContext } from "@/context/HomeProvider";
 
 import { Task } from "@/types/db_types";
 
 import { Swipeable } from "react-native-gesture-handler";
+
+import Feather from "@expo/vector-icons/Feather";
 
 interface IndividualTasksProps {
   task: Task;
@@ -17,7 +21,9 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({
   task,
   setTasks,
 }) => {
-  const { user } = useGlobalContext();
+  const { user, userCharacter, setUserCharacter } = useGlobalContext();
+  const { setEditTaskOpen, setCurrentEditTask } = useTaskContext();
+  const { showReward } = useHomeContext();
 
   const handleDeleteTask = async () => {
     try {
@@ -27,7 +33,7 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({
           headers: {
             Authorization: await user.getIdToken(),
           },
-        }
+        },
       );
       if (response.status === 200) {
         console.log("Task deleted successfully");
@@ -42,9 +48,69 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({
     }
   };
 
+  const handleCompleteTask = async () => {
+    try {
+      const response = await api.put(
+        `/tasks/complete/${user.uid}/${userCharacter.id}/${task.id}`,
+        {},
+        {
+          headers: {
+            Authorization: await user.getIdToken(),
+          },
+        },
+      );
+      if (response.status === 200) {
+        console.log("Task completed successfully");
+        setTasks((prev) => prev.filter((t) => t.id !== task.id));
+        try {
+          const response = await api.get(
+            `/character/get/${user.uid}`,
+            {
+              headers: {
+                Authorization: await user.getIdToken(),
+              },
+            }
+          );
+          if (response.status === 200) {
+            setUserCharacter(response.data);
+            showReward({
+              experienceReward: task.experienceReward,
+              goldReward: task.goldReward,
+              strengthReward: task.StrengthReward,
+              defenseReward: task.DefenseReward,
+              agilityReward: task.AgilityReward,
+              vitalityReward: task.VitalityReward,
+              enduranceReward: task.EnduranceReward,
+              willReward: task.WillReward,
+            });
+          }
+        } catch (error) {
+          if (isAxiosError(error)) {
+            // AxiosError type will have a response property
+            console.log(error.response?.data);
+          } else {
+            // Handle other error types if needed
+            console.log(error);
+          }
+        }
+      }
+    } catch (error) {
+      if (isAxiosError(error)) {
+        console.log(error.response?.data);
+      } else {
+        console.log(error);
+      }
+    }
+  };
+
+  const onPressTask = () => {
+    setCurrentEditTask(task);
+    setEditTaskOpen(true);
+  };
+
   const rightSwipe = (
     progress: ReturnType<Animated.Value["interpolate"]>,
-    dragX: ReturnType<Animated.Value["interpolate"]>
+    dragX: ReturnType<Animated.Value["interpolate"]>,
   ) => {
     const scale = dragX.interpolate({
       inputRange: [-100, 0],
@@ -53,9 +119,9 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({
     });
     return (
       <TouchableOpacity activeOpacity={0.6} onPress={() => handleDeleteTask()}>
-        <View className="bg-[#fc4949] flex items-center justify-center h-full w-[70px] ">
+        <View className="flex h-full w-[70px] items-center justify-center bg-[#fc4949] ">
           <Animated.Text
-            className="text-white font-bold text-lg"
+            className="text-lg font-bold text-white"
             style={{ transform: [{ scale: scale }] }}
           >
             Delete
@@ -68,15 +134,27 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({
   return (
     <Swipeable renderRightActions={rightSwipe} overshootRight={false}>
       {task.description ? (
-        <View>
-          <View className="bg-red-100 p-4 py-3 rounded-lg overflow-hidden flex flex-row justify-between items-end">
+        <View className="flex flex-row">
+          <View className="flex w-[10%] items-center justify-center rounded-l-lg bg-blue-300">
+            <TouchableOpacity
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-red-300"
+              onPress={handleCompleteTask}
+            >
+              <Feather name="check" size={18} color="black" />
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity
+            className="flex w-[90%] flex-row items-end justify-between overflow-hidden rounded-r-lg bg-red-100 p-4 py-3"
+            activeOpacity={1}
+            onPress={() => onPressTask()}
+          >
             <View>
               <Text>{task.title}</Text>
-              <Text className="text-sm mt-1 text-neutral-500">
+              <Text className="mt-1 text-sm text-neutral-500">
                 {task.description}
               </Text>
             </View>
-            <View className="flex flex-row gap-4 items-center">
+            <View className="flex flex-row items-center gap-4">
               <Text>{task.difficultyRank}</Text>
               {task.dueDate ? (
                 <Text>
@@ -85,24 +163,36 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({
                 </Text>
               ) : null}
             </View>
-          </View>
+          </TouchableOpacity>
         </View>
       ) : (
-        <View>
-          <View className="bg-red-100 p-4 py-5 rounded-lg overflow-hidden flex flex-row justify-between items-end">
+        <View className="flex flex-row">
+          <View className="flex w-[10%] items-center justify-center rounded-l-lg bg-blue-300">
+            <TouchableOpacity
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-red-300"
+              onPress={handleCompleteTask}
+            >
+              <Feather name="check" size={18} color="black" />
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity
+            className="flex w-[90%] flex-row items-end justify-between overflow-hidden rounded-r-lg bg-red-100 p-4 py-5"
+            activeOpacity={1}
+            onPress={() => onPressTask()}
+          >
             <View>
               <Text>{task.title}</Text>
             </View>
-            <View className="flex flex-row gap-4 items-center">
+            <View className="flex flex-row items-center gap-4">
               <Text>{task.difficultyRank}</Text>
-                {task.dueDate ? (
-                  <Text>
-                    {new Date(task.dueDate).getMonth() + 1} /{" "}
-                    {new Date(task.dueDate).getDate()}
-                  </Text>
-                ) : null}
+              {task.dueDate ? (
+                <Text>
+                  {new Date(task.dueDate).getMonth() + 1} /{" "}
+                  {new Date(task.dueDate).getDate()}
+                </Text>
+              ) : null}
             </View>
-          </View>
+          </TouchableOpacity>
         </View>
       )}
     </Swipeable>

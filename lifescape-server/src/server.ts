@@ -12,7 +12,6 @@ import { tasksRouter } from "./routes/tasks";
 import { habitsRouter } from "./routes/habits";
 import { routineRouter } from "./routes/routine";
 
-
 admin.initializeApp({
   credential: admin.credential.cert(<admin.ServiceAccount>credentials),
 });

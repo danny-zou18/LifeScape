@@ -9,8 +9,8 @@ import {
   TextInput,
   ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
-import { FieldValues, useForm } from "react-hook-form";
+import React, { useState, useEffect } from "react";
+import { FieldValues, useForm, Controller } from "react-hook-form";
 import { isAxiosError } from "axios";
 import api from "@/api/axios";
 import { DifficultyRank } from "@/types/db_types";
@@ -33,12 +33,20 @@ const roundToNextHour = (date: Date): Date => {
   return roundedDate;
 };
 
-const TaskCreationModal: React.FC = () => {
-  const { tasks, setTasks, taskCreationOpen, setTaskCreationOpen, setSortBy } =
-    useTaskContext();
+const TaskEditModal: React.FC = () => {
+  const {
+    tasks,
+    setTasks,
+    editTaskOpen,
+    setEditTaskOpen,
+    currentEditTask,
+    setCurrentEditTask,
+    setSortBy,
+  } = useTaskContext();
 
   const [loading, setLoading] = useState<boolean>(false);
-  const { user, userCharacter } = useGlobalContext();
+  const { user } = useGlobalContext();
+  const [taskId, setTaskId] = useState<number | null>(null);
 
   const [date, setDate] = useState(roundToNextHour(new Date()));
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
@@ -57,6 +65,7 @@ const TaskCreationModal: React.FC = () => {
   const {
     setValue,
     handleSubmit,
+    control,
     reset,
     formState: { errors },
   } = useForm<FieldValues>({
@@ -79,8 +88,8 @@ const TaskCreationModal: React.FC = () => {
     }
 
     try {
-      const response = await api.post(
-        `/tasks/create/${user.uid}/${userCharacter.id}`,
+      const response = await api.put(
+        `/tasks/update/${user.uid}/${taskId?.toString()}`,
         { title, description, dueDate, difficultyRank },
         {
           headers: {
@@ -88,14 +97,18 @@ const TaskCreationModal: React.FC = () => {
           },
         }
       );
-      if (response.status === 201) {
-        console.log("Task created successfully");
-        setTasks([...tasks, response.data]);
-        setTaskCreationOpen(false);
-        setShowDatePicker(false);
-        setDifficultyRank(DifficultyRank.E);
+      if (response.status === 200) {
+        console.log("Task updated successfully");
+        const updatedTasks = tasks.map((task) => {
+          if (task.id === taskId) {
+            return response.data;
+          }
+          return task;
+        });
+        setTasks(updatedTasks);
+        setEditTaskOpen(false);
+        setCurrentEditTask(null);
         setSortBy("");
-        reset();
       }
     } catch (error) {
       if (isAxiosError(error)) {
@@ -111,16 +124,35 @@ const TaskCreationModal: React.FC = () => {
   };
 
   const onCancel = () => {
-    setTaskCreationOpen(false);
-    setShowDatePicker(false);
-    setDifficultyRank(DifficultyRank.E);
-    reset();
+    setEditTaskOpen(false);
+    setCurrentEditTask(null);
   };
+
+  useEffect(() => {
+    if (currentEditTask) {
+      setTaskId(currentEditTask.id);
+      if (currentEditTask.dueDate) {
+        setDate(new Date(currentEditTask.dueDate));
+        setShowDatePicker(true);
+        setValue("dueDate", new Date(currentEditTask.dueDate));
+      }
+      setDifficultyRank(currentEditTask.difficultyRank);
+      setValue("title", currentEditTask.title);
+      setValue("description", currentEditTask.description);
+    } else {
+      setEditTaskOpen(false);
+      setShowDatePicker(false);
+      setDifficultyRank(DifficultyRank.E);
+      setTaskId(null);
+      reset();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentEditTask]);
 
   return (
     <Modal
       animationType="slide"
-      visible={taskCreationOpen}
+      visible={editTaskOpen}
       onRequestClose={onCancel}
     >
       <SafeAreaView>
@@ -131,23 +163,38 @@ const TaskCreationModal: React.FC = () => {
           <View className="flex items-center justify-center mt-5">
             <View className="w-[85%]">
               <Text className="ml-2 text-md text-neutral-700 pb-1">Title</Text>
-              <TextInput
-                id="title"
-                autoCapitalize="none"
-                onChangeText={(text) => setValue("title", text)}
-                autoComplete="name"
-                className="w-full h-[50px] bg-black rounded-lg text-white px-3"
+              <Controller
+                control={control}
+                name="title"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    id="title"
+                    autoCapitalize="none"
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    autoComplete="name"
+                    className="w-full h-[50px] bg-black rounded-lg text-white px-3"
+                  />
+                )}
               />
             </View>
             <View className="mt-5 w-[85%]">
               <Text className="ml-2 text-md text-neutral-700 pb-1">Notes</Text>
-              <TextInput
-                id="description"
-                autoCapitalize="none"
-                onChangeText={(text) => setValue("description", text)}
-                autoComplete="name"
-                className="w-full h-[50px] bg-black rounded-lg text-white px-3"
-                numberOfLines={2}
+              <Controller
+                control={control}
+                name="description"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    id="description"
+                    autoCapitalize="none"
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    autoComplete="name"
+                    className="w-full h-[50px] bg-black rounded-lg text-white px-3"
+                  />
+                )}
               />
             </View>
             <View className="mt-5 flex w-[85%]">
@@ -218,4 +265,4 @@ const TaskCreationModal: React.FC = () => {
   );
 };
 
-export default TaskCreationModal;
+export default TaskEditModal;

@@ -10,15 +10,15 @@ import {
   Dimensions,
   ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
-import { FieldValues, useForm } from "react-hook-form";
+import React, { useEffect, useState } from "react";
+import { FieldValues, useForm, Controller } from "react-hook-form";
 import { isAxiosError } from "axios";
 import api from "@/api/axios";
 
 import { useRoutineContext, CustomEventType } from "@/context/RoutineProvider";
 import { useGlobalContext } from "@/context/GlobalProvider";
 
-import { DifficultyRank } from "@/types/db_types";
+import { DifficultyRank, Routine } from "@/types/db_types";
 
 import DifficultySelection from "../general/DifficultySelection";
 import DateTimePicker, {
@@ -31,18 +31,21 @@ const timeToMinutes = (time: Date): number => {
   return time.getHours() * 60 + time.getMinutes();
 };
 
-const RoutineCreationModal = () => {
+const RoutineEditModal = () => {
   const {
     todaysRoutine,
     setTodaysRoutine,
     weeklyRoutine,
     setWeeklyRoutine,
-    routineCreationOpen,
-    setRoutineCreationOpen,
+    editRoutineOpen,
+    setEditRoutineOpen,
+    currentEditRoutine,
+    setCurrentEditRoutine,
   } = useRoutineContext();
 
   const [loading, setLoading] = useState<boolean>(false);
   const { user, userCharacter } = useGlobalContext();
+  const [routineId, setRoutineId] = useState<number | null>(null);
 
   const [daysOfWeek, setDaysOfWeek] = useState<number[]>([]);
 
@@ -62,6 +65,7 @@ const RoutineCreationModal = () => {
     setValue,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
@@ -80,10 +84,11 @@ const RoutineCreationModal = () => {
       setShowTimeError(true);
       return;
     }
-
     try {
-      const response = await api.post(
-        `/routine/create/${user.uid}/${userCharacter.id}`,
+      const response = await api.put(
+        `/routine/update/${user.uid}/${
+          userCharacter.id
+        }/${routineId?.toString()}`,
         {
           title,
           description,
@@ -98,7 +103,7 @@ const RoutineCreationModal = () => {
           },
         }
       );
-      if (response.status === 201) {
+      if (response.status === 200) {
         const routine = response.data;
         const start = new Date();
         start.setHours(Math.floor(routine.startTimeOfDayInMinutes / 60));
@@ -116,53 +121,76 @@ const RoutineCreationModal = () => {
           end,
           title: routine.title,
         };
-
-        if (daysOfWeek.includes(new Date().getDay() + 1)) {
-          setTodaysRoutine([...todaysRoutine, updatedRoutine]);
-        }
-
-        const updatedRoutineWeekly: CustomEventType[] = [];
-
-        routine.daysOfWeek.forEach((dayOfWeek: number) => {
-          const start = new Date();
-          const end = new Date();
-
-          // Get the current day of the week (0-6, where 0 is Sunday)
-          const currentDayOfWeek = start.getDay() + 1;
-
-          // Calculate the number of days to add or subtract from the current date
-          let daysToAdd = currentDayOfWeek - dayOfWeek;
-
-          // Add or subtract the days from the current date to get the appropriate date
-          start.setDate(start.getDate() - daysToAdd);
-          end.setDate(start.getDate());
-
-          start.setHours(Math.floor(routine.startTimeOfDayInMinutes / 60));
-          start.setMinutes(routine.startTimeOfDayInMinutes % 60);
-          start.setSeconds(0);
-          start.setMilliseconds(0);
-
-          end.setHours(Math.floor(routine.endTimeOfDayInMinutes / 60));
-          end.setMinutes(routine.endTimeOfDayInMinutes % 60);
-          end.setSeconds(0);
-          end.setMilliseconds(0);
-
-          updatedRoutineWeekly.push({
-            routine,
-            start,
-            end,
-            title: routine.title,
-          });
+        const updatedRoutines = todaysRoutine.map((r) => {
+          if (r.routine.id === routine.id) {
+            return updatedRoutine;
+          }
+          return r;
         });
+        setTodaysRoutine(updatedRoutines);
 
-        setWeeklyRoutine([...weeklyRoutine, ...updatedRoutineWeekly]);
+        const fetchRoutinesWeek = async () => {
+          try {
+            const response = await api.get(
+              `/routine/getAll/${user.uid}/${userCharacter.id}`,
+              {
+                headers: {
+                  Authorization: await user.getIdToken(),
+                },
+              }
+            );
+            if (response.status === 200) {
+              const routines = response.data;
+              const updatedRoutine: CustomEventType[] = [];
 
-        setRoutineCreationOpen(false);
-        reset();
-        setDaysOfWeek([]);
-        setStartTimeOfDay(new Date(0, 0, 0, 0, 0, 0, 0));
-        setEndTimeOfDay(new Date(0, 0, 0, 0, 0, 0, 0));
-        setDifficulty(DifficultyRank.E);
+              routines.forEach((routine: Routine) => {
+                routine.daysOfWeek.forEach((dayOfWeek: number) => {
+                  const start = new Date();
+                  const end = new Date();
+
+                  // Get the current day of the week (0-6, where 0 is Sunday)
+                  const currentDayOfWeek = start.getDay() + 1;
+
+                  // Calculate the number of days to add or subtract from the current date
+                  let daysToAdd = currentDayOfWeek - dayOfWeek;
+
+                  // Add or subtract the days from the current date to get the appropriate date
+                  start.setDate(start.getDate() - daysToAdd);
+                  end.setDate(start.getDate());
+
+                  start.setHours(
+                    Math.floor(routine.startTimeOfDayInMinutes / 60)
+                  );
+                  start.setMinutes(routine.startTimeOfDayInMinutes % 60);
+                  start.setSeconds(0);
+                  start.setMilliseconds(0);
+
+                  end.setHours(Math.floor(routine.endTimeOfDayInMinutes / 60));
+                  end.setMinutes(routine.endTimeOfDayInMinutes % 60);
+                  end.setSeconds(0);
+                  end.setMilliseconds(0);
+
+                  updatedRoutine.push({
+                    routine,
+                    start,
+                    end,
+                    title: routine.title,
+                  });
+                });
+              });
+              setWeeklyRoutine(updatedRoutine);
+            }
+          } catch (error) {
+            if (isAxiosError(error)) {
+              console.log(error.response?.data);
+            } else {
+              console.log(error);
+            }
+          }
+        };
+        fetchRoutinesWeek();
+        setEditRoutineOpen(false);
+        setCurrentEditRoutine(null);
       }
     } catch (error) {
       if (isAxiosError(error)) {
@@ -176,13 +204,50 @@ const RoutineCreationModal = () => {
   };
 
   const onCancel = () => {
-    setRoutineCreationOpen(false);
-    reset();
-    setDaysOfWeek([]);
-    setStartTimeOfDay(new Date(0, 0, 0, 0, 0, 0, 0));
-    setEndTimeOfDay(new Date(0, 0, 0, 0, 0, 0, 0));
-    setDifficulty(DifficultyRank.E);
+    setEditRoutineOpen(false);
+    setCurrentEditRoutine(null);
   };
+
+  useEffect(() => {
+    if (currentEditRoutine) {
+      setRoutineId(currentEditRoutine.id);
+      setValue("title", currentEditRoutine.title);
+      setValue("description", currentEditRoutine.description);
+      setDaysOfWeek(currentEditRoutine.daysOfWeek);
+      setStartTimeOfDay(
+        new Date(
+          0,
+          0,
+          0,
+          Math.floor(currentEditRoutine.startTimeOfDayInMinutes / 60),
+          currentEditRoutine.startTimeOfDayInMinutes % 60,
+          0,
+          0
+        )
+      );
+      setEndTimeOfDay(
+        new Date(
+          0,
+          0,
+          0,
+          Math.floor(currentEditRoutine.endTimeOfDayInMinutes / 60),
+          currentEditRoutine.endTimeOfDayInMinutes % 60,
+          0,
+          0
+        )
+      );
+      setDifficulty(currentEditRoutine.difficultyRank);
+    } else {
+      reset();
+      setDaysOfWeek([]);
+      setStartTimeOfDay(new Date(0, 0, 0, 0, 0, 0, 0));
+      setEndTimeOfDay(new Date(0, 0, 0, 0, 0, 0, 0));
+      setDifficulty(DifficultyRank.E);
+      setRoutineId(null);
+      setEditRoutineOpen(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentEditRoutine]);
 
   const onStartTimeChange = (
     event: DateTimePickerEvent,
@@ -204,7 +269,7 @@ const RoutineCreationModal = () => {
   return (
     <Modal
       animationType="slide"
-      visible={routineCreationOpen}
+      visible={editRoutineOpen}
       onRequestClose={onCancel}
     >
       <SafeAreaView>
@@ -215,23 +280,38 @@ const RoutineCreationModal = () => {
           <View className="flex items-center justify-center mt-5">
             <View className="w-[85%]">
               <Text className="ml-2 text-md text-neutral-700 pb-1">Title</Text>
-              <TextInput
-                id="title"
-                autoCapitalize="none"
-                onChangeText={(text) => setValue("title", text)}
-                autoComplete="name"
-                className="w-full h-[50px] bg-black rounded-lg text-white px-3"
+              <Controller
+                control={control}
+                name="title"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    id="title"
+                    autoCapitalize="none"
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    autoComplete="name"
+                    className="w-full h-[50px] bg-black rounded-lg text-white px-3"
+                  />
+                )}
               />
             </View>
             <View className="mt-5 w-[85%]">
               <Text className="ml-2 text-md text-neutral-700 pb-1">Notes</Text>
-              <TextInput
-                id="description"
-                autoCapitalize="none"
-                onChangeText={(text) => setValue("description", text)}
-                autoComplete="name"
-                className="h-[50px] bg-black rounded-lg text-white px-3"
-                numberOfLines={2}
+              <Controller
+                control={control}
+                name="description"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    id="decription"
+                    autoCapitalize="none"
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    autoComplete="name"
+                    className="w-full h-[50px] bg-black rounded-lg text-white px-3"
+                  />
+                )}
               />
             </View>
             <View className="mt-5 w-[85%]">
@@ -394,7 +474,7 @@ const RoutineCreationModal = () => {
                   onPress={handleSubmit(submitHandler)}
                 >
                   <Text className="text-white text-xl font-semibold mx-auto my-auto">
-                    Add to Routine
+                    Update Routine
                   </Text>
                 </TouchableHighlight>
               </>
@@ -406,4 +486,4 @@ const RoutineCreationModal = () => {
   );
 };
 
-export default RoutineCreationModal;
+export default RoutineEditModal;

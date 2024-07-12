@@ -1,14 +1,20 @@
 import { View } from 'react-native'
 import React from 'react'
 
-import CreateRoutineBtn from '../routine/CreateRoutineBtn'
+import TopBar from '../routine/TopBar'
 import RoutineCreationModal from '../routine/RoutineCreationModal'
+import DisplayTodaysRoutine from '../routine/DisplayTodaysRoutine'
+import RoutineEditModal from '../routine/RoutineEditModal'
+import WeeklyRoutineModal from '../routine/WeeklyRoutineModal'
 
 const RoutineWrapper = () => {
   return (
     <View >
       <RoutineCreationModal />
-      <CreateRoutineBtn />
+      <RoutineEditModal />
+      <WeeklyRoutineModal />
+      <TopBar />
+      <DisplayTodaysRoutine />
     </View>
   )
 }

@@ -25,7 +25,6 @@ interface Character {
 
   Strength: number;
   Defense: number;
-  Dexterity: number;
   Agility: number;
   Vitality: number;
   Endurance: number;
@@ -54,7 +53,6 @@ interface Task {
   goldReward?: number | null;
   StrengthReward?: number | null;
   DefenseReward?: number | null;
-  DexterityReward?: number | null;
   AgilityReward?: number | null;
   VitalityReward?: number | null;
   EnduranceReward?: number | null;
@@ -71,6 +69,9 @@ interface Habit {
   description?: string | null;
 
   createdAt: Date;
+  lastCompleted?: Date | null;
+  completeBy?: Date | null;
+  totalCompletion: number;
   streak: number;
 
   repeat: Repeat;
@@ -86,7 +87,6 @@ interface Habit {
   goldReward?: number | null;
   StrengthReward?: number | null;
   DefenseReward?: number | null;
-  DexterityReward?: number | null;
   AgilityReward?: number | null;
   VitalityReward?: number | null;
   EnduranceReward?: number | null;
@@ -103,6 +103,7 @@ interface Routine {
   description?: string | null;
 
   createdAt: Date;
+  lastCompleted?: Date | null;
 
   daysOfWeek: number[];
   startTimeOfDayInMinutes: number;
@@ -114,7 +115,6 @@ interface Routine {
   goldReward?: number | null;
   StrengthReward?: number | null;
   DefenseReward?: number | null;
-  DexterityReward?: number | null;
   AgilityReward?: number | null; 
   VitalityReward?: number | null;
   EnduranceReward?: number | null;
