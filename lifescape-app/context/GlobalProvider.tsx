@@ -5,7 +5,7 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-import {isAxiosError} from "axios";
+import { isAxiosError } from "axios";
 import api from "@/api/axios";
 
 import { useRouter } from "expo-router";
@@ -62,16 +62,31 @@ const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         setLoggedIn(true);
         setUser(user);
         try {
-          const response = await api.get(
-            `/character/get/${user.uid}`,
-            {
-              headers: {
-                Authorization: await user.getIdToken(),
-              },
-            }
-          );
+          const response = await api.get(`/character/get/${user.uid}`, {
+            headers: {
+              Authorization: await user.getIdToken(),
+            },
+          });
           if (response.status === 200) {
             setUserCharacter(response.data);
+          }
+        } catch (error) {
+          if (isAxiosError(error)) {
+            // AxiosError type will have a response property
+            console.log(error.response?.data);
+          } else {
+            // Handle other error types if needed
+            console.log(error);
+          }
+        }
+        try {
+          const response = await api.get(`/auth/${user.uid}`, {
+            headers: {
+              Authorization: await user.getIdToken(),
+            },
+          });
+          if (response.status === 200) {
+            setPsqlUser(response.data.user);
           }
         } catch (error) {
           if (isAxiosError(error)) {
@@ -98,7 +113,7 @@ const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       console.log("Cleaning up onAuthStateChanged listener");
       unsubscribe();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

@@ -5,28 +5,28 @@ import "nativewind";
 import { useGlobalContext } from "@/context/GlobalProvider";
 
 const Account = () => {
-  const { user } = useGlobalContext();
+  const { psqlUser } = useGlobalContext();
   return (
     <View className="flex-1 bg-gray-100 p-5">
       <View className="w-full bg-white p-6 rounded-lg shadow-md">
         <View className="my-3">
           <Text className="text-lg font-semibold">Username:</Text>
-          <Text className="text-base">{user.username}</Text>
+          <Text className="text-base">{psqlUser?.username}</Text>
         </View>
 
         <View className="my-3">
           <Text className="text-lg font-semibold">Email:</Text>
-          <Text className="text-base">{user.email}</Text>
+          <Text className="text-base">{psqlUser?.email}</Text>
         </View>
 
         <View className="my-3">
           <Text className="text-lg font-semibold">Email Verification:</Text>
           <Text
             className={`text-base ${
-              user.emailVerified ? "text-green-600" : "text-red-600"
+                psqlUser?.emailVerified ? "text-green-600" : "text-red-600"
             }`}
           >
-            {user.emailVerified ? "Verified" : "Not Verified"}
+            {psqlUser?.emailVerified ? "Verified" : "Not Verified"}
           </Text>
         </View>
       </View>

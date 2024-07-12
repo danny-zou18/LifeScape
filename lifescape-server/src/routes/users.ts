@@ -2,6 +2,7 @@ import express from "express";
 import { db } from "../utils/db.server";
 
 import { getAuth } from "firebase-admin/auth";
+import { auth } from "firebase-admin";
 
 const router = express.Router();
 
@@ -104,6 +105,8 @@ router.post("/register", async (req, res) => {
  *  @apiDescription Get a user by ID
  *
  *  @apiParam {String} id User ID
+ * 
+ * @apiHeader {String} Authorization Firebase ID Token
  *
  *  @apiSuccess {String} message Success message
  *  @apiSuccess {Boolean} success Success status
@@ -129,7 +132,16 @@ router.post("/register", async (req, res) => {
  *      }
  */
 router.get("/:id", async (req, res) => {
+  const authToken = req.headers.authorization;
   const { id } = req.params;
+  try {
+    const authUser = await auth().verifyIdToken(authToken as string);
+    if (authUser.uid !== id) {
+      res.status(403).json({ error: "Unauthorized" });
+    }
+  } catch (e) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
   const user = await db.users
     .findUnique({
       where: {
