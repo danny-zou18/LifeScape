@@ -47,6 +47,11 @@ const IndividualRoutinesDaily: EventRenderer<CustomEventType> = (
     }
   };
 
+  const handleCompleteRoutine = async () => {
+    
+  }
+
+
   const confirmDeletionAlert = () => {
     Alert.alert("Delete this routine?", "This action cannot be undone.", [
       { text: "Delete", onPress: () => handleDeleteRoutine() },

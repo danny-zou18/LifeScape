@@ -476,6 +476,121 @@ async function isTimeslotAvailable(
   return overlappingRoutines.length === 0;
 }
 
+/** @api {put} /routine/complete/:userId/:characterId/:routineId Complete Routine
+ *  @apiName CompleteRoutine
+ *  @apiGroup Routine
+ *
+ *  @apiDescription Complete a Routine
+ *
+ *  @apiParam {String} userId User ID
+ *  @apiParam {String} characterId Character ID
+ *  @apiParam {String} routineId Routine ID
+ *
+ *  @apiHeader {String} Authorization Firebase ID Token
+ *
+ *  @apiSuccess {Object} message Success message
+ *  @apiSuccessExample {json} Success-Response:
+ *      HTTP/1.1 200 OK
+ *      {
+ *        "message": "Routine completed successfully"
+ *      }
+ *  @apiError Unauthorized User is not authorized
+ *  @apiErrorExample {json} Unauthorized:
+ *      HTTP/1.1 403 Unauthorized
+ *      {
+ *        "error": "Unauthorized"
+ *      }
+ *  @apiError RoutineNotFound Routine not found
+ *  @apiErrorExample {json} RoutineNotFound:
+ *      HTTP/1.1 404 Not Found
+ *      {
+ *        "error": "Routine not found"
+ *      }
+ *  @apiError Unauthorized User is not authorized
+ *  @apiErrorExample {json} Unauthorized:
+ *      HTTP/1.1 401 Unauthorized
+ *      {
+ *         "error": "Unauthorized"
+ *      }
+ *  @apiError RoutineCompletionFailed Routine completion failed
+ *  @apiErrorExample {json} RoutineCompletionUpdateFailed:
+ *      HTTP/1.1 400 Bad Request
+ *      {
+ *        "error": "Routine Completion Update Failed"
+ *      }
+ * @apiError RoutineCompletionFailed Routine completion failed
+ * @apiErrorExample {json} RoutineCompletionFailed:
+ *      HTTP/1.1 400 Bad Request
+ *      {
+ *        "error": "Routine Completion Failed"
+ *      }
+ */
+router.put("/complete/:userId/:characterId/:routineId", async (req, res) => {
+  const authToken = req.headers.authorization;
+  const { userId, characterId, routineId } = req.params;
+
+  try {
+    const authUser = await auth().verifyIdToken(authToken as string);
+    if (authUser.uid !== userId) {
+      res.status(403).json({ error: "Unauthorized" });
+    }
+  } catch (e) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  const routine = await db.routine.findUnique({
+    where: {
+      id: parseInt(routineId),
+    },
+  });
+
+  if (!routine) {
+    return res.status(404).json({ error: "Routine not found" });
+  }
+
+  await db.character
+    .update({
+      where: {
+        id: parseInt(characterId),
+      },
+      data: {
+        experience: {
+          increment: routine.experienceReward ? routine.experienceReward : 0,
+        },
+        gold: {
+          increment: routine.goldReward ? routine.goldReward : 0,
+        },
+        strengthXp: {
+          increment: routine.StrengthReward ? routine.StrengthReward : 0,
+        },
+        defenseXp: {
+          increment: routine.DefenseReward ? routine.DefenseReward : 0,
+        },
+        agilityXp: {
+          increment: routine.AgilityReward ? routine.AgilityReward : 0,
+        },
+        vitalityXp: {
+          increment: routine.VitalityReward ? routine.VitalityReward : 0,
+        },
+        enduranceXp: {
+          increment: routine.EnduranceReward ? routine.EnduranceReward : 0,
+        },
+        willXp: {
+          increment: routine.WillReward ? routine.WillReward : 0,
+        },
+      },
+    })
+    .then(() => {
+      return res
+        .status(200)
+        .json({ message: "Routine completed successfully" });
+    })
+    .catch((error) => {
+      console.log(error);
+      return res.status(400).json({ error: "Routine Completion Failed" });
+    });
+});
+
 /** Checks if time slot is available for a routine to be updated
  *
  * @param daysOfWeek     Array of days of the week, represented as integers 1 - 7, where 1 is Sunday, 2 is Monday, etc.
