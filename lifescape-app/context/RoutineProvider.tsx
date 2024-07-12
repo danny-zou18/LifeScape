@@ -76,7 +76,7 @@ const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const fetchRoutinesDay = async () => {
       try {
         const response = await api.get(
-          `/routine/getDay/${user.uid}/${userCharacter.id}`,
+          `/routine/getDay/${user.uid}/${userCharacter?.id}`,
           {
             headers: {
               Authorization: await user.getIdToken(),
@@ -122,7 +122,7 @@ const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const fetchRoutinesWeek = async () => {
       try {
         const response = await api.get(
-          `/routine/getAll/${user.uid}/${userCharacter.id}`,
+          `/routine/getAll/${user.uid}/${userCharacter?.id}`,
           {
             headers: {
               Authorization: await user.getIdToken(),

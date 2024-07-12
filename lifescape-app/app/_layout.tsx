@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import * as SplashScreen from "expo-splash-screen";
 import "../global.css";
 import { useFonts } from "expo-font";
-import GlobalProvider, { useGlobalContext } from "@/context/GlobalProvider";
+import GlobalProvider from "@/context/GlobalProvider";
 
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
@@ -33,13 +33,12 @@ export default function RootLayout() {
 }
 
 const RootLayoutNav = () => {
-  const { loggedIn } = useGlobalContext();
   return (
     <GlobalProvider>
-      <Stack initialRouteName={loggedIn ? '(app)' : 'index'}>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        <Stack.Screen name="(app)" options={{ headerShown: false }} />
+      <Stack >
+        <Stack.Screen name="index" options={{ headerShown: false, animation: "fade" }} />
+        <Stack.Screen name="(auth)" options={{ headerShown: false, animation: "fade" }} />
+        <Stack.Screen name="(app)" options={{ headerShown: false, animation: "fade" }} />
       </Stack>
     </GlobalProvider>
   );
