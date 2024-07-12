@@ -512,6 +512,12 @@ async function isTimeslotAvailable(
  *      {
  *         "error": "Unauthorized"
  *      }
+ * @apiError RoutineUpdateLastCompletedDateFailed Routine update last completed date failed
+ * @apiErrorExample {json} RoutineUpdateLastCompletedDateFailed:
+ *      HTTP/1.1 400 Bad Request
+ *      {
+ *        "error": "Routine Update Last Completed Date Failed"
+ *      }
  *  @apiError RoutineCompletionFailed Routine completion failed
  *  @apiErrorExample {json} RoutineCompletionUpdateFailed:
  *      HTTP/1.1 400 Bad Request
@@ -547,6 +553,22 @@ router.put("/complete/:userId/:characterId/:routineId", async (req, res) => {
   if (!routine) {
     return res.status(404).json({ error: "Routine not found" });
   }
+
+  await db.routine
+    .update({
+      where: {
+        id: parseInt(routineId),
+      },
+      data: {
+        lastCompleted: new Date(),
+      },
+    })
+    .catch((error) => {
+      console.log(error);
+      return res
+        .status(400)
+        .json({ error: "Routine Update Last Completed Date Failed" });
+    });
 
   await db.character
     .update({
