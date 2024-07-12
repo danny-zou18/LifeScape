@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { isAxiosError } from "axios";
 import api from "@/api/axios";
+import * as SplashScreen from "expo-splash-screen";
 
 import { useRouter } from "expo-router";
 
@@ -98,13 +99,16 @@ const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
           }
         }
         router.replace("home");
+        if (user) {
+          SplashScreen.hideAsync();
+        }
       } else {
         console.log("User logged out");
         setLoggedIn(false);
         setUser(null);
         setUserCharacter(null);
         setPsqlUser(null);
-        router.replace("sign-in");
+        SplashScreen.hideAsync();
       }
     });
 
