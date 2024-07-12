@@ -103,6 +103,7 @@ interface Routine {
   description?: string | null;
 
   createdAt: Date;
+  lastCompleted?: Date | null;
 
   daysOfWeek: number[];
   startTimeOfDayInMinutes: number;

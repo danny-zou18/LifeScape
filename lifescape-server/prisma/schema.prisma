@@ -126,6 +126,7 @@ model Routine {
   description String?
 
   createdAt DateTime @default(now())
+  lastCompleted DateTime?
 
   daysOfWeek              Int[]
   startTimeOfDayInMinutes Int

@@ -12,7 +12,7 @@ const IndividualRoutinesDaily: EventRenderer<CustomEventType> = (
   event,
   touchableOpacityProps
 ) => {
-  const { user } = useGlobalContext();
+  const { user, userCharacter, setUserCharacter } = useGlobalContext();
   const { setEditRoutineOpen, setCurrentEditRoutine, setTodaysRoutine } =
     useRoutineContext();
   const { showReward } = useHomeContext();
@@ -48,9 +48,66 @@ const IndividualRoutinesDaily: EventRenderer<CustomEventType> = (
   };
 
   const handleCompleteRoutine = async () => {
-    
-  }
-
+    try {
+      const response = await api.put(
+        `/routine/complete/${user.uid}/${userCharacter.id}/${event.routine.id}`,
+        {},
+        {
+          headers: {
+            Authorization: await user.getIdToken(),
+          },
+        }
+      );
+      if (response.status === 200) {
+        console.log("Routine completed successfully");
+        setTodaysRoutine((prev) =>
+          prev.map((r) => {
+            if (r.routine.id === event.routine.id) {
+              return {
+                ...r,
+                lastCompleted: new Date(),
+              };
+            }
+            return r;
+          })
+        );
+        try {
+          const response = await api.get(`/character/get/${user.uid}`, {
+            headers: {
+              Authorization: await user.getIdToken(),
+            },
+          });
+          if (response.status === 200) {
+            setUserCharacter(response.data);
+            showReward({
+              experienceReward: event.routine.experienceReward,
+              goldReward: event.routine.goldReward,
+              strengthReward: event.routine.StrengthReward,
+              defenseReward: event.routine.DefenseReward,
+              agilityReward: event.routine.AgilityReward,
+              vitalityReward: event.routine.VitalityReward,
+              enduranceReward: event.routine.EnduranceReward,
+              willReward: event.routine.WillReward,
+            });
+          }
+        } catch (error) {
+          if (isAxiosError(error)) {
+            console.log(error.response?.data);
+          } else {
+            console.log(error);
+          }
+        }
+      }
+    } catch (error) {
+      if (isAxiosError(error)) {
+        // AxiosError type will have a response property
+        console.log(error.response?.data);
+      } else {
+        // Handle other error types if needed
+        console.log(error);
+      }
+    }
+  };
 
   const confirmDeletionAlert = () => {
     Alert.alert("Delete this routine?", "This action cannot be undone.", [
@@ -79,7 +136,17 @@ const IndividualRoutinesDaily: EventRenderer<CustomEventType> = (
         ) : null}
       </View>
       <View className="flex flex-row gap-2 absolute top-1 right-1">
-        <Text className="text-xs">{event.start.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })} - {event.end.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</Text>
+        <Text className="text-xs">
+          {event.start.toLocaleTimeString([], {
+            hour: "numeric",
+            minute: "2-digit",
+          })}{" "}
+          -{" "}
+          {event.end.toLocaleTimeString([], {
+            hour: "numeric",
+            minute: "2-digit",
+          })}
+        </Text>
       </View>
       <View className="flex flex-row gap-2 absolute bottom-2 right-2">
         <Text className="text-sm">{event.routine.difficultyRank}</Text>
