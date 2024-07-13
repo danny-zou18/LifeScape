@@ -60,7 +60,7 @@ const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const fetchTasks = async () => {
       try {
         const response = await api.get(
-          `/tasks/get/${user.uid}/${userCharacter.id}`,
+          `/tasks/get/${user.uid}/${userCharacter?.id}`,
           {
             headers: {
               Authorization: await user.getIdToken(),

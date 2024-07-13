@@ -2,20 +2,21 @@ import express from "express";
 import { db } from "../utils/db.server";
 
 import { getAuth } from "firebase-admin/auth";
+import { auth } from "firebase-admin";
 
 const router = express.Router();
 
 /** @api {post} /users/register Register User
  * @apiName RegisterUser
  * @apiGroup User
- * 
+ *
  * @apiDescription Register a user
- * 
+ *
  * @apiBody {String} name Name of the user
  * @apiBody {String} username Username of the user
  * @apiBody {String} email Email of the user
  * @apiBody {String} password Password of the user
- * 
+ *
  * @apiSuccess {String} message Success message
  * @apiSuccess {Boolean} success Success status
  * @apiSuccess {Object} newUser New user object
@@ -43,7 +44,7 @@ const router = express.Router();
  *   HTTP/1.1 400 Bad Request
  *   {
  *     "error": "User Creation Failed"
- *   } 
+ *   }
  */
 router.post("/register", async (req, res) => {
   const { name, username, email, password } = req.body;
@@ -95,6 +96,66 @@ router.post("/register", async (req, res) => {
       console.log(error);
       return res.status(400).json({ error: "User Creation Failed" });
     });
+});
+
+/** @api {get} /users/:id Get User
+ *  @apiName GetUser
+ *  @apiGroup User
+ *
+ *  @apiDescription Get a user by ID
+ *
+ *  @apiParam {String} id User ID
+ * 
+ * @apiHeader {String} Authorization Firebase ID Token
+ *
+ *  @apiSuccess {String} message Success message
+ *  @apiSuccess {Boolean} success Success status
+ *  @apiSuccess {Object} user User object
+ *  @apiSuccessExample {json} Success-Response:
+ *      HTTP/1.1 200 OK
+ *      {
+ *        "message": "User Found",
+ *        "success": true,
+ *        "user": USEROBJECT
+ *      }
+ *  @apiError UserNotFound User not found
+ *  @apiErrorExample {json} UserNotFound:
+ *      HTTP/1.1 404 Not Found
+ *      {
+ *        "error": "User not found"
+ *      }
+ *  @apiError UserFetchFailed User fetch failed
+ *  @apiErrorExample {json} UserFetchFailed:
+ *      HTTP/1.1 400 Bad Request
+ *      {
+ *        "error": "User Fetch Failed"
+ *      }
+ */
+router.get("/:id", async (req, res) => {
+  const authToken = req.headers.authorization;
+  const { id } = req.params;
+  try {
+    const authUser = await auth().verifyIdToken(authToken as string);
+    if (authUser.uid !== id) {
+      res.status(403).json({ error: "Unauthorized" });
+    }
+  } catch (e) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  const user = await db.users
+    .findUnique({
+      where: {
+        id: id,
+      },
+    })
+    .catch((error) => {
+      console.log(error);
+      return res.status(400).json({ error: "User Fetch Failed" });
+    });
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+  return res.status(200).json({ message: "User Found", success: true, user });
 });
 
 export { router as userRouter };
