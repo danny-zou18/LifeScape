@@ -14,7 +14,7 @@ import { useRouter, Link } from "expo-router";
 
 import { useGlobalContext } from "@/context/GlobalProvider";
 
-import AntDesign from '@expo/vector-icons/AntDesign';
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 const Overview = () => {
   const [isSigningIn, setIsSigningIn] = useState<boolean>(false);
@@ -46,18 +46,16 @@ const Overview = () => {
   return (
     <SafeAreaView className=" mx-auto w-[90%] mt-5 mb-2">
       <View className="w-full rounded-lg overflow-hidden bg-black">
-        <Link
-          href="/overview/account"
-          className="p-4 w-full "
-        >
+        <Link href="/overview/account" className="p-4 w-full ">
           <Text className="text-white">Account</Text>
         </Link>
         <View className="w-full h-[1px] bg-white"></View>
-        <Link
-          href="/overview/history"
-         className="p-4  w-full "
-        >
+        <Link href="/overview/history" className="p-4  w-full ">
           <Text className="text-white">History</Text>
+        </Link>
+        <View className="w-full h-[1px] bg-white"></View>
+        <Link href="/overview/settings" className="p-4  w-full ">
+          <Text className="text-white">Settings</Text>
         </Link>
       </View>
 

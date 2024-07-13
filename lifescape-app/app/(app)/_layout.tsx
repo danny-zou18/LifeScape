@@ -18,7 +18,7 @@ const AppLayout:React.FC = () => {
 
   return (
     <GestureHandlerRootView>
-      <Stack initialRouteName="(tabs)">
+      <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       </Stack>
     </GestureHandlerRootView>

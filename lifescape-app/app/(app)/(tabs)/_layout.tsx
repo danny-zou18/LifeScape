@@ -16,7 +16,6 @@ function TabBarIcon(props: {
     return (
       <Tabs
         tabBar={props => <TabBar {...props} />}
-        initialRouteName="home"
       >
         <Tabs.Screen
           name="home"

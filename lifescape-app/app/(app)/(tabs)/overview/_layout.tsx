@@ -27,6 +27,15 @@ export default function OverviewLayout() {
           headerBackTitle: "Overview",
         }} 
       />
+      <Stack.Screen 
+        name="settings/index" 
+        options={{
+          headerShown: true,
+          title: "Settings",
+          headerBackTitle: "Overview",
+        }}
+      />
+      
     </Stack>
   );
 }
