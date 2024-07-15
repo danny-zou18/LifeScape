@@ -44,11 +44,11 @@ const Settings = () => {
   return (
     <SafeAreaView className=" mx-auto w-[90%] mt-5 mb-2">
       <View className="w-full rounded-lg overflow-hidden bg-black">
-        <Link href="/overview/account" className="p-4 w-full ">
+        <Link href="/overview/settings/account" className="p-4 w-full ">
           <Text className="text-white">Account</Text>
         </Link>
         <View className="w-full h-[1px] bg-white"></View>
-        <Link href="/overview/history" className="p-4  w-full ">
+        <Link href="/overview/settings/history" className="p-4  w-full ">
           <Text className="text-white">History</Text>
         </Link>
         <View className="w-full h-[1px] bg-white"></View>
