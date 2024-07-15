@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stack } from 'expo-router';
+import { Stack, Link } from 'expo-router';
 import Header from '@/components/overview/Header';
 
 export default function OverviewLayout() {
@@ -35,6 +35,15 @@ export default function OverviewLayout() {
           headerShown: true,
           title: "Settings",
           headerBackTitle: "Done",
+          presentation: "modal",
+          headerRight: () => (
+            <Link
+              href={"/overview"}
+            >
+              Done
+            </Link>
+          ),
+
         }}
       />
       
