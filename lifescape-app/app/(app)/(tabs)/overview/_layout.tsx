@@ -1,5 +1,6 @@
 import React from 'react';
 import { Stack } from 'expo-router';
+import Header from '@/components/overview/Header';
 
 export default function OverviewLayout() {
   return (
@@ -8,7 +9,8 @@ export default function OverviewLayout() {
         name="index" 
         options={{ 
           headerShown: true,
-          title: "Overview"
+          title: "Overview",
+          header: Header,
         }} 
       />
       <Stack.Screen 
@@ -32,7 +34,7 @@ export default function OverviewLayout() {
         options={{
           headerShown: true,
           title: "Settings",
-          headerBackTitle: "Overview",
+          headerBackTitle: "Done",
         }}
       />
       

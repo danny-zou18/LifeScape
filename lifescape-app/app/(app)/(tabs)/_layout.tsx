@@ -41,6 +41,7 @@ function TabBarIcon(props: {
           name="market"
           options={{
             title: 'Market',
+            headerShown: false,
           }}
         />
         <Tabs.Screen
