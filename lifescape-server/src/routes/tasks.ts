@@ -353,13 +353,12 @@ router.put("/update/:userId/:taskId", async (req, res) => {
  *      {
  *        "error": "Task Completion Update Failed"
  *      }
- * @apiError TaskCompletionFailed Task completion failed
- * @apiErrorExample {json} TaskCompletionFailed:
+ * @apiError Updating Character Total Tasks Completed Failed
+ * @apiErrorExample {json} Updating Character Total Tasks Completed Failed:
  *      HTTP/1.1 400 Bad Request
  *      {
- *        "error": "Task Completion Failed"
+ *        "error": "Updating Character Total Tasks Completed Failed"
  *      }
- * 
  */
 router.put("/complete/:userId/:characterId/:taskId", async (req, res) => {
   const authToken = req.headers.authorization;
@@ -430,7 +429,24 @@ router.put("/complete/:userId/:characterId/:taskId", async (req, res) => {
         },
       },
     })
-    .then(() => {
+    .then(async () => {
+      await db.character
+        .update({
+          where: {
+            id: parseInt(characterId),
+          },
+          data: {
+            TotalTasksDone: {
+              increment: 1,
+            },
+          },
+        })
+        .catch((error) => {
+          console.log(error);
+          return res.status(400).json({
+            error: "Updating Character Total Tasks Completed Failed",
+          });
+        });
       return res.status(200).json({ message: "Task completed successfully" });
     })
     .catch((error) => {
