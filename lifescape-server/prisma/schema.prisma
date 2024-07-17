@@ -58,6 +58,10 @@ model Character {
   Tasks    Task[]
   Habits   Habit[]
   Routines Routine[]
+
+  TasksDone    Int @default(0)
+  HabitsDone   Int @default(0)
+  RoutinesDone Int @default(0)
 }
 
 model Task {
@@ -125,7 +129,7 @@ model Routine {
   title       String
   description String?
 
-  createdAt DateTime @default(now())
+  createdAt     DateTime  @default(now())
   lastCompleted DateTime?
 
   daysOfWeek              Int[]
