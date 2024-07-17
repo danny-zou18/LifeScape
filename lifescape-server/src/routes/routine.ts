@@ -475,6 +475,12 @@ router.put("/update/:userId/:characterId/:routineId", async (req, res) => {
  *      {
  *        "error": "Routine Completion Failed"
  *      }
+ * @apiError Updating Character Total Routines Completed Failed
+ * @apiErrorExample {json} Updating Character Total Routines Completed Failed:
+ *      HTTP/1.1 400 Bad Request
+ *      {
+ *        "error": "Updating Character Total Routines Completed Failed"
+ *      }
  */
 router.put("/complete/:userId/:characterId/:routineId", async (req, res) => {
   const authToken = req.headers.authorization;
@@ -547,7 +553,24 @@ router.put("/complete/:userId/:characterId/:routineId", async (req, res) => {
         },
       },
     })
-    .then(() => {
+    .then(async () => {
+      await db.character
+        .update({
+          where: {
+            id: parseInt(characterId),
+          },
+          data: {
+            TotalRoutinesDone: {
+              increment: 1,
+            },
+          },
+        })
+        .catch((error) => {
+          console.log(error);
+          return res.status(400).json({
+            error: "Updating Character Total Routines Completed Failed",
+          });
+        });
       return res
         .status(200)
         .json({ message: "Routine completed successfully" });
