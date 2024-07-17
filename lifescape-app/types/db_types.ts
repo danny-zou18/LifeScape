@@ -35,6 +35,10 @@ interface Character {
   Tasks: Task[]; // Assuming Task is another type/interface
   Habits: Habit[]; // Assuming Habit is another type/interface
   Routine: Routine[]; // Assuming Routine is another type/interface
+
+  TotalTasksDone: number;
+  TotalHabitsDone: number;
+  TotalRoutinesDone: number;
 }
 
 interface Task {
