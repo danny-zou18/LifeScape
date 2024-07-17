@@ -59,9 +59,9 @@ model Character {
   Habits   Habit[]
   Routines Routine[]
 
-  TasksDone    Int @default(0)
-  HabitsDone   Int @default(0)
-  RoutinesDone Int @default(0)
+  TotalTasksDone    Int @default(0)
+  TotalHabitsDone   Int @default(0)
+  TotalRoutinesDone Int @default(0)
 }
 
 model Task {
