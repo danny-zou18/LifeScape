@@ -1,9 +1,12 @@
 import React from 'react';
-import { Stack, Link } from 'expo-router';
+import { Stack, Link, usePathname } from 'expo-router';
 
 import Header from '@/components/overview/Header';
 
 export default function OverviewLayout() {
+
+  const pathName = usePathname();
+
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen 
@@ -28,7 +31,13 @@ export default function OverviewLayout() {
               Done
             </Link>
           ),
-
+          headerLeft: pathName !== "/overview/settings" ? (() => (
+            <Link
+              href={"/overview/settings"}
+            >
+              Back
+            </Link>
+          )) : undefined,
         }}
       />
     </Stack>

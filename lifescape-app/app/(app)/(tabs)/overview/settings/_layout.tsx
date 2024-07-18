@@ -7,17 +7,15 @@ export default function SettingsLayout() {
       <Stack.Screen
         name="account/index"
         options={{
-          headerShown: true,
+          headerShown: false,
           title: "Account",
-          headerBackTitle: "Done",
         }}
       />
       <Stack.Screen
         name="history/index"
         options={{
-          headerShown: true,
+          headerShown: false,
           title: "History",
-          headerBackTitle: "Done",
         }}
       />
     </Stack>

@@ -458,6 +458,12 @@ router.put("/update/:userId/:habitId", async (req, res) => {
  *      {
  *        "error": "Habit Completion Failed"
  *      }
+ * @apiError Updating Character Total Habits Completed Failed
+ * @apiErrorExample {json} Updating Character Total Habits Completed Failed:
+ *      HTTP/1.1 400 Bad Request
+ *      {
+ *        "error": "Updating Character Total Habits Completed Failed"
+ *      }
  */
 router.put("/complete/:userId/:characterId/:habitId", async (req, res) => {
   const authToken = req.headers.authorization;
@@ -568,7 +574,24 @@ router.put("/complete/:userId/:characterId/:habitId", async (req, res) => {
         },
       },
     })
-    .then(() => {
+    .then(async () => {
+      await db.character
+        .update({
+          where: {
+            id: parseInt(characterId),
+          },
+          data: {
+            TotalHabitsDone: {
+              increment: 1,
+            },
+          },
+        })
+        .catch((error) => {
+          console.log(error);
+          return res.status(400).json({
+            error: "Updating Character Total Habits Completed Failed",
+          });
+        });
       return res.status(200).json({ message: "Habit completed successfully" });
     })
     .catch((error) => {
