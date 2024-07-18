@@ -8,8 +8,8 @@ const AccountInfo = () => {
   return (
     <View>
       <Text className="font-[600] mb-1 ml-2">ACCOUNT INFO</Text>
-      <View className="w-full bg-white py-0 px-2 rounded-lg shadow-md">
-        <View className="mt-2">
+      <View className="w-full bg-white py-2 px-3 rounded-lg shadow-md">
+        <View className="">
           <Text className="text-lg font-semibold">Username:</Text>
           <Text className="text-base">{psqlUser?.username}</Text>
         </View>
@@ -19,7 +19,7 @@ const AccountInfo = () => {
           <Text className="text-base">{psqlUser?.email}</Text>
         </View>
 
-        <View className="mb-2">
+        <View className="">
           <Text className="text-lg font-semibold">Email Verification:</Text>
           <Text
             className={`text-base ${
