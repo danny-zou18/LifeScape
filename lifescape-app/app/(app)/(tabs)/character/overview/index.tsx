@@ -3,7 +3,7 @@ import React from 'react'
 
 const CharacterOverview = () => {
   return (
-    <View>
+    <View className='mx-auto w-[90%] py-2'>
       <Text>CharacterOverview</Text>
     </View>
   )
