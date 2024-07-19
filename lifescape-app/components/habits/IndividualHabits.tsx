@@ -51,7 +51,7 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({
   const handleCompleteHabit = async () => {
     try {
       const response = await api.put(
-        `/habits/complete/${user.uid}/${userCharacter.id}/${habit.id}`,
+        `/habits/complete/${user.uid}/${userCharacter?.id}/${habit.id}`,
         {},
         {
           headers: {

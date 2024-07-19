@@ -4,7 +4,6 @@ import {
 import React from "react";
 
 const Overview = () => {
-
   return (
     <SafeAreaView className=" mx-auto w-[90%] mt-5 mb-2">
       
