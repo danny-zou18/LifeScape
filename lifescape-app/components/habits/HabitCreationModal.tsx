@@ -68,7 +68,7 @@ const HabitCreationModal = () => {
 
     try {
       const response = await api.post(
-        `/habits/create/${user.uid}/${userCharacter.id}`,
+        `/habits/create/${user.uid}/${userCharacter?.id}`,
         {
           title,
           description,

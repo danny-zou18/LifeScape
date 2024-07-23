@@ -1,41 +1,36 @@
 import { View, Text, Image } from "react-native";
 import React, { useMemo } from "react";
+import { calculatePercentage } from "@/functions";
 
 import { useGlobalContext } from "@/context/GlobalProvider";
 
 const CharacterOverview = () => {
   const { userCharacter } = useGlobalContext();
 
-  const calculatePercentage = (current: number, nextLevel: number): string => {
-    if (nextLevel === 0) return "0%";
-    const percentage = (current / nextLevel) * 100;
-    return `${percentage}%`;
-  };
-
   const expPercentage = useMemo(
     () => {
-      let next_level = 0.8 * Math.pow(userCharacter.level, 2) + 2 * userCharacter.level;
-      return calculatePercentage(userCharacter.experience, next_level)
+      let next_level = 0.8 * Math.pow(userCharacter?.level ?? 0, 2) + 2 * (userCharacter?.level ?? 0);
+      return calculatePercentage(userCharacter?.experience ?? 0, next_level)
     },
-    [userCharacter.experience, userCharacter.level]
+    [userCharacter?.experience, userCharacter?.level]
   );
   const healthPercentage = useMemo(
-    () => calculatePercentage(userCharacter.health, userCharacter.maxHealth),
-    [userCharacter.health, userCharacter.maxHealth]
+    () => calculatePercentage(userCharacter?.health ?? 0, userCharacter?.maxHealth ?? 0),
+    [userCharacter?.health, userCharacter?.maxHealth]
   );
   const manaPercentage = useMemo(
-    () => calculatePercentage(userCharacter.mana, userCharacter.maxMana),
-    [userCharacter.mana, userCharacter.maxMana]
+    () => calculatePercentage(userCharacter?.mana ?? 0, userCharacter?.maxMana ?? 0),
+    [userCharacter?.mana, userCharacter?.maxMana]
   );
   const energyPercentage = useMemo(
-    () => calculatePercentage(userCharacter.energy, userCharacter.maxEnergy),
-    [userCharacter.energy, userCharacter.maxEnergy]
+    () => calculatePercentage(userCharacter?.energy ?? 0, userCharacter?.maxEnergy ?? 0),
+    [userCharacter?.energy, userCharacter?.maxEnergy]
   );
   return (
     <View className=" flex flex-row h-[17vh] p-3">
       <View className="w-[37%] h-[95%] relative mt-auto mb-auto">
         <View className="absolute top-[-.5rem] left-2 z-10 bg-[#00000090] px-2 rounded-full">
-          <Text className="text-xs text-white">{userCharacter.name}</Text>
+          <Text className="text-xs text-white">{userCharacter?.name}</Text>
         </View>
         <Image
           className="w-full h-full z-0 rounded-md"
@@ -45,15 +40,15 @@ const CharacterOverview = () => {
         />
         <View
           className={`absolute bottom-[-.5rem] z-10 bg-transparent flex flex-row ${
-            userCharacter.level >= 100
+            userCharacter?.level ?? 0 >= 100
               ? "left-[-.3rem]"
-              : userCharacter.level >= 10
+              : userCharacter?.level ?? 0 >= 10
               ? "left-[.2rem]"
               : "left-1"
           }`}
         >
           <View className="bg-black px-[0.4rem] rounded-full">
-            <Text className="text-xs text-white">{userCharacter.level}</Text>
+            <Text className="text-xs text-white">{userCharacter?.level}</Text>
           </View>
           <View className="bg-[#00000090] ml-1 mt-[0.15rem] min-w-[76%] max-h-[70%] rounded-full overflow-hidden">
             <View
@@ -82,7 +77,7 @@ const CharacterOverview = () => {
               </View>
               <View className="flex flex-row justify-between">
                 <Text className="text-xs">
-                  {userCharacter.health} / {userCharacter.maxHealth}
+                  {userCharacter?.health} / {userCharacter?.maxHealth}
                 </Text>
                 <Text className="text-[.8rem]">Health</Text>
               </View>
@@ -105,7 +100,7 @@ const CharacterOverview = () => {
               </View>
               <View className="flex flex-row justify-between">
                 <Text className="text-xs">
-                  {userCharacter.mana} / {userCharacter.maxMana}
+                  {userCharacter?.mana} / {userCharacter?.maxMana}
                 </Text>
                 <Text className="text-[.8rem]">Mana</Text>
               </View>
@@ -128,7 +123,7 @@ const CharacterOverview = () => {
               </View>
               <View className="flex flex-row justify-between">
                 <Text className="text-xs">
-                  {userCharacter.energy} / {userCharacter.maxEnergy}
+                  {userCharacter?.energy} / {userCharacter?.maxEnergy}
                 </Text>
                 <Text className="text-[.8rem]">Energy</Text>
               </View>
@@ -144,7 +139,7 @@ const CharacterOverview = () => {
                 style={{ flex: 1, aspectRatio: 1 }}
               />
             </View>
-            <Text>{userCharacter.gold}</Text>
+            <Text>{userCharacter?.gold}</Text>
           </View>
         </View>
       </View>

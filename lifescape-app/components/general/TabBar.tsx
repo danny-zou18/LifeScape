@@ -55,7 +55,7 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
 
   return (
     <View style={styles.tabbar}>
-      <View className="w-[45%] h-full flex flex-row justify-around items-center ">
+      <View className="flex h-full w-[45%] flex-row items-center justify-around ">
         {state.routes.slice(0, 2).map((route: any, index: number) => {
           const { options } = descriptors[route.key];
 
@@ -90,7 +90,9 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
               onLongPress={onLongPress}
               style={{ flex: 1 }}
               key={route.key}
-              className={`flex items-center justify-center max-w-[40%] ${isFocused ? "bg-red-400":""} h-full `}
+              className={`flex max-w-[40%] items-center justify-center ${
+                isFocused ? "bg-red-400" : ""
+              } h-full `}
             >
               {icons[route.name]({ color: isFocused ? "red" : "white" })}
             </TouchableOpacity>
@@ -124,14 +126,14 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
           }}
           style={{ transform: [{ translateX: -32 }] }}
           key={state.routes[2].key}
-          className="absolute flex items-center min-w-[60px] h-[60px] rounded-full justify-center left-1/2 -top-7 "
+          className="absolute -top-7 left-1/2 flex h-[60px] min-w-[60px] items-center justify-center rounded-full "
         >
           {icons[state.routes[2].name]({
             color: state.index === 2 ? "red" : "white",
           })}
         </TouchableOpacity>
       )}
-      <View className="w-[45%] h-full flex flex-row justify-around items-center">
+      <View className="flex h-full w-[45%] flex-row items-center justify-around">
         {state.routes.slice(3, 5).map((route: any, index: number) => {
           const { options } = descriptors[route.key];
 
@@ -166,7 +168,9 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
               onLongPress={onLongPress}
               key={route.key}
               style={{ flex: 1 }}
-              className={`flex items-center justify-center max-w-[40%] ${isFocused ? "bg-red-400":""} h-full `}
+              className={`flex max-w-[40%] items-center justify-center ${
+                isFocused ? "bg-red-400" : ""
+              } h-full `}
             >
               {icons[route.name]({ color: isFocused ? "red" : "white" })}
             </TouchableOpacity>

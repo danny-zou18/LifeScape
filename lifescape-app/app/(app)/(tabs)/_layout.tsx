@@ -29,6 +29,7 @@ function TabBarIcon(props: {
           name="character"
           options={{
             title: 'Character',
+            headerShown: false,
           }}
         />
          <Tabs.Screen
