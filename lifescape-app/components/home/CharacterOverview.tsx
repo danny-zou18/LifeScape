@@ -1,16 +1,11 @@
 import { View, Text, Image } from "react-native";
 import React, { useMemo } from "react";
+import { calculatePercentage } from "@/functions";
 
 import { useGlobalContext } from "@/context/GlobalProvider";
 
 const CharacterOverview = () => {
   const { userCharacter } = useGlobalContext();
-
-  const calculatePercentage = (current: number, nextLevel: number): string => {
-    if (nextLevel === 0) return "0%"; 
-    const percentage = (current / nextLevel) * 100;
-    return `${percentage}%`;
-  };
 
   const expPercentage = useMemo(
     () => {
