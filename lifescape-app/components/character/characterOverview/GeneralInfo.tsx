@@ -1,6 +1,5 @@
 import { View, Text } from "react-native";
-import React, { useMemo } from "react";
-import { calculatePercentage } from "@/functions";
+import React from "react";
 
 import { useGlobalContext } from "@/context/GlobalProvider";
 

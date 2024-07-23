@@ -30,6 +30,13 @@ interface Character {
   Endurance: number;
   Will: number;
 
+  strengthXp: number;
+  defenseXp: number;
+  agilityXp: number;
+  vitalityXp: number;
+  enduranceXp: number;
+  willXp: number;
+
   Owner: User; // Assuming User is another type/interface
   OwnerId: string;
   Tasks: Task[]; // Assuming Task is another type/interface
