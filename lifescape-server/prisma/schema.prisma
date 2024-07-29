@@ -21,9 +21,26 @@ model users {
   name          String
   createdAt     DateTime   @default(now())
   character     Character?
-  friends       Friendship[] @relation("UserFriends")
-  friendships   Friendship[] @relation("UserFriendships")
+  friendships   Friendship[] @relation(name: "user_friendships")
+  friends       Friendship[] @relation(name: "friend_friendships")
 }
+
+model Friendship {
+  id String @id @default(cuid())
+
+  user_id String
+  user    users   @relation(name: "user_friendships", fields: [user_id], references: [id])
+
+  friend_id String
+  friend    users   @relation(name: "friend_friendships", fields: [friend_id], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@unique([user_id, friend_id])
+  @@unique([friend_id, user_id])
+}
+
 
 model Character {
   id   Int    @id @default(autoincrement())
@@ -64,18 +81,6 @@ model Character {
   TotalTasksDone    Int @default(0)
   TotalHabitsDone   Int @default(0)
   TotalRoutinesDone Int @default(0)
-}
-
-model Friendship {
-  id        Int   @id @default(autoincrement())
-  user1Id   String
-  user2Id   String
-  user1     users  @relation("UserFriendships", fields: [user1Id], references: [id])
-  user2     users  @relation("UserFriends", fields: [user2Id], references: [id])
-  createdAt DateTime @default(now())
-
-  @@unique([user1Id, user2Id])
-  @@unique([user2Id, user1Id])
 }
 
 model Task {
