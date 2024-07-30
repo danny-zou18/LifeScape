@@ -21,21 +21,18 @@ model users {
   name          String
   createdAt     DateTime     @default(now())
   character     Character?
-  friendships   Friendship[] @relation(name: "user_friendships")
-  friends       Friendship[] @relation(name: "friend_friendships")
+  friends       Friendship[] @relation("friend_friendships")
+  friendships   Friendship[] @relation("user_friendships")
 }
 
 model Friendship {
-  id String @id @default(cuid())
-
-  user_id String
-  user    users   @relation(name: "user_friendships", fields: [user_id], references: [id])
-
-  friend_id String
-  friend    users   @relation(name: "friend_friendships", fields: [friend_id], references: [id])
-
+  id         String   @id @default(cuid())
+  user_id    String
+  friend_id  String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  friend     users    @relation("friend_friendships", fields: [friend_id], references: [id])
+  user       users    @relation("user_friendships", fields: [user_id], references: [id])
 
   @@unique([user_id, friend_id])
   @@unique([friend_id, user_id])
@@ -45,16 +42,10 @@ model Character {
   id                Int       @id @default(autoincrement())
   name              String
   level             Int       @default(1)
-  gold              Int       @default(0)
-  class             Class?    @default(NONE)
-  subclass          Subclass? @default(NONE)
   experience        Int       @default(0)
   health            Int       @default(100)
-  maxHealth         Int       @default(100)
   mana              Int       @default(50)
-  maxMana           Int       @default(50)
   energy            Int       @default(100)
-  maxEnergy         Int       @default(100)
   Strength          Int       @default(10)
   Defense           Int       @default(10)
   Agility           Int       @default(10)
@@ -62,15 +53,21 @@ model Character {
   Endurance         Int       @default(10)
   Will              Int       @default(10)
   OwnerId           String    @unique
-  agilityXp         Float     @default(0)
-  defenseXp         Float     @default(0)
-  enduranceXp       Float     @default(0)
-  strengthXp        Float     @default(0)
-  vitalityXp        Float     @default(0)
-  willXp            Float     @default(0)
   TotalHabitsDone   Int       @default(0)
   TotalRoutinesDone Int       @default(0)
   TotalTasksDone    Int       @default(0)
+  agilityXp         Float     @default(0)
+  class             Class?    @default(NONE)
+  defenseXp         Float     @default(0)
+  enduranceXp       Float     @default(0)
+  gold              Int       @default(0)
+  maxEnergy         Int       @default(100)
+  maxHealth         Int       @default(100)
+  maxMana           Int       @default(50)
+  strengthXp        Float     @default(0)
+  subclass          Subclass? @default(NONE)
+  vitalityXp        Float     @default(0)
+  willXp            Float     @default(0)
   Owner             users     @relation(fields: [OwnerId], references: [id])
   Habits            Habit[]
   Routines          Routine[]

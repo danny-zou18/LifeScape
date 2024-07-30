@@ -40,6 +40,22 @@ export default function OverviewLayout() {
           )) : undefined,
         }}
       />
+      <Stack.Screen 
+        name="friends" 
+        options={{
+          headerShown: true,
+          title: "Friends",
+          headerBackTitle: "Done",
+          presentation: "modal",
+          headerRight: () => (
+            <Link
+              href={"/overview"}
+            >
+              Done
+            </Link>
+          ),
+        }}
+      />
     </Stack>
   );
 }
