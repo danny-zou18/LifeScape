@@ -54,6 +54,13 @@ export default function OverviewLayout() {
               Done
             </Link>
           ),
+          headerLeft: pathName !== "/overview/friends" ? (() => (
+            <Link
+              href={"/overview/friends"}
+            >
+              Back
+            </Link>
+          )) : undefined,
         }}
       />
     </Stack>
