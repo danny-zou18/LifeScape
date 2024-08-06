@@ -56,7 +56,7 @@ const router = express.Router();
 router.post("/add/:userId", async (req, res) => {
   const authToken = req.headers.authorization;
   const { userId } = req.params;
-  const { friendId } = req.body;
+  const { friendUsername } = req.body;
 
   //Authorize
   try {
@@ -69,6 +69,14 @@ router.post("/add/:userId", async (req, res) => {
   }
 
   try {
+    const friendObj = await db.users.findFirst({
+      where: { username: friendUsername },
+      select: { id: true },
+    });
+    const friendId = friendObj?.id;
+    if (!friendId) {
+      return res.status(404).json({ error: "User not found" });
+    }
     const existingFriendship = await db.friendship.findFirst({
       where: {
         OR: [
@@ -81,18 +89,10 @@ router.post("/add/:userId", async (req, res) => {
     if (existingFriendship) {
       return res.status(409).json({ error: "Friendship already exists" });
     }
-  } catch (e) {
-    return res.status(500).json({ error: "Internal Server Error" });
-  }
-
-  try {
     const user = await db.users.findUnique({
       where: { id: userId },
     });
-    const friend = await db.users.findUnique({
-      where: { id: friendId },
-    });
-    if (!user || !friend) {
+    if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
     await db.friendship.create({

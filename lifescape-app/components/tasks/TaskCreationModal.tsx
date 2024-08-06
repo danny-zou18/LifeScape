@@ -80,7 +80,7 @@ const TaskCreationModal: React.FC = () => {
 
     try {
       const response = await api.post(
-        `/tasks/create/${user.uid}/${userCharacter.id}`,
+        `/tasks/create/${user.uid}/${userCharacter?.id}`,
         { title, description, dueDate, difficultyRank },
         {
           headers: {

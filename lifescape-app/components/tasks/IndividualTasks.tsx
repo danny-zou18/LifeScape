@@ -51,7 +51,7 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({
   const handleCompleteTask = async () => {
     try {
       const response = await api.put(
-        `/tasks/complete/${user.uid}/${userCharacter.id}/${task.id}`,
+        `/tasks/complete/${user.uid}/${userCharacter?.id}/${task.id}`,
         {},
         {
           headers: {
