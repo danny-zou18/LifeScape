@@ -203,7 +203,7 @@ enum Repeat {
 
 enum FriendShipStatus {
   PENDING
-  ACCEPTED
+  FRIENDS
   DECLINED
   BLOCKED
   REMOVED

@@ -211,7 +211,7 @@ enum Repeat {
 
 enum FriendShipStatus {
   PENDING = "PENDING",
-  ACCEPTED = "ACCEPTED",
+  FRIENDS = "FRIENDS",
   DECLINED = "DECLINED",
   BLOCKED = "BLOCKED",
   REMOVED = "REMOVED",
