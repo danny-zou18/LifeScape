@@ -38,29 +38,11 @@ export default function OverviewLayout() {
           title: "Friends",
           headerBackTitle: "Done",
           presentation: "modal",
-          headerLeft: () => <Link href={"/overview"}>Done</Link>,
-          headerRight:
+          headerRight: () => <Link href={"/overview"}>Done</Link>,
+          headerLeft:
             pathName !== "/overview/friends"
               ? () => <Link href={"/overview/friends"}>Back</Link>
-              : () => (
-                  <View className="h-10 w-32 flex flex-row items-center">
-                    <Link
-                      href="/overview/friends/add_friend"
-                      className="h-10 items-center py-3 mr-1"
-                    >
-                      <Text>Add Friend</Text>
-                    </Link>
-                    <View className="h-[80%] w-full">
-                      <View className="h-full w-full">
-                        <Image
-                          source={require("../../../../assets/images/add_friend.png")}
-                          resizeMode="contain"
-                          style={{ flex: 1, aspectRatio: 1 }}
-                        />
-                      </View>
-                    </View>
-                  </View>
-                ),
+              : undefined,
         }}
       />
     </Stack>
