@@ -50,7 +50,7 @@ const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<any>(defaultState.user);
   const [psqlUser, setPsqlUser] = useState<User | null>(defaultState.psqlUser);
   const [userCharacter, setUserCharacter] = useState<Character | null>(
-    defaultState.userCharacter
+    defaultState.userCharacter,
   );
   const [isLoading, setIsLoading] = useState<boolean>(defaultState.isLoading);
 

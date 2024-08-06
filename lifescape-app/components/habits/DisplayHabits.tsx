@@ -9,7 +9,7 @@ const DisplayHabits = () => {
   const { habits, setHabits } = useHabitContext();
 
   return (
-    <View className="h-full mt-4">
+    <View className="mt-4 h-full">
       <FlatList
         data={habits}
         renderItem={({ item }) => {

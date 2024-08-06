@@ -5,16 +5,16 @@ import { useGlobalContext } from "@/context/GlobalProvider";
 
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
-const AppLayout:React.FC = () => {
-    const {loggedIn} = useGlobalContext();
+const AppLayout: React.FC = () => {
+  const { loggedIn } = useGlobalContext();
 
-    const router = useRouter();
+  const router = useRouter();
 
-    useEffect(()=>{
-        if(!loggedIn){
-            router.replace("sign-in");
-        }
-    })
+  useEffect(() => {
+    if (!loggedIn) {
+      router.replace("sign-in");
+    }
+  });
 
   return (
     <GestureHandlerRootView>

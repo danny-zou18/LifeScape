@@ -14,7 +14,7 @@ const ViewSelectionBtns: React.FC<ViewSelectionBtnsProps> = ({
   flatListRef,
 }) => {
   return (
-    <View className="w-full  flex flex-row justify-around pb-1">
+    <View className="flex  w-full flex-row justify-around pb-1">
       {TABS.map((tab, index) => (
         <TouchableOpacity
           key={index}
@@ -26,7 +26,7 @@ const ViewSelectionBtns: React.FC<ViewSelectionBtnsProps> = ({
             currentView === tab ? "border-b-2 border-blue-500" : ""
           }`}
         >
-          <Text className={`text-center text-md font-bold`}>{tab}</Text>
+          <Text className={`text-md text-center font-bold`}>{tab}</Text>
         </TouchableOpacity>
       ))}
     </View>

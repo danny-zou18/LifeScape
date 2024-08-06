@@ -52,22 +52,22 @@ export const useRoutineContext = () => useContext(RoutineContext);
 
 const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [todaysRoutine, setTodaysRoutine] = useState<CustomEventType[]>(
-    defaultState.todaysRoutine
+    defaultState.todaysRoutine,
   );
   const [routineCreationOpen, setRoutineCreationOpen] = useState<boolean>(
-    defaultState.routineCreationOpen
+    defaultState.routineCreationOpen,
   );
   const [currentEditRoutine, setCurrentEditRoutine] = useState<Routine | null>(
-    defaultState.currentEditRoutine
+    defaultState.currentEditRoutine,
   );
   const [editRoutineOpen, setEditRoutineOpen] = useState<boolean>(
-    defaultState.editRoutineOpen
+    defaultState.editRoutineOpen,
   );
   const [weeklyRoutine, setWeeklyRoutine] = useState<CustomEventType[]>(
-    defaultState.weeklyRoutine
+    defaultState.weeklyRoutine,
   );
   const [viewWeeklyRoutineOpen, setViewWeeklyRoutineOpen] = useState<boolean>(
-    defaultState.viewWeeklyRoutineOpen
+    defaultState.viewWeeklyRoutineOpen,
   );
 
   const { user, userCharacter } = useGlobalContext();
@@ -81,7 +81,7 @@ const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
             headers: {
               Authorization: await user.getIdToken(),
             },
-          }
+          },
         );
         if (response.status === 200) {
           const routines = response.data;
@@ -105,7 +105,7 @@ const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
                 end,
                 title: routine.title,
               };
-            }
+            },
           );
           setTodaysRoutine(updatedRoutine);
         }
@@ -127,7 +127,7 @@ const RoutineProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
             headers: {
               Authorization: await user.getIdToken(),
             },
-          }
+          },
         );
         if (response.status === 200) {
           const routines = response.data;

@@ -9,7 +9,7 @@ import { useGlobalContext } from "@/context/GlobalProvider";
 
 const IndividualRoutinesWeekly: EventRenderer<CustomEventType> = (
   event,
-  touchableOpacityProps
+  touchableOpacityProps,
 ) => {
   const { user } = useGlobalContext();
   const { setEditRoutineOpen, setCurrentEditRoutine, setWeeklyRoutine } =
@@ -28,12 +28,12 @@ const IndividualRoutinesWeekly: EventRenderer<CustomEventType> = (
           headers: {
             Authorization: await user.getIdToken(),
           },
-        }
+        },
       );
       if (response.status === 200) {
         console.log("Routine deleted successfully");
         setWeeklyRoutine((prev) =>
-          prev.filter((r) => r.routine.id !== event.routine.id)
+          prev.filter((r) => r.routine.id !== event.routine.id),
         );
       }
     } catch (error) {
@@ -61,7 +61,7 @@ const IndividualRoutinesWeekly: EventRenderer<CustomEventType> = (
       {...touchableOpacityProps}
       onPress={onPressEvent}
       onLongPress={confirmDeletionAlert}
-      className="p-4 relative"
+      className="relative p-4"
     >
       <View className=" flex flex-col p-1">
         <Text>{event.title}</Text>
@@ -71,7 +71,6 @@ const IndividualRoutinesWeekly: EventRenderer<CustomEventType> = (
           </Text>
         ) : null} */}
       </View>
- 
     </TouchableOpacity>
   );
 };

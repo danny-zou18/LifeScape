@@ -6,7 +6,7 @@ import CreateTaskBtn from "./CreateRoutineBtn";
 
 const TopBar = () => {
   return (
-    <View className="flex flex-row justify-between items-center pl-2 pr-1 mb-2 ">
+    <View className="mb-2 flex flex-row items-center justify-between pl-2 pr-1 ">
       <ViewWeeklyRoutineBtn />
       <CreateTaskBtn />
     </View>

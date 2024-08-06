@@ -30,7 +30,7 @@ const differentSortOptions = [
   {
     label: "Qutting?",
     value: "quitting",
-  }
+  },
 ];
 
 const FilterHabits = () => {
@@ -41,56 +41,59 @@ const FilterHabits = () => {
       setHabits(
         [...habits].sort((a, b) => {
           return a.difficultyRank.localeCompare(b.difficultyRank);
-        })
+        }),
       );
     } else if (sortBy === "easiest") {
       setHabits(
         [...habits].sort((a, b) => {
           return b.difficultyRank.localeCompare(a.difficultyRank);
-        })
+        }),
       );
     } else if (sortBy === "oldest") {
-        setHabits(
-            [...habits].sort((a, b) => {
-            if (a.createdAt && b.createdAt) {
-                return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-            } else if (a.createdAt) {
-                return -1;
-            } else if (b.createdAt) {
-                return 1;
-            } else {
-                return 0;
-            }
-            })
-        );
+      setHabits(
+        [...habits].sort((a, b) => {
+          if (a.createdAt && b.createdAt) {
+            return (
+              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+            );
+          } else if (a.createdAt) {
+            return -1;
+          } else if (b.createdAt) {
+            return 1;
+          } else {
+            return 0;
+          }
+        }),
+      );
     } else if (sortBy === "newest") {
-        setHabits(
-            [...habits].sort((a, b) => {
-            if (a.createdAt && b.createdAt) {
-                return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-            } else if (b.createdAt) {
-                return -1;
-            } else if (a.createdAt) {
-                return 1;
-            } else {
-                return 0;
-            }
-            })
-        );
+      setHabits(
+        [...habits].sort((a, b) => {
+          if (a.createdAt && b.createdAt) {
+            return (
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            );
+          } else if (b.createdAt) {
+            return -1;
+          } else if (a.createdAt) {
+            return 1;
+          } else {
+            return 0;
+          }
+        }),
+      );
     } else if (sortBy === "streak") {
-        setHabits(
-            [...habits].sort((a, b) => {
-            return b.streak - a.streak;
-            })
-        );
+      setHabits(
+        [...habits].sort((a, b) => {
+          return b.streak - a.streak;
+        }),
+      );
     } else if (sortBy === "quitting") {
-        setHabits(
-            [...habits].sort((a, b) => {
-            return a.quitting === b.quitting ? 0 : a.quitting ? -1 : 1;
-            })
-        );
+      setHabits(
+        [...habits].sort((a, b) => {
+          return a.quitting === b.quitting ? 0 : a.quitting ? -1 : 1;
+        }),
+      );
     }
-
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortBy, setSortBy]);

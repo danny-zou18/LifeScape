@@ -47,13 +47,13 @@ const RoutineCreationModal = () => {
   const [daysOfWeek, setDaysOfWeek] = useState<number[]>([]);
 
   const [startTimeOfDay, setStartTimeOfDay] = useState<Date>(
-    new Date(0, 0, 0, 0, 0, 0, 0)
+    new Date(0, 0, 0, 0, 0, 0, 0),
   );
   const [endTimeOfDay, setEndTimeOfDay] = useState<Date>(
-    new Date(0, 0, 0, 0, 0, 0, 0)
+    new Date(0, 0, 0, 0, 0, 0, 0),
   );
   const [difficulty, setDifficulty] = useState<DifficultyRank>(
-    DifficultyRank.E
+    DifficultyRank.E,
   );
 
   const [showTimeError, setShowTimeError] = useState<boolean>(false);
@@ -96,7 +96,7 @@ const RoutineCreationModal = () => {
           headers: {
             Authorization: await user.getIdToken(),
           },
-        }
+        },
       );
       if (response.status === 201) {
         const routine = response.data;
@@ -186,7 +186,7 @@ const RoutineCreationModal = () => {
 
   const onStartTimeChange = (
     event: DateTimePickerEvent,
-    selectedDate?: Date
+    selectedDate?: Date,
   ) => {
     if (selectedDate) {
       setStartTimeOfDay(selectedDate);
@@ -212,36 +212,36 @@ const RoutineCreationModal = () => {
           <Button title="Cancel" onPress={() => onCancel()}></Button>
         </View>
         <ScrollView>
-          <View className="flex items-center justify-center mt-5">
+          <View className="mt-5 flex items-center justify-center">
             <View className="w-[85%]">
-              <Text className="ml-2 text-md text-neutral-700 pb-1">Title</Text>
+              <Text className="text-md ml-2 pb-1 text-neutral-700">Title</Text>
               <TextInput
                 id="title"
                 autoCapitalize="none"
                 onChangeText={(text) => setValue("title", text)}
                 autoComplete="name"
-                className="w-full h-[50px] bg-black rounded-lg text-white px-3"
+                className="h-[50px] w-full rounded-lg bg-black px-3 text-white"
               />
             </View>
             <View className="mt-5 w-[85%]">
-              <Text className="ml-2 text-md text-neutral-700 pb-1">Notes</Text>
+              <Text className="text-md ml-2 pb-1 text-neutral-700">Notes</Text>
               <TextInput
                 id="description"
                 autoCapitalize="none"
                 onChangeText={(text) => setValue("description", text)}
                 autoComplete="name"
-                className="h-[50px] bg-black rounded-lg text-white px-3"
+                className="h-[50px] rounded-lg bg-black px-3 text-white"
                 numberOfLines={2}
               />
             </View>
             <View className="mt-5 w-[85%]">
-              <Text className="ml-2 text-md text-neutral-700 pb-1">
+              <Text className="text-md ml-2 pb-1 text-neutral-700">
                 Days of Week
               </Text>
-              <View className="w-full bg-gray-400 rounded-lg overflow-hidden">
-                <View className="flex flex-row justify-between p-1 py-2 w-full">
+              <View className="w-full overflow-hidden rounded-lg bg-gray-400">
+                <View className="flex w-full flex-row justify-between p-1 py-2">
                   <TouchableHighlight
-                    className={`flex items-center justify-center w-[13.3%] bg-${
+                    className={`flex w-[13.3%] items-center justify-center bg-${
                       daysOfWeek.includes(1) ? "[#b93df2]" : "[#e1abf740]"
                     } rounded-full`}
                     style={{ height: calculatedWidth }}
@@ -249,7 +249,7 @@ const RoutineCreationModal = () => {
                       setDaysOfWeek(
                         daysOfWeek.includes(1)
                           ? daysOfWeek.filter((day) => day !== 1)
-                          : [...daysOfWeek, 1]
+                          : [...daysOfWeek, 1],
                       )
                     }
                     underlayColor="#b93df200"
@@ -257,7 +257,7 @@ const RoutineCreationModal = () => {
                     <Text>Sun</Text>
                   </TouchableHighlight>
                   <TouchableHighlight
-                    className={`flex items-center justify-center w-[13.3%] bg-${
+                    className={`flex w-[13.3%] items-center justify-center bg-${
                       daysOfWeek.includes(2) ? "[#b93df2]" : "[#e1abf740]"
                     } rounded-full`}
                     style={{ height: calculatedWidth }}
@@ -265,7 +265,7 @@ const RoutineCreationModal = () => {
                       setDaysOfWeek(
                         daysOfWeek.includes(2)
                           ? daysOfWeek.filter((day) => day !== 2)
-                          : [...daysOfWeek, 2]
+                          : [...daysOfWeek, 2],
                       )
                     }
                     underlayColor="#b93df200"
@@ -273,7 +273,7 @@ const RoutineCreationModal = () => {
                     <Text>M</Text>
                   </TouchableHighlight>
                   <TouchableHighlight
-                    className={`flex items-center justify-center w-[13.3%] bg-${
+                    className={`flex w-[13.3%] items-center justify-center bg-${
                       daysOfWeek.includes(3) ? "[#b93df2]" : "[#e1abf740]"
                     } rounded-full`}
                     style={{ height: calculatedWidth }}
@@ -281,7 +281,7 @@ const RoutineCreationModal = () => {
                       setDaysOfWeek(
                         daysOfWeek.includes(3)
                           ? daysOfWeek.filter((day) => day !== 3)
-                          : [...daysOfWeek, 3]
+                          : [...daysOfWeek, 3],
                       )
                     }
                     underlayColor="#b93df200"
@@ -289,7 +289,7 @@ const RoutineCreationModal = () => {
                     <Text>T</Text>
                   </TouchableHighlight>
                   <TouchableHighlight
-                    className={`flex items-center justify-center w-[13.3%] bg-${
+                    className={`flex w-[13.3%] items-center justify-center bg-${
                       daysOfWeek.includes(4) ? "[#b93df2]" : "[#e1abf740]"
                     } rounded-full`}
                     style={{ height: calculatedWidth }}
@@ -297,7 +297,7 @@ const RoutineCreationModal = () => {
                       setDaysOfWeek(
                         daysOfWeek.includes(4)
                           ? daysOfWeek.filter((day) => day !== 4)
-                          : [...daysOfWeek, 4]
+                          : [...daysOfWeek, 4],
                       )
                     }
                     underlayColor="#b93df200"
@@ -305,7 +305,7 @@ const RoutineCreationModal = () => {
                     <Text>W</Text>
                   </TouchableHighlight>
                   <TouchableHighlight
-                    className={`flex items-center justify-center w-[13.3%] bg-${
+                    className={`flex w-[13.3%] items-center justify-center bg-${
                       daysOfWeek.includes(5) ? "[#b93df2]" : "[#e1abf740]"
                     } rounded-full`}
                     style={{ height: calculatedWidth }}
@@ -313,7 +313,7 @@ const RoutineCreationModal = () => {
                       setDaysOfWeek(
                         daysOfWeek.includes(5)
                           ? daysOfWeek.filter((day) => day !== 5)
-                          : [...daysOfWeek, 5]
+                          : [...daysOfWeek, 5],
                       )
                     }
                     underlayColor="#b93df200"
@@ -321,7 +321,7 @@ const RoutineCreationModal = () => {
                     <Text>T</Text>
                   </TouchableHighlight>
                   <TouchableHighlight
-                    className={`flex items-center justify-center w-[13.3%] bg-${
+                    className={`flex w-[13.3%] items-center justify-center bg-${
                       daysOfWeek.includes(6) ? "[#b93df2]" : "[#e1abf740]"
                     } rounded-full`}
                     style={{ height: calculatedWidth }}
@@ -329,7 +329,7 @@ const RoutineCreationModal = () => {
                       setDaysOfWeek(
                         daysOfWeek.includes(6)
                           ? daysOfWeek.filter((day) => day !== 6)
-                          : [...daysOfWeek, 6]
+                          : [...daysOfWeek, 6],
                       )
                     }
                     underlayColor="#b93df200"
@@ -337,7 +337,7 @@ const RoutineCreationModal = () => {
                     <Text>F</Text>
                   </TouchableHighlight>
                   <TouchableHighlight
-                    className={`flex items-center justify-center w-[13.3%] bg-${
+                    className={`flex w-[13.3%] items-center justify-center bg-${
                       daysOfWeek.includes(7) ? "[#b93df2]" : "[#e1abf740]"
                     } rounded-full`}
                     style={{ height: calculatedWidth }}
@@ -345,7 +345,7 @@ const RoutineCreationModal = () => {
                       setDaysOfWeek(
                         daysOfWeek.includes(7)
                           ? daysOfWeek.filter((day) => day !== 7)
-                          : [...daysOfWeek, 7]
+                          : [...daysOfWeek, 7],
                       )
                     }
                     underlayColor="#b93df200"
@@ -355,7 +355,7 @@ const RoutineCreationModal = () => {
                 </View>
                 {!(daysOfWeek.length === 0) ? (
                   <View>
-                    <View className="bg-red-400 h-[45px] flex flex-row items-center p-2 justify-between border-b-[1px] border-t-[1px]">
+                    <View className="flex h-[45px] flex-row items-center justify-between border-b-[1px] border-t-[1px] bg-red-400 p-2">
                       <Text>Start Time</Text>
                       <DateTimePicker
                         mode="time"
@@ -365,7 +365,7 @@ const RoutineCreationModal = () => {
                         minuteInterval={5}
                       />
                     </View>
-                    <View className="bg-red-400 h-[45px] flex flex-row items-center p-2 justify-between">
+                    <View className="flex h-[45px] flex-row items-center justify-between bg-red-400 p-2">
                       <Text>End Time</Text>
                       <DateTimePicker
                         mode="time"
@@ -389,11 +389,11 @@ const RoutineCreationModal = () => {
             ) : (
               <>
                 <TouchableHighlight
-                  className="bg-[#000000] w-[225px] h-[45px] rounded-md mt-10"
+                  className="mt-10 h-[45px] w-[225px] rounded-md bg-[#000000]"
                   underlayColor="#FFFFFF"
                   onPress={handleSubmit(submitHandler)}
                 >
-                  <Text className="text-white text-xl font-semibold mx-auto my-auto">
+                  <Text className="mx-auto my-auto text-xl font-semibold text-white">
                     Add to Routine
                   </Text>
                 </TouchableHighlight>

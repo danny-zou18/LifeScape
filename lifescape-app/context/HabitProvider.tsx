@@ -44,14 +44,14 @@ export const useHabitContext = () => useContext(HabitContext);
 const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [habits, setHabits] = useState<Habit[]>(defaultState.habits);
   const [habitCreationOpen, setHabitCreationOpen] = useState<boolean>(
-    defaultState.habitCreationOpen
+    defaultState.habitCreationOpen,
   );
   const [sortBy, setSortBy] = useState<string>(defaultState.sortBy);
   const [currentEditHabit, setCurrentEditHabit] = useState<Habit | null>(
-    defaultState.currentEditHabit
+    defaultState.currentEditHabit,
   );
   const [editHabitOpen, setEditHabitOpen] = useState<boolean>(
-    defaultState.editHabitOpen
+    defaultState.editHabitOpen,
   );
 
   const { user, userCharacter } = useGlobalContext();
@@ -59,11 +59,15 @@ const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   useEffect(() => {
     const fetchHabits = async () => {
       try {
-        const response = await api.put(`/habits/checkStreaks/${user.uid}/${userCharacter?.id}`, {}, {
-          headers: {
-            Authorization: await user.getIdToken(),
+        const response = await api.put(
+          `/habits/checkStreaks/${user.uid}/${userCharacter?.id}`,
+          {},
+          {
+            headers: {
+              Authorization: await user.getIdToken(),
+            },
           },
-        });
+        );
         if (response.status === 200) {
           console.log("Streaks checked");
         }
@@ -81,7 +85,7 @@ const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
             headers: {
               Authorization: await user.getIdToken(),
             },
-          }
+          },
         );
         if (response.status === 200) {
           setHabits(response.data);
@@ -96,7 +100,7 @@ const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     };
 
     fetchHabits();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   return (

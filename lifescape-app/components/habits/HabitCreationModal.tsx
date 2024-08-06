@@ -23,8 +23,13 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import DifficultySelection from "../general/DifficultySelection";
 
 const HabitCreationModal = () => {
-  const { habits, setHabits, habitCreationOpen, setHabitCreationOpen, setSortBy } =
-    useHabitContext();
+  const {
+    habits,
+    setHabits,
+    habitCreationOpen,
+    setHabitCreationOpen,
+    setSortBy,
+  } = useHabitContext();
 
   const [loading, setLoading] = useState<boolean>(false);
   const { user, userCharacter } = useGlobalContext();
@@ -34,7 +39,7 @@ const HabitCreationModal = () => {
   const [goalCompletionWeekly, setGoalCompletionWeekly] = useState<number>(1);
   const [goalCompletionMonthly, setGoalCompletionMonthly] = useState<number>(1);
   const [difficulty, setDifficulty] = useState<DifficultyRank>(
-    DifficultyRank.E
+    DifficultyRank.E,
   );
 
   const {
@@ -82,7 +87,7 @@ const HabitCreationModal = () => {
           headers: {
             Authorization: await user.getIdToken(),
           },
-        }
+        },
       );
 
       if (response.status === 201) {
@@ -116,7 +121,6 @@ const HabitCreationModal = () => {
     setGoalCompletionWeekly(1);
     setGoalCompletionMonthly(1);
     setDifficulty(DifficultyRank.E);
-    
   };
 
   const onMinusWeeklyGoal = () => {
@@ -151,35 +155,35 @@ const HabitCreationModal = () => {
           <Button title="Cancel" onPress={() => onCancel()}></Button>
         </View>
         <ScrollView>
-          <View className="flex items-center justify-center mt-5">
+          <View className="mt-5 flex items-center justify-center">
             <View className="w-[85%]">
-              <Text className="ml-2 text-md text-neutral-700 pb-1">Title</Text>
+              <Text className="text-md ml-2 pb-1 text-neutral-700">Title</Text>
               <TextInput
                 id="title"
                 autoCapitalize="none"
                 onChangeText={(text) => setValue("title", text)}
                 autoComplete="name"
-                className="w-full h-[50px] bg-black rounded-lg text-white px-3"
+                className="h-[50px] w-full rounded-lg bg-black px-3 text-white"
               />
             </View>
             <View className="mt-5 w-[85%]">
-              <Text className="ml-2 text-md text-neutral-700 pb-1">Notes</Text>
+              <Text className="text-md ml-2 pb-1 text-neutral-700">Notes</Text>
               <TextInput
                 id="description"
                 autoCapitalize="none"
                 onChangeText={(text) => setValue("description", text)}
                 autoComplete="name"
-                className="h-[50px] bg-black rounded-lg text-white px-3"
+                className="h-[50px] rounded-lg bg-black px-3 text-white"
                 numberOfLines={2}
               />
             </View>
             <View className="mt-4 w-[85%]">
-              <Text className="ml-2 text-md text-neutral-700 pb-1">
+              <Text className="text-md ml-2 pb-1 text-neutral-700">
                 Controls
               </Text>
-              <View className="flex flex-row justify-between bg-gray-400 w-full h-[50px] rounded-lg p-1">
+              <View className="flex h-[50px] w-full flex-row justify-between rounded-lg bg-gray-400 p-1">
                 <TouchableHighlight
-                  className={`flex items-center justify-center h-full ${
+                  className={`flex h-full items-center justify-center ${
                     !quitting ? "bg-[#b93df2]" : "bg-[#e1abf740]"
                   } w-[49.5%] rounded-md transition-all duration-200`}
                   onPress={() => setQuitting(false)}
@@ -188,7 +192,7 @@ const HabitCreationModal = () => {
                   <Text>Positive</Text>
                 </TouchableHighlight>
                 <TouchableHighlight
-                  className={`flex items-center justify-center h-full ${
+                  className={`flex h-full items-center justify-center ${
                     quitting ? "bg-[#b93df2]" : "bg-[#e1abf740]"
                   } w-[49.5%] rounded-md transition-all duration-200`}
                   onPress={() => setQuitting(true)}
@@ -199,12 +203,12 @@ const HabitCreationModal = () => {
               </View>
             </View>
             <View className="mt-4 w-[85%]">
-              <Text className="ml-2 text-md text-neutral-700 pb-1">
+              <Text className="text-md ml-2 pb-1 text-neutral-700">
                 Repeats?
               </Text>
-              <View className="flex flex-row justify-between bg-gray-400 w-full h-[40px] rounded-lg p-1">
+              <View className="flex h-[40px] w-full flex-row justify-between rounded-lg bg-gray-400 p-1">
                 <TouchableHighlight
-                  className={`flex items-center justify-center h-full ${
+                  className={`flex h-full items-center justify-center ${
                     repeat === "DAILY" ? "bg-[#b93df2]" : "bg-[#e1abf740]"
                   } w-[32.7%] rounded-md transition-all duration-200`}
                   onPress={() => setRepeat(Repeat.DAILY)}
@@ -213,7 +217,7 @@ const HabitCreationModal = () => {
                   <Text>Daily</Text>
                 </TouchableHighlight>
                 <TouchableHighlight
-                  className={`flex items-center justify-center h-full ${
+                  className={`flex h-full items-center justify-center ${
                     repeat === "WEEKLY" ? "bg-[#b93df2]" : "bg-[#e1abf740]"
                   } w-[32.7%] rounded-md transition-all duration-200`}
                   onPress={() => setRepeat(Repeat.WEEKLY)}
@@ -222,7 +226,7 @@ const HabitCreationModal = () => {
                   <Text>Weekly</Text>
                 </TouchableHighlight>
                 <TouchableHighlight
-                  className={`flex items-center justify-center h-full ${
+                  className={`flex h-full items-center justify-center ${
                     repeat === "MONTHLY" ? "bg-[#b93df2]" : "bg-[#e1abf740]"
                   } w-[32.7%] rounded-md transition-all duration-200`}
                   onPress={() => setRepeat(Repeat.MONTHLY)}
@@ -232,9 +236,9 @@ const HabitCreationModal = () => {
                 </TouchableHighlight>
               </View>
               {repeat === Repeat.WEEKLY && (
-                <View className="w-full bg-red-200 h-[40px] rounded-lg flex flex-row items-center p-2 justify-between">
+                <View className="flex h-[40px] w-full flex-row items-center justify-between rounded-lg bg-red-200 p-2">
                   <Text>Weekly Completion Goal</Text>
-                  <View className="flex flex-row h-full items-center gap-2">
+                  <View className="flex h-full flex-row items-center gap-2">
                     <AntDesign
                       name="minus"
                       size={26}
@@ -242,7 +246,7 @@ const HabitCreationModal = () => {
                       onPress={onMinusWeeklyGoal}
                     />
                     <TextInput
-                      className="w-[35px] h-full rounded-md px-2 bg-black text-white"
+                      className="h-full w-[35px] rounded-md bg-black px-2 text-white"
                       keyboardType="numeric"
                       value={goalCompletionWeekly.toString()}
                       editable={false}
@@ -258,9 +262,9 @@ const HabitCreationModal = () => {
                 </View>
               )}
               {repeat === Repeat.MONTHLY && (
-                <View className="w-full bg-red-200 h-[40px] rounded-lg flex flex-row items-center p-2 justify-between">
+                <View className="flex h-[40px] w-full flex-row items-center justify-between rounded-lg bg-red-200 p-2">
                   <Text>Monthly Completion Goal</Text>
-                  <View className="flex flex-row h-full items-center gap-2">
+                  <View className="flex h-full flex-row items-center gap-2">
                     <AntDesign
                       name="minus"
                       size={26}
@@ -268,7 +272,7 @@ const HabitCreationModal = () => {
                       onPress={onMinusMonthlyGoal}
                     />
                     <TextInput
-                      className="w-[35px] h-full rounded-md px-2 bg-black text-white"
+                      className="h-full w-[35px] rounded-md bg-black px-2 text-white"
                       keyboardType="numeric"
                       value={goalCompletionMonthly.toString()}
                       editable={false}
@@ -293,11 +297,11 @@ const HabitCreationModal = () => {
             ) : (
               <>
                 <TouchableHighlight
-                  className="bg-[#000000] w-[225px] h-[45px] rounded-md mt-10"
+                  className="mt-10 h-[45px] w-[225px] rounded-md bg-[#000000]"
                   underlayColor="#FFFFFF"
                   onPress={handleSubmit(submitHandler)}
                 >
-                  <Text className="text-white text-xl font-semibold mx-auto my-auto">
+                  <Text className="mx-auto my-auto text-xl font-semibold text-white">
                     Create Habit
                   </Text>
                 </TouchableHighlight>

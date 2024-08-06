@@ -9,7 +9,7 @@ module.exports = {
   env: {
     node: true,
   },
-  rules : {
-    'import/no-unresolved': "off"
+  rules: {
+    "import/no-unresolved": "off",
   },
 };

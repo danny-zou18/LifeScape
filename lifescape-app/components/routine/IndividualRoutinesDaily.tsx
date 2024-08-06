@@ -10,7 +10,7 @@ import { useHomeContext } from "@/context/HomeProvider";
 
 const IndividualRoutinesDaily: EventRenderer<CustomEventType> = (
   event,
-  touchableOpacityProps
+  touchableOpacityProps,
 ) => {
   const { user, userCharacter, setUserCharacter } = useGlobalContext();
   const { setEditRoutineOpen, setCurrentEditRoutine, setTodaysRoutine } =
@@ -30,12 +30,12 @@ const IndividualRoutinesDaily: EventRenderer<CustomEventType> = (
           headers: {
             Authorization: await user.getIdToken(),
           },
-        }
+        },
       );
       if (response.status === 200) {
         console.log("Routine deleted successfully");
         setTodaysRoutine((prev) =>
-          prev.filter((r) => r.routine.id !== event.routine.id)
+          prev.filter((r) => r.routine.id !== event.routine.id),
         );
       }
     } catch (error) {
@@ -56,7 +56,7 @@ const IndividualRoutinesDaily: EventRenderer<CustomEventType> = (
           headers: {
             Authorization: await user.getIdToken(),
           },
-        }
+        },
       );
       if (response.status === 200) {
         console.log("Routine completed successfully");
@@ -69,7 +69,7 @@ const IndividualRoutinesDaily: EventRenderer<CustomEventType> = (
               };
             }
             return r;
-          })
+          }),
         );
         try {
           const response = await api.get(`/character/get/${user.uid}`, {
@@ -129,7 +129,7 @@ const IndividualRoutinesDaily: EventRenderer<CustomEventType> = (
     >
       <TouchableOpacity
         onPress={handleCompleteRoutine}
-        className={`w-[15%] h-full ${
+        className={`h-full w-[15%] ${
           !!event.routine.lastCompleted &&
           new Date(event.routine.lastCompleted).getDate() ===
             new Date().getDate()
@@ -142,8 +142,8 @@ const IndividualRoutinesDaily: EventRenderer<CustomEventType> = (
             new Date().getDate()
         }
       ></TouchableOpacity>
-      <View className="w-[85%] relative pl-2">
-        <View className="max-w-[70%] flex flex-col">
+      <View className="relative w-[85%] pl-2">
+        <View className="flex max-w-[70%] flex-col">
           <Text>{event.title}</Text>
           {event.routine.description ? (
             <Text className="text-sm text-neutral-400">
@@ -151,7 +151,7 @@ const IndividualRoutinesDaily: EventRenderer<CustomEventType> = (
             </Text>
           ) : null}
         </View>
-        <View className="flex flex-row gap-2 absolute top-0 right-0">
+        <View className="absolute right-0 top-0 flex flex-row gap-2">
           <Text className="text-xs">
             {event.start.toLocaleTimeString([], {
               hour: "numeric",
@@ -164,7 +164,7 @@ const IndividualRoutinesDaily: EventRenderer<CustomEventType> = (
             })}
           </Text>
         </View>
-        <View className="flex flex-row gap-2 absolute bottom-1 right-1">
+        <View className="absolute bottom-1 right-1 flex flex-row gap-2">
           <Text className="text-sm">{event.routine.difficultyRank}</Text>
         </View>
       </View>
