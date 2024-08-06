@@ -34,6 +34,8 @@ model Friendship {
   friend     users    @relation("friend_friendships", fields: [friend_id], references: [id])
   user       users    @relation("user_friendships", fields: [user_id], references: [id])
 
+  status FriendShipStatus @default(PENDING)
+
   @@unique([user_id, friend_id])
   @@unique([friend_id, user_id])
 }
@@ -197,4 +199,12 @@ enum Repeat {
   DAILY
   WEEKLY
   MONTHLY
+}
+
+enum FriendShipStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  BLOCKED
+  REMOVED
 }

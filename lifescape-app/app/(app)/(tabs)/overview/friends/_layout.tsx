@@ -11,6 +11,13 @@ export default function FriendsLayout() {
           title: "Add Friend",
         }}
       />
+      <Stack.Screen
+        name="friend_requests/index"
+        options={{
+          headerShown: false,
+          title: "Friend Requests",
+        }}
+      />
     </Stack>
   );
 }

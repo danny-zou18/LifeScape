@@ -18,6 +18,19 @@ const Friends = () => {
             </View>
           </Pressable>
         </Link>
+        <View className="h-[1px] w-full bg-white"></View>
+        <Link href="/overview/friends/friend_requests" asChild>
+          <Pressable className="flex w-full flex-row items-center justify-between p-4">
+            <Text className="text-white">Friend Requests</Text>
+            <View className="h-[170%]">
+              <Image
+                source={require("../../../../../assets/images/add_friend.png")}
+                resizeMode="contain"
+                style={{ flex: 1, aspectRatio: 1 }}
+              />
+            </View>
+          </Pressable>
+        </Link>
 
         <View className="h-[1px] w-full bg-white"></View>
       </View>
