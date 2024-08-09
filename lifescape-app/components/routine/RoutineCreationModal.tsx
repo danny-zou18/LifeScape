@@ -83,7 +83,7 @@ const RoutineCreationModal = () => {
 
     try {
       const response = await api.post(
-        `/routine/create/${user.uid}/${userCharacter.id}`,
+        `/routine/create/${user.uid}/${userCharacter?.id}`,
         {
           title,
           description,
