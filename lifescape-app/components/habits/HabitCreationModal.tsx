@@ -91,7 +91,6 @@ const HabitCreationModal = () => {
       );
 
       if (response.status === 201) {
-        console.log("Habit created successfully", response.data);
         setHabits([...habits, response.data]);
         setHabitCreationOpen(false);
         reset();
