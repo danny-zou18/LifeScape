@@ -220,6 +220,7 @@ enum FriendShipStatus {
 export {
   User,
   Friendship,
+  FriendShipStatus,
   Character,
   Task,
   Habit,
