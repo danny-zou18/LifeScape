@@ -108,4 +108,31 @@ router.post("/add/:userId", async (req, res) => {
   }
 });
 
+router.get("/getFriendRequests/:userId", async (req, res) => {
+  const authToken = req.headers.authorization;
+  const { userId } = req.params;
+
+  //Authorize
+  try {
+    const authUser = await auth().verifyIdToken(authToken as string);
+    if (authUser.uid !== userId) {
+      res.status(403).json({ error: "Unauthorized" });
+    }
+  } catch (e) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  try {
+    const friendRequests = await db.friendship.findMany({
+      where: {
+        friend_id: userId,
+        status: "PENDING",
+      },
+    });
+    return res.status(200).json(friendRequests);
+  } catch (e) {
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 export { router as FriendsRouter };
