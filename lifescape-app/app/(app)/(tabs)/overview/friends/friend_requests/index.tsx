@@ -4,6 +4,7 @@ import api from "@/api/axios";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { Friendship, FriendShipStatus } from "@/types/db_types";
 import { isAxiosError } from "axios";
+import IndividualFriendRequest from "@/components/friends/IndividualFriendRequest";
 
 const FriendRequests = () => {
   const { user } = useGlobalContext();
@@ -41,6 +42,13 @@ const FriendRequests = () => {
   return (
     <View>
       <Text>FriendRequests</Text>
+      {loading ? (
+        <Text>Loading...</Text>
+      ) : (
+        friendRequests.map((friendRequest) => (
+          <IndividualFriendRequest key={friendRequest.id} friendRequestData={friendRequest} />
+        ))
+      )}
     </View>
   );
 };
