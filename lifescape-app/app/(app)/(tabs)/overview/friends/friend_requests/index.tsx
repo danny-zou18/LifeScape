@@ -48,7 +48,7 @@ const FriendRequests = () => {
         friendRequests.map((friendRequest) => (
           <IndividualFriendRequest key={friendRequest.id} friendRequestData={friendRequest} />
         ))
-      )}
+      )}  
     </View>
   );
 };

@@ -99,6 +99,8 @@ router.post("/add/:userId", async (req, res) => {
       data: {
         user: { connect: { id: userId } },
         friend: { connect: { id: friendId } },
+        user_username: user.username,
+        friend_username: friendUsername,
         status: "PENDING",
       },
     });

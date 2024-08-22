@@ -26,14 +26,16 @@ model users {
 }
 
 model Friendship {
-  id         String           @id @default(cuid())
-  user_id    String
-  friend_id  String
-  created_at DateTime         @default(now())
-  updated_at DateTime         @updatedAt
-  status     FriendShipStatus @default(PENDING)
-  friend     users            @relation("friend_friendships", fields: [friend_id], references: [id])
-  user       users            @relation("user_friendships", fields: [user_id], references: [id])
+  id              String           @id @default(cuid())
+  user_id         String
+  friend_id       String
+  user_username   String
+  friend_username String
+  created_at      DateTime         @default(now())
+  updated_at      DateTime         @updatedAt
+  status          FriendShipStatus @default(PENDING)
+  friend          users            @relation("friend_friendships", fields: [friend_id], references: [id])
+  user            users            @relation("user_friendships", fields: [user_id], references: [id])
 
   @@unique([user_id, friend_id])
   @@unique([friend_id, user_id])
