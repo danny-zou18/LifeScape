@@ -13,6 +13,8 @@ interface Friendship {
   id: string;
   user_id: string;
   friend_id: string;
+  user_username: string;
+  friend_username: string;
   created_at: Date;
   updated_at: Date;
   friend: User;

@@ -8,8 +8,8 @@ interface IndividualFriendRequestProps {
 
 const IndividualFriendRequest:React.FC<IndividualFriendRequestProps> = ({friendRequestData}) => {
   return (
-    <View>
-      <Text>IndividualFriendRequest</Text>
+    <View className='w-full p-3 border-[1px] rounded-lg'>
+      <Text>{friendRequestData.user_username}</Text>
     </View>
   )
 }
