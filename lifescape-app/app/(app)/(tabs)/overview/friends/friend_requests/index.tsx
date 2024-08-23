@@ -40,7 +40,7 @@ const FriendRequests = () => {
       }
     };
     fetchFriendRequests();
-  }, [refresh]);
+  }, [refresh, user]);
 
   return (
     <View className="mx-auto mt-5 w-[90%]">

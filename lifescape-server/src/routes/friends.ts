@@ -110,6 +110,45 @@ router.post("/add/:userId", async (req, res) => {
   }
 });
 
+/**
+ * @api {get} /getFriendRequests/:userId Get Friend Requests
+ * @apiName GetFriendRequests
+ * @apiGroup Friends
+ *
+ * @apiDescription Get friend requests for a user.
+ *
+ * @apiParam {String} userId User ID
+ *
+ * @apiHeader {String} Authorization Firebase ID Token
+ *
+ * @apiSuccess {Object[]} friendRequests List of friend requests
+ * @apiSuccessExample {json} Success-Response:
+ *       HTTP/1.1 200 OK
+ *       [
+ *         {
+ *           "id": 1,
+ *           "user_id": "user-id",
+ *           "friend_id": "friend-id",
+ *           "user_username": "user-username",
+ *           "friend_username": "friend-username",
+ *           "status": "PENDING"
+ *         }
+ *       ]
+ *
+ * @apiError Unauthorized User is not authorized
+ * @apiErrorExample {json} Unauthorized:
+ *       HTTP/1.1 403 Unauthorized
+ *       {
+ *         "error": "Unauthorized"
+ *       }
+ *
+ * @apiError InternalServerError Internal Server Error
+ * @apiErrorExample {json} InternalServerError:
+ *       HTTP/1.1 500 Internal Server Error
+ *       {
+ *         "error": "Internal Server Error"
+ *       }
+ */
 router.get("/getFriendRequests/:userId", async (req, res) => {
   const authToken = req.headers.authorization;
   const { userId } = req.params;
@@ -132,6 +171,83 @@ router.get("/getFriendRequests/:userId", async (req, res) => {
       },
     });
     return res.status(200).json(friendRequests);
+  } catch (e) {
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+/**
+ * @api {post} /accept/:userId Accept Friend Request
+ * @apiName AcceptFriendRequest
+ * @apiGroup Friends
+ *
+ * @apiDescription Accept a friend request for a user.
+ *
+ * @apiParam {String} userId User ID
+ *
+ * @apiHeader {String} Authorization Firebase ID Token
+ *
+ * @apiBody {String} friendId Friend ID
+ *
+ * @apiSuccess {Object} message Success message
+ * @apiSuccessExample {json} Success-Response:
+ *       HTTP/1.1 200 OK
+ *       {
+ *         "message": "Friend request accepted"
+ *       }
+ *
+ * @apiError Unauthorized User is not authorized
+ * @apiErrorExample {json} Unauthorized:
+ *       HTTP/1.1 403 Unauthorized
+ *       {
+ *         "error": "Unauthorized"
+ *       }
+ *
+ * @apiError FriendshipNotFound Friendship not found
+ * @apiErrorExample {json} FriendshipNotFound:
+ *       HTTP/1.1 404 Not Found
+ *       {
+ *         "error": "Friendship not found"
+ *       }
+ *
+ * @apiError InternalServerError Internal Server Error
+ * @apiErrorExample {json} InternalServerError:
+ *       HTTP/1.1 500 Internal Server Error
+ *       {
+ *         "error": "Internal Server Error"
+ *       }
+ */
+router.post("/accept/:userId", async (req, res) => {
+  const authToken = req.headers.authorization;
+  const { userId } = req.params;
+  const { friendId } = req.body;
+
+  //Authorize
+  try {
+    const authUser = await auth().verifyIdToken(authToken as string);
+    if (authUser.uid !== userId) {
+      res.status(403).json({ error: "Unauthorized" });
+    }
+  } catch (e) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  try {
+    const friendship = await db.friendship.findFirst({
+      where: {
+        user_id: friendId,
+        friend_id: userId,
+        status: "PENDING",
+      },
+    });
+    if (!friendship) {
+      return res.status(404).json({ error: "Friendship not found" });
+    }
+    await db.friendship.update({
+      where: { id: friendship.id },
+      data: { status: "FRIENDS" },
+    });
+    return res.status(200).json({ message: "Friend request accepted" });
   } catch (e) {
     return res.status(500).json({ error: "Internal Server Error" });
   }
