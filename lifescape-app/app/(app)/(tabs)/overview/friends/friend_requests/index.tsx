@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, ActivityIndicator } from "react-native";
 import React, { useState, useEffect } from "react";
 import api from "@/api/axios";
 import { useGlobalContext } from "@/context/GlobalProvider";
@@ -27,7 +27,6 @@ const FriendRequests = () => {
         );
         if (response.status === 200) {
           setFriendRequests(response.data);
-          console.log(response.data);
         }
       } catch (error) {
         if (isAxiosError(error)) {
@@ -46,13 +45,15 @@ const FriendRequests = () => {
     <View className="mx-auto mt-5 w-[90%]">
       <Text>FriendRequests</Text>
       {loading ? (
-        <Text>Loading...</Text>
+        <ActivityIndicator color="#0000ff" />
       ) : (
         <ScrollView className="w-full bg-red-400 mt-2 flex flex-col gap-2">
           {friendRequests.map((friendRequest) => (
             <IndividualFriendRequest
               key={friendRequest.id}
               friendRequestData={friendRequest}
+              refresh={refresh}
+              setRefresh={setRefresh}
             />
           ))}
         </ScrollView>
