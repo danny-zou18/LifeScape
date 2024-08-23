@@ -253,4 +253,78 @@ router.post("/accept/:userId", async (req, res) => {
   }
 });
 
+/**
+ * @api {post} /reject/:userId Reject Friend Request
+ * @apiName RejectFriendRequest
+ * @apiGroup Friends
+ *
+ * @apiDescription Reject a friend request for a user.
+ *
+ * @apiParam {String} userId User ID
+ *
+ * @apiHeader {String} Authorization Firebase ID Token
+ *
+ * @apiBody {String} friendId Friend ID
+ *
+ * @apiSuccess {Object} message Success message
+ * @apiSuccessExample {json} Success-Response:
+ *       HTTP/1.1 200 OK
+ *       {
+ *         "message": "Friend request rejected"
+ *       }
+ *
+ * @apiError Unauthorized User is not authorized
+ * @apiErrorExample {json} Unauthorized:
+ *       HTTP/1.1 403 Unauthorized
+ *       {
+ *         "error": "Unauthorized"
+ *       }
+ *
+ * @apiError FriendshipNotFound Friendship not found
+ * @apiErrorExample {json} FriendshipNotFound:
+ *       HTTP/1.1 404 Not Found
+ *       {
+ *         "error": "Friendship not found"
+ *       }
+ *
+ * @apiError InternalServerError Internal Server Error
+ * @apiErrorExample {json} InternalServerError:
+ *       HTTP/1.1 500 Internal Server Error
+ *       {
+ *         "error": "Internal Server Error"
+ *       }
+ */
+router.post("/reject/:userId", async (req, res) => {
+  const authToken = req.headers.authorization;
+  const { userId } = req.params;
+  const { friendId } = req.body;
+
+  //Authorize
+  try {
+    const authUser = await auth().verifyIdToken(authToken as string);
+    if (authUser.uid !== userId) {
+      res.status(403).json({ error: "Unauthorized" });
+    }
+  } catch (e) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  try {
+    const friendship = await db.friendship.findFirst({
+      where: {
+        user_id: friendId,
+        friend_id: userId,
+        status: "PENDING",
+      },
+    });
+    if (!friendship) {
+      return res.status(404).json({ error: "Friendship not found" });
+    }
+    await db.friendship.delete({ where: { id: friendship.id } });
+    return res.status(200).json({ message: "Friend request rejected" });
+  } catch (e) {
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 export { router as FriendsRouter };
