@@ -327,4 +327,72 @@ router.post("/reject/:userId", async (req, res) => {
   }
 });
 
+/**
+ * @api {get} /getFriends/:userId Get Friends
+ * @apiName GetFriends
+ * @apiGroup Friends
+ *
+ * @apiDescription Get friends for a user.
+ *
+ * @apiParam {String} userId User ID
+ *
+ * @apiHeader {String} Authorization Firebase ID Token
+ *
+ * @apiSuccess {Object[]} friends List of friends
+ * @apiSuccessExample {json} Success-Response:
+ *       HTTP/1.1 200 OK
+ *       [
+ *         {
+ *           "id": 1,
+ *           "user_id": "user-id",
+ *           "friend_id": "friend-id",
+ *           "user_username": "user-username",
+ *           "friend_username": "friend-username",
+ *           "status": "FRIENDS"
+ *         }
+ *       ]
+ *
+ * @apiError Unauthorized User is not authorized
+ * @apiErrorExample {json} Unauthorized:
+ *       HTTP/1.1 403 Unauthorized
+ *       {
+ *         "error": "Unauthorized"
+ *       }
+ *
+ * @apiError InternalServerError Internal Server Error
+ * @apiErrorExample {json} InternalServerError:
+ *       HTTP/1.1 500 Internal Server Error
+ *       {
+ *         "error": "Internal Server Error"
+ *       }
+ */
+router.get("/getFriends/:userId", async (req, res) => {
+  const authToken = req.headers.authorization;
+  const { userId } = req.params;
+
+  //Authorize
+  try {
+    const authUser = await auth().verifyIdToken(authToken as string);
+    if (authUser.uid !== userId) {
+      res.status(403).json({ error: "Unauthorized" });
+    }
+  } catch (e) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  try {
+    const friends = await db.friendship.findMany({
+      where: {
+        OR: [
+          { user_id: userId, status: "FRIENDS" },
+          { friend_id: userId, status: "FRIENDS" },
+        ],
+      },
+    });
+    return res.status(200).json(friends);
+  } catch (e) {
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 export { router as FriendsRouter };
