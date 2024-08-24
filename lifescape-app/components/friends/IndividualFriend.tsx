@@ -8,8 +8,8 @@ interface IndividualFriendProps {
 
 const IndividualFriend: React.FC<IndividualFriendProps> = ({friendData}) => {
   return (
-    <View>
-        <Text>{friendData.user_id}</Text>
+    <View className='bg-blue-400 p-2 rounded-md'>
+        <Text>{friendData.user_username}</Text>
     </View>
   )
 }

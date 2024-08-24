@@ -38,12 +38,11 @@ const FriendsList = () => {
     },[user, refresh])
 
   return (
-    <View className='w-full bg-red-400 mt-5'>
+    <View className='w-full  mt-5'>
         {loading ? (
             <ActivityIndicator size='large' color='white' />
         ) : (
             <ScrollView>
-                <Text>Friends List</Text>
                 {friends.map((friend) => (
                     <IndividualFriend
                         key={friend.id}
