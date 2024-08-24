@@ -62,14 +62,11 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({
       if (response.status === 200) {
         console.log("Habit completed successfully");
         try {
-          const response = await api.get(
-            `/character/get/${user.uid}`,
-            {
-              headers: {
-                Authorization: await user.getIdToken(),
-              },
-            }
-          );
+          const response = await api.get(`/character/get/${user.uid}`, {
+            headers: {
+              Authorization: await user.getIdToken(),
+            },
+          });
           if (response.status === 200) {
             setUserCharacter(response.data);
             setHabits((prev) =>
@@ -78,10 +75,13 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({
                   ? {
                       ...h,
                       streak: h.streak + 1,
-                      currentCompletions: h.repeat === "WEEKLY" || h.repeat === "MONTHLY" ? h.currentCompletions + 1 : h.currentCompletions,
+                      currentCompletions:
+                        h.repeat === "WEEKLY" || h.repeat === "MONTHLY"
+                          ? h.currentCompletions + 1
+                          : h.currentCompletions,
                     }
-                  : h
-              )
+                  : h,
+              ),
             );
             showReward({
               experienceReward: habit.experienceReward,
@@ -111,7 +111,7 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({
         console.log(error);
       }
     }
-  }
+  };
 
   const onPressHabit = () => {
     setCurrentEditHabit(habit);
@@ -195,7 +195,7 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({
           <TouchableOpacity
             className={`${
               habit.quitting ? "bg-red-100" : "bg-green-200"
-            } flex flex-row items-end justify-between overflow-hidden rounded-r-lg p-4 py-5 w-[90%]`}
+            } flex w-[90%] flex-row items-end justify-between overflow-hidden rounded-r-lg p-4 py-5`}
             activeOpacity={1}
             onPress={() => onPressHabit()}
           >

@@ -44,14 +44,14 @@ export const useTaskContext = () => useContext(TaskContext);
 const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [tasks, setTasks] = useState<Task[]>(defaultState.tasks);
   const [taskCreationOpen, setTaskCreationOpen] = useState<boolean>(
-    defaultState.taskCreationOpen
+    defaultState.taskCreationOpen,
   );
   const [sortBy, setSortBy] = useState<string>(defaultState.sortBy);
   const [currentEditTask, setCurrentEditTask] = useState<Task | null>(
-    defaultState.currentEditTask
+    defaultState.currentEditTask,
   );
   const [editTaskOpen, setEditTaskOpen] = useState<boolean>(
-    defaultState.editTaskOpen
+    defaultState.editTaskOpen,
   );
 
   const { user, userCharacter } = useGlobalContext();
@@ -65,7 +65,7 @@ const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
             headers: {
               Authorization: await user.getIdToken(),
             },
-          }
+          },
         );
         if (response.status === 200) {
           setTasks(response.data);
@@ -83,7 +83,18 @@ const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   return (
     <TaskContext.Provider
-      value={{ tasks, setTasks, taskCreationOpen, setTaskCreationOpen, sortBy, setSortBy, currentEditTask, setCurrentEditTask ,editTaskOpen, setEditTaskOpen}}
+      value={{
+        tasks,
+        setTasks,
+        taskCreationOpen,
+        setTaskCreationOpen,
+        sortBy,
+        setSortBy,
+        currentEditTask,
+        setCurrentEditTask,
+        editTaskOpen,
+        setEditTaskOpen,
+      }}
     >
       {children}
     </TaskContext.Provider>

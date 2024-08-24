@@ -8,7 +8,7 @@ import {
   TextInput,
 } from "react-native";
 import React, { useState } from "react";
-import {isAxiosError} from "axios";
+import { isAxiosError } from "axios";
 import api from "@/api/axios";
 
 import { useGlobalContext } from "@/context/GlobalProvider";
@@ -42,7 +42,7 @@ const CharacterCreationModal: React.FC<CharacterCreationModalProps> = ({
           headers: {
             Authorization: await user.getIdToken(),
           },
-        }
+        },
       );
       if (response.status === 201) {
         setUserCharacter(response.data);
@@ -65,32 +65,32 @@ const CharacterCreationModal: React.FC<CharacterCreationModalProps> = ({
       <Text>Plase make a character</Text>
       <TouchableHighlight
         onPress={() => setOpen(true)}
-        className="bg-[#FDFDFD] w-[225px] h-[45px] rounded-md mt-4"
+        className="mt-4 h-[45px] w-[225px] rounded-md bg-[#FDFDFD]"
         underlayColor="#FFFFFF"
       >
-        <Text className="text-black text-xl font-semibold mx-auto my-auto">
+        <Text className="mx-auto my-auto text-xl font-semibold text-black">
           Make your Character
         </Text>
       </TouchableHighlight>
       <Modal animationType="slide" visible={isOpen}>
-        <SafeAreaView className=" bg-red-400 h-full p-20 flex flex-col items-center">
+        <SafeAreaView className=" flex h-full flex-col items-center bg-red-400 p-20">
           <Text className="text-2xl">Create Your Character</Text>
           <View>
-            <Text className="text-xl text-neutral-700 pb-1">Name</Text>
+            <Text className="pb-1 text-xl text-neutral-700">Name</Text>
             <TextInput
               id="name"
               autoCapitalize="none"
               onChangeText={(text) => setCharacterName(text)}
               autoComplete="name"
-              className="w-[300px] h-[60px] bg-black rounded-md text-white px-3"
+              className="h-[60px] w-[300px] rounded-md bg-black px-3 text-white"
             />
           </View>
           <TouchableHighlight
-            className="bg-[#FDFDFD] w-[225px] h-[45px] rounded-md mt-4"
+            className="mt-4 h-[45px] w-[225px] rounded-md bg-[#FDFDFD]"
             underlayColor="#FFFFFF"
             onPress={() => handle_creation()}
           >
-            <Text className="text-black text-xl font-semibold mx-auto my-auto">
+            <Text className="mx-auto my-auto text-xl font-semibold text-black">
               Create Character
             </Text>
           </TouchableHighlight>

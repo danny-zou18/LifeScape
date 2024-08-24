@@ -6,7 +6,22 @@ interface User {
   name: string;
   createdAt: Date;
   character?: Character | null;
+  friends: Friendship[];
+  friendShips: Friendship[];
 }
+interface Friendship {
+  id: string;
+  user_id: string;
+  friend_id: string;
+  user_username: string;
+  friend_username: string;
+  created_at: Date;
+  updated_at: Date;
+  friend: User;
+  user: User;
+  status: FriendShipStatus;
+}
+
 interface Character {
   id: number;
   name: string;
@@ -89,7 +104,7 @@ interface Habit {
   currentCompletions: number;
   completionGoalWeekly?: number | null;
   completionGoalMonthly?: number | null;
-  
+
   quitting: boolean;
 
   difficultyRank: DifficultyRank;
@@ -126,7 +141,7 @@ interface Routine {
   goldReward?: number | null;
   StrengthReward?: number | null;
   DefenseReward?: number | null;
-  AgilityReward?: number | null; 
+  AgilityReward?: number | null;
   VitalityReward?: number | null;
   EnduranceReward?: number | null;
   WillReward?: number | null;
@@ -196,4 +211,24 @@ enum Repeat {
   MONTHLY = "MONTHLY",
 }
 
-export { User, Character, Task, Habit, Routine, Class, Subclass, DifficultyRank, Repeat};
+enum FriendShipStatus {
+  PENDING = "PENDING",
+  FRIENDS = "FRIENDS",
+  DECLINED = "DECLINED",
+  BLOCKED = "BLOCKED",
+  REMOVED = "REMOVED",
+}
+
+export {
+  User,
+  Friendship,
+  FriendShipStatus,
+  Character,
+  Task,
+  Habit,
+  Routine,
+  Class,
+  Subclass,
+  DifficultyRank,
+  Repeat,
+};

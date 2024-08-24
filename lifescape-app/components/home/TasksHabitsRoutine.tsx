@@ -1,7 +1,4 @@
-import {
-  View,
-  FlatList,
-} from "react-native";
+import { View, FlatList } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedScrollHandler,
@@ -51,7 +48,7 @@ const TasksHabitsRoutine: React.FC<TasksHabitsRoutineProps> = ({
       onScroll={scrollHandler}
       scrollEventThrottle={16}
       renderItem={({ item }) => (
-        <View className="w-[95vw] mt-1 h-[35rem]">
+        <View className="mt-1 h-[35rem] w-[95vw]">
           {item === "Tasks" && (
             <TaskProvider>
               <TaskWrapper />

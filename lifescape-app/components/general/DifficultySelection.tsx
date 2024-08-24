@@ -14,13 +14,13 @@ const DifficultySelection: React.FC<DifficultySelectionProps> = ({
 }) => {
   return (
     <View className="mt-4 w-[85%]">
-      <Text className="ml-2 text-md text-neutral-700 pb-1">
+      <Text className="text-md ml-2 pb-1 text-neutral-700">
         Difficulty Rank
       </Text>
-      <View className="flex flex-row justify-between p-1 bg-gray-400 rounded-lg h-[50px] w-full">
+      <View className="flex h-[50px] w-full flex-row justify-between rounded-lg bg-gray-400 p-1">
         <TouchableHighlight
-          className={`flex items-center justify-center w-[13.3%] ${
-            difficulty === DifficultyRank.F ?"bg-[#b93df2]" : "bg-[#e1abf740]"
+          className={`flex w-[13.3%] items-center justify-center ${
+            difficulty === DifficultyRank.F ? "bg-[#b93df2]" : "bg-[#e1abf740]"
           } rounded-md`}
           onPress={() => setDifficulty(DifficultyRank.F)}
           underlayColor="#b93df200"
@@ -28,7 +28,7 @@ const DifficultySelection: React.FC<DifficultySelectionProps> = ({
           <Text>F</Text>
         </TouchableHighlight>
         <TouchableHighlight
-          className={`flex items-center justify-center w-[13.3%] ${
+          className={`flex w-[13.3%] items-center justify-center ${
             difficulty === DifficultyRank.E ? "bg-[#b93df2]" : "bg-[#e1abf740]"
           } rounded-md`}
           onPress={() => setDifficulty(DifficultyRank.E)}
@@ -37,7 +37,7 @@ const DifficultySelection: React.FC<DifficultySelectionProps> = ({
           <Text>E</Text>
         </TouchableHighlight>
         <TouchableHighlight
-          className={`flex items-center justify-center w-[13.3%] ${
+          className={`flex w-[13.3%] items-center justify-center ${
             difficulty === DifficultyRank.D ? "bg-[#b93df2]" : "bg-[#e1abf740]"
           } rounded-md`}
           onPress={() => setDifficulty(DifficultyRank.D)}
@@ -46,7 +46,7 @@ const DifficultySelection: React.FC<DifficultySelectionProps> = ({
           <Text>D</Text>
         </TouchableHighlight>
         <TouchableHighlight
-          className={`flex items-center justify-center w-[13.3%] ${
+          className={`flex w-[13.3%] items-center justify-center ${
             difficulty === DifficultyRank.C ? "bg-[#b93df2]" : "bg-[#e1abf740]"
           } rounded-md`}
           onPress={() => setDifficulty(DifficultyRank.C)}
@@ -55,7 +55,7 @@ const DifficultySelection: React.FC<DifficultySelectionProps> = ({
           <Text>C</Text>
         </TouchableHighlight>
         <TouchableHighlight
-          className={`flex items-center justify-center w-[13.3%] ${
+          className={`flex w-[13.3%] items-center justify-center ${
             difficulty === DifficultyRank.B ? "bg-[#b93df2]" : "bg-[#e1abf740]"
           } rounded-md`}
           onPress={() => setDifficulty(DifficultyRank.B)}
@@ -64,7 +64,7 @@ const DifficultySelection: React.FC<DifficultySelectionProps> = ({
           <Text>B</Text>
         </TouchableHighlight>
         <TouchableHighlight
-          className={`flex items-center justify-center w-[13.3%] ${
+          className={`flex w-[13.3%] items-center justify-center ${
             difficulty === DifficultyRank.A ? "bg-[#b93df2]" : "bg-[#e1abf740]"
           } rounded-md`}
           onPress={() => setDifficulty(DifficultyRank.A)}
@@ -73,7 +73,7 @@ const DifficultySelection: React.FC<DifficultySelectionProps> = ({
           <Text>A</Text>
         </TouchableHighlight>
         <TouchableHighlight
-          className={`flex items-center justify-center w-[13.3%] ${
+          className={`flex w-[13.3%] items-center justify-center ${
             difficulty === DifficultyRank.S ? "bg-[#b93df2]" : "bg-[#e1abf740]"
           } rounded-md`}
           onPress={() => setDifficulty(DifficultyRank.S)}

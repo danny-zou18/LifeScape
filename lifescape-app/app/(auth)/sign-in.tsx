@@ -10,14 +10,11 @@ import {
   TouchableHighlight,
   ScrollView,
 } from "react-native";
-import {
-  useForm,
-  FieldValues,
-} from "react-hook-form";
+import { useForm, FieldValues } from "react-hook-form";
 import React, { useState } from "react";
 
 import { FIREBASE_AUTH } from "@/FirebaseConfig";
-import { signInWithEmailAndPassword} from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 import { Link } from "expo-router";
 
@@ -25,9 +22,9 @@ const SignIn: React.FC = () => {
   // const [email, set_email] = useState<string>("");
   // const [password, set_password] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  
+
   const auth = FIREBASE_AUTH;
-  const win = Dimensions.get('window');
+  const win = Dimensions.get("window");
   const {
     setValue,
     handleSubmit,
@@ -37,67 +34,74 @@ const SignIn: React.FC = () => {
       email: "",
       password: "",
     },
-  })
+  });
 
   const submitHandler = async ({ email, password }: FieldValues) => {
     // console.log(email, password)
     setLoading(true);
     await signInWithEmailAndPassword(auth, email, password)
-    .then((userCredentials)=> {
-      ;
-    })
-    .catch((error)=> {
-      console.log(error);
-    })
-    .finally(()=>{
-      setLoading(false);
-    })
-  }
+      .then((userCredentials) => {})
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   return (
     <SafeAreaView className="h-full">
       <KeyboardAvoidingView behavior="padding">
         <ScrollView>
-          <View className="p-8 relative" style={{ width: win.width, height: win.width }}>
+          <View
+            className="relative p-8"
+            style={{ width: win.width, height: win.width }}
+          >
             {/* lifescape image  */}
             <Image
-              source={require('../.././assets/images/LifeScape.png')}
-              className="w-full h-full"
+              source={require("../.././assets/images/LifeScape.png")}
+              className="h-full w-full"
             />
           </View>
-          <View className="w-full flex flex-col justify-center items-center px-4 my-6 gap-4">
+          <View className="my-6 flex w-full flex-col items-center justify-center gap-4 px-4">
             <View className="">
-              <Text className="text-xl text-neutral-700 pb-1">Email</Text>
+              <Text className="pb-1 text-xl text-neutral-700">Email</Text>
               <TextInput
                 id="email"
                 autoCapitalize="none"
-                onChangeText={(text) => setValue('email', text)}
+                onChangeText={(text) => setValue("email", text)}
                 autoComplete="email"
-                className="w-[300px] h-[60px] bg-black rounded-md text-white px-3"
+                className="h-[60px] w-[300px] rounded-md bg-black px-3 text-white"
               />
             </View>
             <View>
-              <Text className="text-xl text-neutral-700 pb-1">Password</Text>
+              <Text className="pb-1 text-xl text-neutral-700">Password</Text>
               <TextInput
                 id="password"
                 autoCapitalize="none"
                 secureTextEntry={true}
-                onChangeText={(text) => setValue('password', text)}
+                onChangeText={(text) => setValue("password", text)}
                 autoComplete="current-password"
-                className="w-[300px] h-[60px] bg-black rounded-md text-white px-3"
+                className="h-[60px] w-[300px] rounded-md bg-black px-3 text-white"
               />
             </View>
-  
+
             {loading ? (
               <ActivityIndicator size="large" color="#0000ff" />
             ) : (
               <>
-                <TouchableHighlight onPress={handleSubmit(submitHandler)} className="bg-[#FDFDFD] w-[225px] h-[45px] rounded-md mt-4" underlayColor="#FFFFFF">
-                  <Text className="text-black text-xl font-semibold mx-auto my-auto">Login</Text>
+                <TouchableHighlight
+                  onPress={handleSubmit(submitHandler)}
+                  className="mt-4 h-[45px] w-[225px] rounded-md bg-[#FDFDFD]"
+                  underlayColor="#FFFFFF"
+                >
+                  <Text className="mx-auto my-auto text-xl font-semibold text-black">
+                    Login
+                  </Text>
                 </TouchableHighlight>
               </>
             )}
-            <View className="flex flex-row mt-4">
+            <View className="mt-4 flex flex-row">
               <Text>Don't have an Account?</Text>
               <Link href="sign-up" className="ml-3">
                 Sign up

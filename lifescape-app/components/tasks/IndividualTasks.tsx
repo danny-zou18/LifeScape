@@ -51,7 +51,7 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({
   const handleCompleteTask = async () => {
     try {
       const response = await api.put(
-        `/tasks/complete/${user.uid}/${userCharacter.id}/${task.id}`,
+        `/tasks/complete/${user.uid}/${userCharacter?.id}/${task.id}`,
         {},
         {
           headers: {
@@ -63,14 +63,11 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({
         console.log("Task completed successfully");
         setTasks((prev) => prev.filter((t) => t.id !== task.id));
         try {
-          const response = await api.get(
-            `/character/get/${user.uid}`,
-            {
-              headers: {
-                Authorization: await user.getIdToken(),
-              },
-            }
-          );
+          const response = await api.get(`/character/get/${user.uid}`, {
+            headers: {
+              Authorization: await user.getIdToken(),
+            },
+          });
           if (response.status === 200) {
             setUserCharacter(response.data);
             showReward({

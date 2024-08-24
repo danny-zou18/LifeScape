@@ -6,7 +6,7 @@ import CreateHabitBtn from "./CreateHabitBtn";
 
 const TopBar = () => {
   return (
-    <View className="flex flex-row justify-between items-center pl-2 pr-1 ">
+    <View className="flex flex-row items-center justify-between pl-2 pr-1 ">
       <FilterHabits />
       <CreateHabitBtn />
     </View>

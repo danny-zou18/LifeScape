@@ -27,7 +27,7 @@ const Home = () => {
     <SafeAreaView>
       {userCharacter ? (
         <HomeProvider>
-          <View className="flex items-center relative">
+          <View className="relative flex items-center">
             <CharacterOverview />
             <View className="flex w-[95vw] ">
               <ViewSelectionBtns

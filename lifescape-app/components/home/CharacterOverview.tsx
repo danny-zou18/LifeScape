@@ -7,61 +7,72 @@ import { useGlobalContext } from "@/context/GlobalProvider";
 const CharacterOverview = () => {
   const { userCharacter } = useGlobalContext();
 
-  const expPercentage = useMemo(
-    () => {
-      let next_level = 0.8 * Math.pow(userCharacter?.level ?? 0, 2) + 2 * (userCharacter?.level ?? 0);
-      return calculatePercentage(userCharacter?.experience ?? 0, next_level)
-    },
-    [userCharacter?.experience, userCharacter?.level]
-  );
+  const expPercentage = useMemo(() => {
+    let next_level =
+      0.8 * Math.pow(userCharacter?.level ?? 0, 2) +
+      2 * (userCharacter?.level ?? 0);
+    return calculatePercentage(userCharacter?.experience ?? 0, next_level);
+  }, [userCharacter?.experience, userCharacter?.level]);
   const healthPercentage = useMemo(
-    () => calculatePercentage(userCharacter?.health ?? 0, userCharacter?.maxHealth ?? 0),
-    [userCharacter?.health, userCharacter?.maxHealth]
+    () =>
+      calculatePercentage(
+        userCharacter?.health ?? 0,
+        userCharacter?.maxHealth ?? 0,
+      ),
+    [userCharacter?.health, userCharacter?.maxHealth],
   );
   const manaPercentage = useMemo(
-    () => calculatePercentage(userCharacter?.mana ?? 0, userCharacter?.maxMana ?? 0),
-    [userCharacter?.mana, userCharacter?.maxMana]
+    () =>
+      calculatePercentage(
+        userCharacter?.mana ?? 0,
+        userCharacter?.maxMana ?? 0,
+      ),
+    [userCharacter?.mana, userCharacter?.maxMana],
   );
   const energyPercentage = useMemo(
-    () => calculatePercentage(userCharacter?.energy ?? 0, userCharacter?.maxEnergy ?? 0),
-    [userCharacter?.energy, userCharacter?.maxEnergy]
+    () =>
+      calculatePercentage(
+        userCharacter?.energy ?? 0,
+        userCharacter?.maxEnergy ?? 0,
+      ),
+    [userCharacter?.energy, userCharacter?.maxEnergy],
   );
   return (
-    <View className=" flex flex-row h-[17vh] p-3">
-      <View className="w-[37%] h-[95%] relative mt-auto mb-auto">
-        <View className="absolute top-[-.5rem] left-2 z-10 bg-[#00000090] px-2 rounded-full">
+    <View className=" flex h-[17vh] flex-row p-3">
+      <View className="relative mb-auto mt-auto h-[95%] w-[37%]">
+        <View className="absolute left-2 top-[-.5rem] z-10 rounded-full bg-[#00000090] px-2">
           <Text className="text-xs text-white">{userCharacter?.name}</Text>
         </View>
         <Image
-          className="w-full h-full z-0 rounded-md"
+          className="z-0 h-full w-full rounded-md"
           source={{
             uri: "https://media1.tenor.com/m/sepKXIenuG0AAAAC/cat-meme-cat-meme-face.gif",
           }}
         />
         <View
-          className={`absolute bottom-[-.5rem] z-10 bg-transparent flex flex-row ${
-            userCharacter?.level ?? 0 >= 100
+          className={`absolute bottom-[-.5rem] z-10 flex flex-row bg-transparent ${
+            (userCharacter?.level ?? 0 >= 100)
               ? "left-[-.3rem]"
-              : userCharacter?.level ?? 0 >= 10
-              ? "left-[.2rem]"
-              : "left-1"
+              : (userCharacter?.level ?? 0 >= 10)
+                ? "left-[.2rem]"
+                : "left-1"
           }`}
         >
-          <View className="bg-black px-[0.4rem] rounded-full">
+          <View className="rounded-full bg-black px-[0.4rem]">
             <Text className="text-xs text-white">{userCharacter?.level}</Text>
           </View>
-          <View className="bg-[#00000090] ml-1 mt-[0.15rem] min-w-[76%] max-h-[70%] rounded-full overflow-hidden">
+          <View className="ml-1 mt-[0.15rem] max-h-[70%] min-w-[76%] overflow-hidden rounded-full bg-[#00000090]">
             <View
               style={{ width: expPercentage }}
-              className={`bg-green-400 h-full rounded-l-full rounded-r-lg flex items-center justify-center`}
+              className={`flex h-full items-center justify-center rounded-l-full rounded-r-lg bg-green-400`}
             ></View>
           </View>
         </View>
       </View>
-      <View className="ml-1 max-w-[62%] flex flex-col">
-        <View className=" p-1 max-h-[70%]">
-          <View className="h-[33%] flex flex-row">
-            <View className="w-[10%] h-[80%]">
+      <View className="ml-1 flex max-w-[62%] flex-col">
+        <View className=" max-h-[70%] p-1">
+          <View className="flex h-[33%] flex-row">
+            <View className="h-[80%] w-[10%]">
               <Image
                 source={require("../../assets/images/bisexual.png")}
                 resizeMode="contain"
@@ -69,10 +80,10 @@ const CharacterOverview = () => {
               />
             </View>
             <View className="h-full w-[90%]">
-              <View className="min-w-full h-[.7rem] bg-white rounded-full overflow-hidden">
+              <View className="h-[.7rem] min-w-full overflow-hidden rounded-full bg-white">
                 <View
                   style={{ width: healthPercentage }}
-                  className={`bg-red-400 h-full rounded-l-full rounded-r-lg flex items-center justify-center`}
+                  className={`flex h-full items-center justify-center rounded-l-full rounded-r-lg bg-red-400`}
                 ></View>
               </View>
               <View className="flex flex-row justify-between">
@@ -83,8 +94,8 @@ const CharacterOverview = () => {
               </View>
             </View>
           </View>
-          <View className="h-[33%] mt-1 flex flex-row">
-            <View className="w-[10%] h-[80%]">
+          <View className="mt-1 flex h-[33%] flex-row">
+            <View className="h-[80%] w-[10%]">
               <Image
                 source={require("../../assets/images/mana.png")}
                 resizeMode="contain"
@@ -92,10 +103,10 @@ const CharacterOverview = () => {
               />
             </View>
             <View className="h-full w-[90%]">
-              <View className="min-w-full h-[.7rem] bg-white rounded-full overflow-hidden">
+              <View className="h-[.7rem] min-w-full overflow-hidden rounded-full bg-white">
                 <View
                   style={{ width: manaPercentage }}
-                  className={`bg-blue-400 h-full rounded-l-full rounded-r-lg flex items-center justify-center`}
+                  className={`flex h-full items-center justify-center rounded-l-full rounded-r-lg bg-blue-400`}
                 ></View>
               </View>
               <View className="flex flex-row justify-between">
@@ -106,8 +117,8 @@ const CharacterOverview = () => {
               </View>
             </View>
           </View>
-          <View className="h-[33%] mt-1 flex flex-row">
-            <View className="w-[10%] h-[80%]">
+          <View className="mt-1 flex h-[33%] flex-row">
+            <View className="h-[80%] w-[10%]">
               <Image
                 source={require("../../assets/images/flash.png")}
                 resizeMode="contain"
@@ -115,10 +126,10 @@ const CharacterOverview = () => {
               />
             </View>
             <View className="h-full w-[90%]">
-              <View className="min-w-full h-[.7rem] bg-white rounded-full overflow-hidden">
+              <View className="h-[.7rem] min-w-full overflow-hidden rounded-full bg-white">
                 <View
                   style={{ width: energyPercentage }}
-                  className={`bg-yellow-200 h-full rounded-l-full rounded-r-lg flex items-center justify-center`}
+                  className={`flex h-full items-center justify-center rounded-l-full rounded-r-lg bg-yellow-200`}
                 ></View>
               </View>
               <View className="flex flex-row justify-between">
@@ -130,8 +141,8 @@ const CharacterOverview = () => {
             </View>
           </View>
         </View>
-        <View className="h-[30%] p-1 mt-1">
-          <View className="w-full flex flex-row items-center justify-end">
+        <View className="mt-1 h-[30%] p-1">
+          <View className="flex w-full flex-row items-center justify-end">
             <View className="h-8">
               <Image
                 source={require("../../assets/images/pixil-frame-0.png")}

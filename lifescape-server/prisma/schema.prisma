@@ -14,68 +14,76 @@ model testing {
 }
 
 model users {
-  id            String     @id @default(cuid())
-  username      String     @unique
-  email         String     @unique
+  id            String       @id @default(cuid())
+  username      String       @unique
+  email         String       @unique
   emailVerified DateTime?
   name          String
-  createdAt     DateTime   @default(now())
+  createdAt     DateTime     @default(now())
   character     Character?
+  friends       Friendship[] @relation("friend_friendships")
+  friendships   Friendship[] @relation("user_friendships")
+}
+
+model Friendship {
+  id              String           @id @default(cuid())
+  user_id         String
+  friend_id       String
+  user_username   String
+  friend_username String
+  created_at      DateTime         @default(now())
+  updated_at      DateTime         @updatedAt
+  status          FriendShipStatus @default(PENDING)
+  friend          users            @relation("friend_friendships", fields: [friend_id], references: [id])
+  user            users            @relation("user_friendships", fields: [user_id], references: [id])
+
+  @@unique([user_id, friend_id])
+  @@unique([friend_id, user_id])
 }
 
 model Character {
-  id   Int    @id @default(autoincrement())
-  name String
-
-  level      Int       @default(1)
-  gold       Int       @default(0)
-  class      Class?    @default(NONE)
-  subclass   Subclass? @default(NONE)
-  experience Int       @default(0)
-  health     Int       @default(100)
-  maxHealth  Int       @default(100)
-  mana       Int       @default(50)
-  maxMana    Int       @default(50)
-  energy     Int       @default(100)
-  maxEnergy  Int       @default(100)
-
-  Strength  Int @default(10)
-  Defense   Int @default(10)
-  Agility   Int @default(10)
-  Vitality  Int @default(10)
-  Endurance Int @default(10)
-  Will      Int @default(10)
-
-  strengthXp  Float @default(0) //Created trigger function for this.
-  defenseXp   Float @default(0) //Created trigger function for this.
-  agilityXp   Float @default(0) //Created trigger function for this.
-  vitalityXp  Float @default(0) //Created trigger function for this.
-  enduranceXp Float @default(0) //Created trigger function for this.
-  willXp      Float @default(0) //Created trigger function for this.
-
-  Owner    users     @relation(fields: [OwnerId], references: [id])
-  OwnerId  String    @unique
-  Tasks    Task[]
-  Habits   Habit[]
-  Routines Routine[]
-
-  TotalTasksDone    Int @default(0)
-  TotalHabitsDone   Int @default(0)
-  TotalRoutinesDone Int @default(0)
+  id                Int       @id @default(autoincrement())
+  name              String
+  level             Int       @default(1)
+  experience        Int       @default(0)
+  health            Int       @default(100)
+  mana              Int       @default(50)
+  energy            Int       @default(100)
+  Strength          Int       @default(10)
+  Defense           Int       @default(10)
+  Agility           Int       @default(10)
+  Vitality          Int       @default(10)
+  Endurance         Int       @default(10)
+  Will              Int       @default(10)
+  OwnerId           String    @unique
+  TotalHabitsDone   Int       @default(0)
+  TotalRoutinesDone Int       @default(0)
+  TotalTasksDone    Int       @default(0)
+  agilityXp         Float     @default(0)
+  class             Class?    @default(NONE)
+  defenseXp         Float     @default(0)
+  enduranceXp       Float     @default(0)
+  gold              Int       @default(0)
+  maxEnergy         Int       @default(100)
+  maxHealth         Int       @default(100)
+  maxMana           Int       @default(50)
+  strengthXp        Float     @default(0)
+  subclass          Subclass? @default(NONE)
+  vitalityXp        Float     @default(0)
+  willXp            Float     @default(0)
+  Owner             users     @relation(fields: [OwnerId], references: [id])
+  Habits            Habit[]
+  Routines          Routine[]
+  Tasks             Task[]
 }
 
 model Task {
-  id Int @id @default(autoincrement())
-
-  title       String
-  description String?
-
-  createdAt DateTime  @default(now())
-  dueDate   DateTime?
-  completed Boolean   @default(false)
-
-  difficultyRank DifficultyRank @default(E)
-
+  id               Int            @id @default(autoincrement())
+  title            String
+  description      String?
+  createdAt        DateTime       @default(now())
+  dueDate          DateTime?
+  completed        Boolean        @default(false)
   experienceReward Int?
   goldReward       Int?
   StrengthReward   Int?
@@ -84,71 +92,58 @@ model Task {
   VitalityReward   Int?
   EnduranceReward  Int?
   WillReward       Int?
-
-  Character   Character @relation(fields: [CharacterId], references: [id])
-  CharacterId Int
+  CharacterId      Int
+  difficultyRank   DifficultyRank @default(E)
+  Character        Character      @relation(fields: [CharacterId], references: [id])
 }
 
 model Habit {
-  id Int @id @default(autoincrement())
-
-  title       String
-  description String?
-
-  createdAt       DateTime  @default(now())
-  lastCompleted   DateTime?
-  completeBy      DateTime?
-  totalCompletion Int       @default(0)
-  streak          Int       @default(0)
-
-  repeat                Repeat @default(DAILY)
-  currentCompletions    Int    @default(0)
+  id                    Int            @id @default(autoincrement())
+  title                 String
+  description           String?
+  createdAt             DateTime       @default(now())
+  streak                Int            @default(0)
+  repeat                Repeat         @default(DAILY)
   completionGoalWeekly  Int?
   completionGoalMonthly Int?
-
-  quitting Boolean @default(false)
-
-  difficultyRank DifficultyRank @default(E)
-
-  experienceReward Int?
-  goldReward       Int?
-  StrengthReward   Int?
-  DefenseReward    Int?
-  AgilityReward    Int?
-  VitalityReward   Int?
-  EnduranceReward  Int?
-  WillReward       Int?
-
-  Character   Character @relation(fields: [CharacterId], references: [id])
-  CharacterId Int
+  quitting              Boolean        @default(false)
+  difficultyRank        DifficultyRank @default(E)
+  experienceReward      Int?
+  goldReward            Int?
+  StrengthReward        Int?
+  DefenseReward         Int?
+  AgilityReward         Int?
+  VitalityReward        Int?
+  EnduranceReward       Int?
+  WillReward            Int?
+  CharacterId           Int
+  currentCompletions    Int            @default(0)
+  lastCompleted         DateTime?
+  completeBy            DateTime?
+  totalCompletion       Int            @default(0)
+  Character             Character      @relation(fields: [CharacterId], references: [id])
 }
 
 model Routine {
-  id Int @id @default(autoincrement())
-
-  title       String
-  description String?
-
-  createdAt     DateTime  @default(now())
-  lastCompleted DateTime?
-
+  id                      Int            @id @default(autoincrement())
+  title                   String
+  description             String?
+  createdAt               DateTime       @default(now())
   daysOfWeek              Int[]
   startTimeOfDayInMinutes Int
+  difficultyRank          DifficultyRank @default(E)
+  experienceReward        Int?
+  goldReward              Int?
+  StrengthReward          Int?
+  DefenseReward           Int?
+  AgilityReward           Int?
+  VitalityReward          Int?
+  EnduranceReward         Int?
+  WillReward              Int?
+  CharacterId             Int
   endTimeOfDayInMinutes   Int
-
-  difficultyRank DifficultyRank @default(E)
-
-  experienceReward Int?
-  goldReward       Int?
-  StrengthReward   Int?
-  DefenseReward    Int?
-  AgilityReward    Int?
-  VitalityReward   Int?
-  EnduranceReward  Int?
-  WillReward       Int?
-
-  Character   Character @relation(fields: [CharacterId], references: [id])
-  CharacterId Int
+  lastCompleted           DateTime?
+  Character               Character      @relation(fields: [CharacterId], references: [id])
 }
 
 enum Class {
@@ -163,31 +158,25 @@ enum Class {
 
 enum Subclass {
   NONE
-
   BERSERKER
   PALADIN
   GUARDIAN
   DESTROYER
   SLAYER
-
   SORCERER
   SUMMONER
   ELEMENTALIST
   NECROMANCER
   ALCHEMIST
-
   THIEF
-
   SHARPSHOOTER
   GUNSLINGER
   ARTILLERIST
-
   PRIEST
   MONK
   DRUID
   SHAMAN
   BARD
-
   NINJA
   SOULREAPER
   SHADOWHUNTER
@@ -211,4 +200,12 @@ enum Repeat {
   DAILY
   WEEKLY
   MONTHLY
+}
+
+enum FriendShipStatus {
+  PENDING
+  FRIENDS
+  DECLINED
+  BLOCKED
+  REMOVED
 }

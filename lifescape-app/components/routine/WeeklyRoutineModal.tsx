@@ -18,7 +18,7 @@ const WeeklyRoutineModal = () => {
     >
       <RoutineEditModal />
       <SafeAreaView>
-        <View className="flex flex-row mb-2 ml-5">
+        <View className="mb-2 ml-5 flex flex-row">
           <Button
             title="Exit"
             onPress={() => setViewWeeklyRoutineOpen(false)}
@@ -30,7 +30,7 @@ const WeeklyRoutineModal = () => {
           renderEvent={IndividualRoutinesWeekly}
           mode="week"
           swipeEnabled={false}
-          dayHeaderStyle={{ flex: 1, justifyContent: "center"}}
+          dayHeaderStyle={{ flex: 1, justifyContent: "center" }}
           // headerContainerStyle={{ display: "none" }}
           onPressEvent={(event) => {
             console.log(event);

@@ -35,10 +35,19 @@ export default function RootLayout() {
 const RootLayoutNav = () => {
   return (
     <GlobalProvider>
-      <Stack >
-        <Stack.Screen name="index" options={{ headerShown: false, animation: "fade" }} />
-        <Stack.Screen name="(auth)" options={{ headerShown: false, animation: "fade" }} />
-        <Stack.Screen name="(app)" options={{ headerShown: false, animation: "fade" }} />
+      <Stack>
+        <Stack.Screen
+          name="index"
+          options={{ headerShown: false, animation: "fade" }}
+        />
+        <Stack.Screen
+          name="(auth)"
+          options={{ headerShown: false, animation: "fade" }}
+        />
+        <Stack.Screen
+          name="(app)"
+          options={{ headerShown: false, animation: "fade" }}
+        />
       </Stack>
     </GlobalProvider>
   );

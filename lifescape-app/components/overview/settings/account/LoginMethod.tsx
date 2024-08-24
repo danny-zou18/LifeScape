@@ -5,9 +5,9 @@ import { TouchableHighlight } from "react-native-gesture-handler";
 const LoginMethod = () => {
   return (
     <View>
-      <Text className="font-[600] mb-1 ml-2">LOGIN METHODS</Text>
-      <View className="w-full bg-white py-2 px-4 rounded-lg shadow-md">
-        <View className=" flex flex-row justify-between items-center">
+      <Text className="mb-1 ml-2 font-[600]">LOGIN METHODS</Text>
+      <View className="w-full rounded-lg bg-white px-4 py-2 shadow-md">
+        <View className=" flex flex-row items-center justify-between">
           <View className="">
             <Text className="text-lg font-semibold">Password</Text>
             <Text>Set</Text>

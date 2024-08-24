@@ -11,12 +11,12 @@ const CreateRoutineBtn = () => {
   return (
     <TouchableHighlight
       style={{ alignSelf: "flex-start" }}
-      className="bg-[rgb(253,253,253)] p-2 rounded-full shadow-sm"
+      className="rounded-full bg-[rgb(253,253,253)] p-2 shadow-sm"
       underlayColor="#FFFFFF60"
       onPress={() => setRoutineCreationOpen(true)}
     >
       <View className="flex flex-row items-center pl-2">
-        <Text className="mr-2 text-md font-[500]">Create</Text>
+        <Text className="text-md mr-2 font-[500]">Create</Text>
         <AntDesign name="plus" size={24} color="black" />
       </View>
     </TouchableHighlight>

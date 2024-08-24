@@ -28,7 +28,6 @@ export default function CharacterLayout() {
               <Text>Done</Text>
             </Link>
           ),
-          
         }}
       />
     </Stack>

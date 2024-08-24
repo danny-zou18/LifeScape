@@ -44,7 +44,7 @@ const TaskCreationModal: React.FC = () => {
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
 
   const [difficultyRank, setDifficultyRank] = useState<DifficultyRank>(
-    DifficultyRank.E
+    DifficultyRank.E,
   );
 
   const onDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
@@ -80,13 +80,13 @@ const TaskCreationModal: React.FC = () => {
 
     try {
       const response = await api.post(
-        `/tasks/create/${user.uid}/${userCharacter.id}`,
+        `/tasks/create/${user.uid}/${userCharacter?.id}`,
         { title, description, dueDate, difficultyRank },
         {
           headers: {
             Authorization: await user.getIdToken(),
           },
-        }
+        },
       );
       if (response.status === 201) {
         console.log("Task created successfully");
@@ -128,35 +128,35 @@ const TaskCreationModal: React.FC = () => {
           <Button title="Cancel" onPress={() => onCancel()}></Button>
         </View>
         <ScrollView className="h-full">
-          <View className="flex items-center justify-center mt-5">
+          <View className="mt-5 flex items-center justify-center">
             <View className="w-[85%]">
-              <Text className="ml-2 text-md text-neutral-700 pb-1">Title</Text>
+              <Text className="text-md ml-2 pb-1 text-neutral-700">Title</Text>
               <TextInput
                 id="title"
                 autoCapitalize="none"
                 onChangeText={(text) => setValue("title", text)}
                 autoComplete="name"
-                className="w-full h-[50px] bg-black rounded-lg text-white px-3"
+                className="h-[50px] w-full rounded-lg bg-black px-3 text-white"
               />
             </View>
             <View className="mt-5 w-[85%]">
-              <Text className="ml-2 text-md text-neutral-700 pb-1">Notes</Text>
+              <Text className="text-md ml-2 pb-1 text-neutral-700">Notes</Text>
               <TextInput
                 id="description"
                 autoCapitalize="none"
                 onChangeText={(text) => setValue("description", text)}
                 autoComplete="name"
-                className="w-full h-[50px] bg-black rounded-lg text-white px-3"
+                className="h-[50px] w-full rounded-lg bg-black px-3 text-white"
                 numberOfLines={2}
               />
             </View>
             <View className="mt-5 flex w-[85%]">
-              <Text className="ml-2 text-md text-neutral-700 pb-1">
+              <Text className="text-md ml-2 pb-1 text-neutral-700">
                 Due Date
               </Text>
-              <View className="w-full h-[50px] bg-black rounded-lg text-white px-3 flex flex-row justify-center items-center">
+              <View className="flex h-[50px] w-full flex-row items-center justify-center rounded-lg bg-black px-3 text-white">
                 {showDatePicker ? (
-                  <View className="flex flex-row justify-center items-center">
+                  <View className="flex flex-row items-center justify-center">
                     <DateTimePicker
                       id="dueDate"
                       value={date}
@@ -179,11 +179,11 @@ const TaskCreationModal: React.FC = () => {
                 ) : (
                   <View>
                     <TouchableHighlight
-                      className="bg-[#000000] w-[225px]  rounded-md "
+                      className="w-[225px] rounded-md  bg-[#000000] "
                       underlayColor="#FFFFFF"
                       onPress={() => setShowDatePicker(true)}
                     >
-                      <Text className="text-white text-xl font-semibold mx-auto my-auto">
+                      <Text className="mx-auto my-auto text-xl font-semibold text-white">
                         Select Date
                       </Text>
                     </TouchableHighlight>
@@ -201,11 +201,11 @@ const TaskCreationModal: React.FC = () => {
             ) : (
               <>
                 <TouchableHighlight
-                  className="bg-[#000000] w-[225px] h-[45px] rounded-md mt-10"
+                  className="mt-10 h-[45px] w-[225px] rounded-md bg-[#000000]"
                   underlayColor="#FFFFFF"
                   onPress={handleSubmit(submitHandler)}
                 >
-                  <Text className="text-white text-xl font-semibold mx-auto my-auto">
+                  <Text className="mx-auto my-auto text-xl font-semibold text-white">
                     Create Task
                   </Text>
                 </TouchableHighlight>

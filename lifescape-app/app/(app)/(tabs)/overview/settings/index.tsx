@@ -42,16 +42,16 @@ const Settings = () => {
   };
 
   return (
-    <SafeAreaView className=" mx-auto w-[90%] mt-5 mb-2">
-      <View className="w-full rounded-lg overflow-hidden bg-black">
-        <Link href="/overview/settings/account" className="p-4 w-full ">
+    <SafeAreaView className=" mx-auto mb-2 mt-5 w-[90%]">
+      <View className="w-full overflow-hidden rounded-lg bg-black">
+        <Link href="/overview/settings/account" className="w-full p-4 ">
           <Text className="text-white">Account</Text>
         </Link>
-        <View className="w-full h-[1px] bg-white"></View>
-        <Link href="/overview/settings/history" className="p-4  w-full ">
+        <View className="h-[1px] w-full bg-white"></View>
+        <Link href="/overview/settings/history" className="w-full  p-4 ">
           <Text className="text-white">History</Text>
         </Link>
-        <View className="w-full h-[1px] bg-white"></View>
+        <View className="h-[1px] w-full bg-white"></View>
       </View>
 
       {isSigningIn ? (
