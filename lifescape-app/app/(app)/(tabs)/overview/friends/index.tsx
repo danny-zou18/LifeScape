@@ -1,6 +1,7 @@
 import { View, Text, Image, SafeAreaView, Pressable } from "react-native";
 import { Link } from "expo-router";
 import React from "react";
+import FriendsList from "@/components/friends/FriendsList";
 
 const Friends = () => {
   return (
@@ -31,9 +32,9 @@ const Friends = () => {
             </View>
           </Pressable>
         </Link>
-
         <View className="h-[1px] w-full bg-white"></View>
       </View>
+      <FriendsList />
     </SafeAreaView>
   );
 };

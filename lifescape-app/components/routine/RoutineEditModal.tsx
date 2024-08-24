@@ -87,7 +87,7 @@ const RoutineEditModal = () => {
     try {
       const response = await api.put(
         `/routine/update/${user.uid}/${
-          userCharacter.id
+          userCharacter?.id
         }/${routineId?.toString()}`,
         {
           title,
@@ -132,7 +132,7 @@ const RoutineEditModal = () => {
         const fetchRoutinesWeek = async () => {
           try {
             const response = await api.get(
-              `/routine/getAll/${user.uid}/${userCharacter.id}`,
+              `/routine/getAll/${user.uid}/${userCharacter?.id}`,
               {
                 headers: {
                   Authorization: await user.getIdToken(),
