@@ -19,6 +19,6 @@ const CreateHabitBtn = () => {
       </View>
     </TouchableHighlight>
   );
-};  
+};
 
 export default CreateHabitBtn;

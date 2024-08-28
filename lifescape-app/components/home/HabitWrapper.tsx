@@ -13,7 +13,6 @@ const HabitWrapper = () => {
       <HabitEditModal />
       <TopBar />
       <DisplayHabits />
-      
     </View>
   );
 };

@@ -1,4 +1,11 @@
-import { View, Text, ScrollView, TextInput, ActivityIndicator, TouchableHighlight } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  TextInput,
+  ActivityIndicator,
+  TouchableHighlight,
+} from "react-native";
 import React, { useState } from "react";
 import api from "@/api/axios";
 import { useGlobalContext } from "@/context/GlobalProvider";
@@ -21,10 +28,11 @@ const AddFriend = () => {
     },
   });
 
-  const submitHandler = async ({friendUsername}: FieldValues) => {
+  const submitHandler = async ({ friendUsername }: FieldValues) => {
     setLoading(true);
     try {
-      const response = await api.post(`/friends/add/${user.uid}`,
+      const response = await api.post(
+        `/friends/add/${user.uid}`,
         {
           friendUsername: friendUsername,
         },
@@ -32,7 +40,7 @@ const AddFriend = () => {
           headers: {
             Authorization: await user.getIdToken(),
           },
-        }
+        },
       );
       if (response.status === 200) {
         console.log(response.data);
@@ -47,8 +55,7 @@ const AddFriend = () => {
     } finally {
       setLoading(false);
     }
-
-  }  
+  };
   return (
     <View>
       <ScrollView>
