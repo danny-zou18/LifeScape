@@ -395,7 +395,7 @@ router.get("/getFriends/:userId", async (req, res) => {
   }
 });
 
-router.get("/getFriend/:userId/:friendId", async (req, res) => {
+router.get("/getFriendData/:userId/:friendId", async (req, res) => {
   const authToken = req.headers.authorization;
   const { userId, friendId } = req.params;
 
@@ -417,11 +417,7 @@ router.get("/getFriend/:userId/:friendId", async (req, res) => {
     if (!friendWithCharacter) {
       return res.status(404).json({ error: "User not found" });
     }
-    const friendCharacter = friendWithCharacter.character;
-    if (!friendCharacter) {
-      return res.status(200).json(null);
-    }
-    res.status(200).json(friendCharacter);
+    res.status(200).json(friendWithCharacter);
   } catch (e) {
     console.log(e);
     return res.status(500).json({ error: "Internal Server Error" });
