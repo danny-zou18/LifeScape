@@ -1,4 +1,9 @@
-import { View, Text, ActivityIndicator, TouchableHighlight } from "react-native";
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  TouchableHighlight,
+} from "react-native";
 import React, { useState } from "react";
 import { Friendship } from "@/types/db_types";
 import api from "@/api/axios";
@@ -84,10 +89,18 @@ const IndividualFriendRequest: React.FC<IndividualFriendRequestProps> = ({
           <ActivityIndicator color="#0000ff" />
         ) : (
           <>
-            <TouchableHighlight onPress={acceptFriendRequest} className="p-2 bg-green-400 rounded-full" underlayColor="#278a3e"  >
+            <TouchableHighlight
+              onPress={acceptFriendRequest}
+              className="p-2 bg-green-400 rounded-full"
+              underlayColor="#278a3e"
+            >
               <Ionicons name="checkmark-sharp" size={24} color="black" />
             </TouchableHighlight>
-            <TouchableHighlight onPress={rejectFriendRequest} className="p-2 bg-red-500 rounded-full" underlayColor="#8a2424">
+            <TouchableHighlight
+              onPress={rejectFriendRequest}
+              className="p-2 bg-red-500 rounded-full"
+              underlayColor="#8a2424"
+            >
               <Ionicons name="close" size={24} color="black" />
             </TouchableHighlight>
           </>

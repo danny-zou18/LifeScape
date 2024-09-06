@@ -17,7 +17,7 @@ const FriendOverview = () => {
     const fetchFriendData = async () => {
       try {
         const response = await api.get(
-          `/friends/getFriendData/${user.uid}/${friendId}`
+          `/friends/getFriendData/${user.uid}/${friendId}`,
         );
         setFriendData(response.data);
       } catch (error) {
@@ -34,7 +34,7 @@ const FriendOverview = () => {
       2 * (friendData?.character?.level ?? 0);
     return calculatePercentage(
       friendData?.character?.experience ?? 0,
-      next_level
+      next_level,
     );
   }, [friendData?.character?.experience, friendData?.character?.level]);
 
