@@ -395,4 +395,33 @@ router.get("/getFriends/:userId", async (req, res) => {
   }
 });
 
+router.get("/getFriendData/:userId/:friendId", async (req, res) => {
+  const authToken = req.headers.authorization;
+  const { userId, friendId } = req.params;
+
+  //Authorize
+  try {
+    const authUser = await auth().verifyIdToken(authToken as string);
+    if (authUser.uid !== userId) {
+      res.status(403).json({ error: "Unauthorized" });
+    }
+  } catch (e) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  try {
+    const friendWithCharacter = await db.users.findUnique({
+      where: { id: friendId },
+      include: { character: true },
+    });
+    if (!friendWithCharacter) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.status(200).json(friendWithCharacter);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 export { router as FriendsRouter };
