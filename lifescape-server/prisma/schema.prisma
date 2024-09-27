@@ -75,6 +75,7 @@ model Character {
   Habits            Habit[]
   Routines          Routine[]
   Tasks             Task[]
+  Items             Item[]
 }
 
 model Task {
@@ -208,4 +209,29 @@ enum FriendShipStatus {
   DECLINED
   BLOCKED
   REMOVED
+}
+
+
+model Item {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  cost        Int
+  rarity      Int
+  type        ItemType
+  CharacterId Int
+  URL         String?
+  Quantity    Int       @default(1)
+  Character   Character @relation(fields: [CharacterId], references: [id])
+}
+
+enum ItemType {
+  WEAPON
+  ARMOR
+  Chest
+  CONSUMABLE
+  MATERIAL
+  QUEST
+  KEY
+  MISC
 }

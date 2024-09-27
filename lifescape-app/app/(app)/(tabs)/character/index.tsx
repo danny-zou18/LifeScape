@@ -1,20 +1,48 @@
-import { View, Text, FlatList, StyleSheet, Image } from "react-native";
-import React from "react";
-
-// Sample inventory data with images
-const inventoryData = [
-  { id: "1", name: "Health Potion", quantity: 10, image: require("../../../../assets/Inventory/test.png") },
-  { id: "2", name: "Mana Potion", quantity: 5, image: require("../../../../assets/Inventory/test.png") },
-  { id: "3", name: "Sword", quantity: 1, image: require("../../../../assets/Inventory/test.png") },
-  { id: "4", name: "Shield", quantity: 1, image: require("../../../../assets/Inventory/test.png") },
-  { id: "5", name: "Bow", quantity: 2, image: require("../../../../assets/Inventory/test.png") },
-];
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  Image,
+  ActivityIndicator,
+} from "react-native";
+import React, { useEffect, useState } from "react";
+import api from "@/api/axios";
+import { useGlobalContext } from "@/context/GlobalProvider";
 
 const Inventory = () => {
+  const [inventoryData, setInventoryData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const { user, userCharacter } = useGlobalContext();
+
+  useEffect(() => {
+    const fetchInventory = async () => {
+      try {
+        const response = await api.get(`/items/get/${user.uid}/${userCharacter?.id}`, {
+          headers: {
+            Authorization: await user.getIdToken(),
+          },
+        });
+        setInventoryData(response.data);
+      } catch (error) {
+        console.error("Failed to fetch inventory data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInventory();
+  }, []);
+
   // Render each item in the inventory
-  const renderItem = ({ item }: { item: { id: string; name: string; quantity: number; image: any } }) => (
+  const renderItem = ({
+    item,
+  }: {
+    item: { id: string; name: string; quantity: number; URL: string };
+  }) => (
     <View style={styles.itemContainer}>
-      <Image source={item.image} style={styles.itemImage} />
+      <Image source={{ uri: item.URL }} style={styles.itemImage} />
       <View style={styles.textContainer}>
         <Text style={styles.itemText}>{item.name}</Text>
         <Text style={styles.quantityText}>Qty: {item.quantity}</Text>
@@ -22,12 +50,20 @@ const Inventory = () => {
     </View>
   );
 
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Inventory</Text>
       <FlatList
         data={inventoryData}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
         numColumns={2} // Set the grid with 2 columns
       />
@@ -76,6 +112,11 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     resizeMode: "contain",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
