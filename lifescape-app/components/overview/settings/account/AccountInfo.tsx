@@ -17,6 +17,51 @@ const AccountInfo = () => {
   const [message, setMessage] = useState<string | null>(null);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [verificationCode, setVerificationCode] = useState<string[]>(Array(6).fill(''));
+
+  // Create refs for each input field
+  const inputsRef = useRef<Array<TextInput | null>>([]);
+
+  const focusNext = (index: number) => {
+    if (index < inputsRef.current.length - 1) {
+      inputsRef.current[index + 1]?.focus();
+    }
+  };
+
+  const focusPrevious = (index: number) => {
+    if (index > 0) {
+      inputsRef.current[index - 1]?.focus();
+    }
+  };
+
+  const handleInputChange = (value: string, index: number) => {
+    const newCode = [...verificationCode];
+    newCode[index] = value;
+
+    setVerificationCode(newCode);
+
+    if (value !== '') {
+      focusNext(index);
+    }
+  };
+
+  const handleKeyPress = (event: any, index: number) => {
+    if (event.nativeEvent.key === 'Backspace') {
+      const newCode = [...verificationCode];
+
+      // If current box is empty and backspace is pressed, move to the previous box and delete
+      if (newCode[index] === '') {
+        if (index > 0) {
+          focusPrevious(index);
+          newCode[index - 1] = ''; // Clear the previous input
+          setVerificationCode(newCode);
+        }
+      } else {
+        // If the current box is not empty, clear it
+        newCode[index] = '';
+        setVerificationCode(newCode);
+      }
+    }
+  };
   
   const sendVerificationEmail = async () => {
     setLoading(true);
