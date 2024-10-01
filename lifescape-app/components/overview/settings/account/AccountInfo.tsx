@@ -5,7 +5,32 @@ import api from "@/api/axios";
 import { useGlobalContext } from "@/context/GlobalProvider";
 
 const AccountInfo = () => {
-  
+  const { user, psqlUser } = useGlobalContext();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [message, setMessage] = useState<string | null>(null);
+
+  const sendVerificationEmail = async () => {
+    setLoading(true);
+    setMessage(null); // Reset any previous message
+    try {
+      const send = await api.post(`/auth/post/verify-email/${user.uid}`, {
+        headers: {
+          Authorization: await user.getIdToken(),
+        },
+      });
+      setMessage("Verification email sent successfully.");
+    } catch (error) {
+      setMessage("Failed to send verification email.");
+      if (isAxiosError(error)) {
+        console.log(error.response?.data);
+      } else {
+        console.log(error);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <View>
       <Text className="mb-1 ml-2 font-[600]">ACCOUNT INFO</Text>
