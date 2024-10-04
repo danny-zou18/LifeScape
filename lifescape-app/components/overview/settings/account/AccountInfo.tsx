@@ -64,16 +64,28 @@ const AccountInfo = () => {
   };
   
   const sendVerificationEmail = async () => {
+    if (!user) {
+      console.log("User is not authenticated");
+      setMessage('User is not authenticated');
+      return;
+    }
+  
+    const idToken = await user.getIdToken(); // Ensure this is not undefined
+    console.log("ID Token:", idToken);
+    console.log("User ID:", user.uid);
+  
     setLoading(true);
     setMessage(null); // Reset any previous message
+  
     try {
       const send = await api.post(`/auth/post/verify-email/${user.uid}`, {
         headers: {
-          Authorization: await user.getIdToken(),
+          Authorization: idToken,  // Use idToken here
         },
       });
       setMessage('Verification email sent successfully.');
-      setIsModalVisible(true); // Show modal to enter verification code
+      setIsModalVisible(true);
+      console.log("Modal visibility set to true");
     } catch (error) {
       setMessage('Failed to send verification email.');
       if (isAxiosError(error)) {
@@ -84,7 +96,7 @@ const AccountInfo = () => {
     } finally {
       setLoading(false);
     }
-  };
+  };  
 
   const submitVerificationCode = async () => {
     if (verificationCode.length !== 6) {
