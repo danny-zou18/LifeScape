@@ -9,6 +9,7 @@ import {
 import React, { useEffect, useState } from "react";
 import api from "@/api/axios";
 import { useGlobalContext } from "@/context/GlobalProvider";
+import ImageXpBar from "@/components/character/characterOverview/ImageXpBar";
 
 const Inventory = () => {
   const [inventoryData, setInventoryData] = useState([]);
@@ -44,8 +45,8 @@ const Inventory = () => {
     <View style={styles.itemContainer}>
       <Image source={{ uri: item.URL }} style={styles.itemImage} />
       <View style={styles.textContainer}>
-        <Text style={styles.itemText}>{item.name}</Text>
-        <Text style={styles.quantityText}>Qty: {item.quantity}</Text>
+      <Text style={styles.itemText}>{item.name}</Text>
+      <Text style={styles.quantityText}>Qty: {item.quantity}</Text>
       </View>
     </View>
   );
@@ -59,8 +60,12 @@ const Inventory = () => {
   }
 
   return (
+   
     <View style={styles.container}>
-      <Text style={styles.title}>Inventory</Text>
+      <View className="mx-auto flex w-[90%] flex-col py-2">
+        <ImageXpBar />
+      </View>
+      <Text style={styles.title} className="py-10">Inventory</Text>
       <FlatList
         data={inventoryData}
         keyExtractor={(item) => item.id.toString()}
