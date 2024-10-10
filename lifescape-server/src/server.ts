@@ -12,6 +12,7 @@ import { tasksRouter } from "./routes/tasks";
 import { habitsRouter } from "./routes/habits";
 import { routineRouter } from "./routes/routine";
 import { FriendsRouter } from "./routes/friends";
+import { itemsRouter } from "./routes/items";
 
 admin.initializeApp({
   credential: admin.credential.cert(<admin.ServiceAccount>credentials),
@@ -29,6 +30,7 @@ app.use("/tasks", tasksRouter);
 app.use("/habits", habitsRouter);
 app.use("/routine", routineRouter);
 app.use("/friends", FriendsRouter);
+app.use("/items", itemsRouter);
 
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
