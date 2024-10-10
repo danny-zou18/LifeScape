@@ -20,11 +20,14 @@ const Inventory = () => {
   useEffect(() => {
     const fetchInventory = async () => {
       try {
-        const response = await api.get(`/items/get/${user.uid}/${userCharacter?.id}`, {
-          headers: {
-            Authorization: await user.getIdToken(),
-          },
-        });
+        const response = await api.get(
+          `/items/get/${user.uid}/${userCharacter?.id}`,
+          {
+            headers: {
+              Authorization: await user.getIdToken(),
+            },
+          }
+        );
         setInventoryData(response.data);
       } catch (error) {
         console.error("Failed to fetch inventory data:", error);
@@ -45,8 +48,8 @@ const Inventory = () => {
     <View style={styles.itemContainer}>
       <Image source={{ uri: item.URL }} style={styles.itemImage} />
       <View style={styles.textContainer}>
-      <Text style={styles.itemText}>{item.name}</Text>
-      <Text style={styles.quantityText}>Qty: {item.quantity}</Text>
+        <Text style={styles.itemText}>{item.name}</Text>
+        <Text style={styles.quantityText}>Qty: {item.quantity}</Text>
       </View>
     </View>
   );
@@ -60,12 +63,13 @@ const Inventory = () => {
   }
 
   return (
-   
     <View style={styles.container}>
       <View className="mx-auto flex w-[90%] flex-col py-2">
         <ImageXpBar />
       </View>
-      <Text style={styles.title} className="py-10">Inventory</Text>
+      <Text style={styles.title} className="py-10">
+        Inventory
+      </Text>
       <FlatList
         data={inventoryData}
         keyExtractor={(item) => item.id.toString()}
