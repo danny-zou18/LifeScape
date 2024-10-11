@@ -1,0 +1,2 @@
+UnityFramework filter=lfs diff=lfs merge=lfs -text
+lifescape-app/unity/builds/ios/UnityFramework.framework/UnityFramework filter=lfs diff=lfs merge=lfs -text

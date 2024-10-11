@@ -12,7 +12,7 @@ const AppLayout: React.FC = () => {
 
   useEffect(() => {
     if (!loggedIn) {
-      router.replace("sign-in");
+      router.replace("/sign-in");
     }
   });
 
