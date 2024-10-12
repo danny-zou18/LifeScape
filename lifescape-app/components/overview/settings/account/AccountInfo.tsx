@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { isAxiosError } from "axios";
 import api from "@/api/axios";
 import { useGlobalContext } from '@/context/GlobalProvider';
 
@@ -30,26 +31,42 @@ const AccountInfo = () => {
 
   const sendVerificationEmail = async () => {
     if (!user) {
+      console.log("User is not authenticated");
       setMessage('User is not authenticated');
       return;
     }
+  
+    console.log("sending email verification");
+  
+    const idToken = await user.getIdToken();
+    console.log("ID Token:", idToken);
+    console.log("User ID:", user.uid);
+  
     setLoading(true);
-    setMessage(null);
+    setMessage(null); // Reset any previous message
+  
     try {
-      const idToken = await user.getIdToken();
       const response = await api.post(`/auth/verify-email/${user.uid}`, {}, {
         headers: {
-          Authorization: `Bearer ${idToken}`,
+          Authorization: `Bearer ${idToken}`,  // Use idToken here
         },
       });
       setMessage('Verification email sent successfully.');
+      console.log('Verification email sent:', response.data.verificationLink);
     } catch (error) {
-      console.log("Failed to send email", error);
+      console.log("error: ", error);
+      console.log("failed to send");
       setMessage('Failed to send verification email.');
+      if (isAxiosError(error)) {
+        console.log(error.response?.data);
+      } else {
+        console.log(error);
+      }
     } finally {
       setLoading(false);
     }
   };
+  
 
   return (
     <View>
