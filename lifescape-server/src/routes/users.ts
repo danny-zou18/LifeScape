@@ -167,38 +167,34 @@ router.post("/verify-email/:userId", async (req, res) => {
   }
 
   try {
-    // Verify the Firebase ID token
     const authUser = await getAuth().verifyIdToken(authToken.replace('Bearer ', ''));
     console.log(`User ID verified: ${authUser.uid}`);
 
-    // Find the user in your PostgreSQL database
+    // Find the user
     const user = await db.users.findUnique({ where: { id: userId } });
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    // Get Firebase user record to ensure email is associated
+    // Generate email verification link from Firebase Admin
     const userRecord = await getAuth().getUser(userId);
-    console.log(`Firebase user record retrieved for ${userRecord.email}`);
-
-    // If the user doesn't have an email, return an error
     if (!userRecord.email) {
       return res.status(400).json({ error: "User does not have an email" });
     }
 
-    // Generate the email verification link
     const link = await getAuth().generateEmailVerificationLink(userRecord.email);
     console.log(`Generated email verification link: ${link}`);
 
+    // Optionally: you can send this link via email or return it to the client (for now we'll return it)
     return res.status(200).json({
       message: "Verification email sent",
       success: true,
-      verificationLink: link,  // Return the link in the response
+      verificationLink: link, // You can send this link via an actual email sending service later
     });
 
   } catch (error) {
-    console.error("Error generating verification link:", error);
-    return res.status(400).json({ error: "Failed to send verification email" });
+    console.error("Error verifying user or sending email:", error);
+    return res.status(400).json({ error: "Failed to verify user or send email" });
   }
 });
 
