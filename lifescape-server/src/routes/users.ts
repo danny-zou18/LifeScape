@@ -159,45 +159,47 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/verify-email/:userId", async (req, res) => {
-  const authToken = req.headers.authorization;
   const { userId } = req.params;
+  const authToken = req.headers.authorization;
 
   if (!authToken) {
     return res.status(400).json({ error: "Authorization token is missing" });
   }
-  
-  console.log(`Received request to verify email for userId: ${userId}`); // Log userId
 
   try {
-    const authUser = await getAuth().verifyIdToken(authToken);
-    console.log(`User ID verified: ${authUser.uid}`); // Log after verification
+    // Verify the Firebase ID token
+    const authUser = await getAuth().verifyIdToken(authToken.replace('Bearer ', ''));
+    console.log(`User ID verified: ${authUser.uid}`);
 
+    // Find the user in your PostgreSQL database
     const user = await db.users.findUnique({ where: { id: userId } });
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
+    // Get Firebase user record to ensure email is associated
     const userRecord = await getAuth().getUser(userId);
-    console.log(`Firebase user record retrieved for ${userRecord.email}`); // Log user record
+    console.log(`Firebase user record retrieved for ${userRecord.email}`);
 
+    // If the user doesn't have an email, return an error
     if (!userRecord.email) {
       return res.status(400).json({ error: "User does not have an email" });
     }
 
     await getAuth()
-      .generateEmailVerificationLink(userRecord.email)
-      .then((link) => {
-        console.log(`Generated email verification link: ${link}`); // Log verification link
-        res.status(200).json({
-          message: "Verification email sent",
-          success: true,
-          verificationLink: link, // In production, you'd send this via email
-        });
-      })
-      .catch((error) => {
-        console.error("Error sending verification email:", error);
-        res.status(400).json({ error: "Failed to send verification email" });
+    .generateEmailVerificationLink(userRecord.email)
+    .then((link) => {
+      console.log(`Generated email verification link: ${link}`); // Log verification link
+      res.status(200).json({
+        message: "Verification email sent",
+        success: true,
+        verificationLink: link, // In production, you'd send this via email
       });
+    })
+    .catch((error) => {
+      console.error("Error sending verification email:", error);
+      res.status(400).json({ error: "Failed to send verification email" });
+    });
   } catch (error) {
     console.log(error);
     return res.status(400).json({ error: "Failed to verify user" });
