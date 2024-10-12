@@ -186,23 +186,19 @@ router.post("/verify-email/:userId", async (req, res) => {
       return res.status(400).json({ error: "User does not have an email" });
     }
 
-    await getAuth()
-    .generateEmailVerificationLink(userRecord.email)
-    .then((link) => {
-      console.log(`Generated email verification link: ${link}`); // Log verification link
-      res.status(200).json({
-        message: "Verification email sent",
-        success: true,
-        verificationLink: link, // In production, you'd send this via email
-      });
-    })
-    .catch((error) => {
-      console.error("Error sending verification email:", error);
-      res.status(400).json({ error: "Failed to send verification email" });
+    // Generate the email verification link
+    const link = await getAuth().generateEmailVerificationLink(userRecord.email);
+    console.log(`Generated email verification link: ${link}`);
+
+    return res.status(200).json({
+      message: "Verification email sent",
+      success: true,
+      verificationLink: link,  // Return the link in the response
     });
+
   } catch (error) {
-    console.log(error);
-    return res.status(400).json({ error: "Failed to verify user" });
+    console.error("Error generating verification link:", error);
+    return res.status(400).json({ error: "Failed to send verification email" });
   }
 });
 
