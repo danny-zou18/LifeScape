@@ -22,12 +22,14 @@ const AccountInfo = () => {
   const inputsRef = useRef<Array<TextInput | null>>([]);
 
   const focusNext = (index: number) => {
+    console.log("next");
     if (index < inputsRef.current.length - 1) {
       inputsRef.current[index + 1]?.focus();
     }
   };
 
   const focusPrevious = (index: number) => {
+    console.log("previous");
     if (index > 0) {
       inputsRef.current[index - 1]?.focus();
     }
@@ -69,6 +71,8 @@ const AccountInfo = () => {
       setMessage('User is not authenticated');
       return;
     }
+
+    console.log("sending email verification");
   
     const idToken = await user.getIdToken(); // Ensure this is not undefined
     console.log("ID Token:", idToken);
@@ -78,6 +82,7 @@ const AccountInfo = () => {
     setMessage(null); // Reset any previous message
   
     try {
+      console.log("trying to send");
       const send = await api.post(`/auth/post/verify-email/${user.uid}`, {
         headers: {
           Authorization: idToken,  // Use idToken here
@@ -86,7 +91,10 @@ const AccountInfo = () => {
       setMessage('Verification email sent successfully.');
       setIsModalVisible(true);
       console.log("Modal visibility set to true");
+      console.log("email verification sent");
     } catch (error) {
+      console.log("error: ", {error});
+      console.log("failed to send");
       setMessage('Failed to send verification email.');
       if (isAxiosError(error)) {
         console.log(error.response?.data);
@@ -99,6 +107,7 @@ const AccountInfo = () => {
   };  
 
   const submitVerificationCode = async () => {
+    console.log("submit");
     if (verificationCode.length !== 6) {
       setMessage('Please enter a valid 6-digit code.');
       return;
@@ -153,7 +162,7 @@ const AccountInfo = () => {
 
         {!psqlUser?.emailVerified && (
           <TouchableOpacity
-            onPress={() => setIsModalVisible(true)}
+            onPress={sendVerificationEmail}
             disabled={loading}
             className="mt-3 bg-blue-500 rounded-lg py-2 px-4"
           >
