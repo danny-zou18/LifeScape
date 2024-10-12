@@ -71,7 +71,7 @@ const AccountInfo = () => {
       setMessage('User is not authenticated');
       return;
     }
-
+  
     console.log("sending email verification");
   
     const idToken = await user.getIdToken(); // Ensure this is not undefined
@@ -83,17 +83,18 @@ const AccountInfo = () => {
   
     try {
       console.log("trying to send");
-      const send = await api.post(`/auth/post/verify-email/${user.uid}`, {
+  
+      // Use the correct API route
+      const response = await api.post(`/auth/verify-email/${user.uid}`, {}, {
         headers: {
-          Authorization: idToken,  // Use idToken here
+          Authorization: `Bearer ${idToken}`,  // Use idToken here
         },
       });
       setMessage('Verification email sent successfully.');
-      setIsModalVisible(true);
-      console.log("Modal visibility set to true");
-      console.log("email verification sent");
+      setIsModalVisible(true); // Show the modal for code entry
+      console.log('Verification email sent:', response.data.verificationLink);
     } catch (error) {
-      console.log("error: ", {error});
+      console.log("error: ", error);
       console.log("failed to send");
       setMessage('Failed to send verification email.');
       if (isAxiosError(error)) {
@@ -115,10 +116,11 @@ const AccountInfo = () => {
     setLoading(true);
     setMessage(null); // Reset message
     try {
-      const verify = await api.post(`/auth/post/confirm-verification/${user.uid}`, {
-        code: verificationCode,
+      const verify = await api.post(`/auth/confirm-verification/${user.uid}`, {
+        code: verificationCode,  // Send the code in the body
+      }, {
         headers: {
-          Authorization: await user.getIdToken(),
+          Authorization: await user.getIdToken(),  // Send the Firebase ID token
         },
       });
       setMessage('Verification successful.');
@@ -162,7 +164,10 @@ const AccountInfo = () => {
 
         {!psqlUser?.emailVerified && (
           <TouchableOpacity
-            onPress={sendVerificationEmail}
+            onPress={async () => {
+              setIsModalVisible(true); // Open the modal
+              await sendVerificationEmail(); // Call the function to send the email
+            }}
             disabled={loading}
             className="mt-3 bg-blue-500 rounded-lg py-2 px-4"
           >
