@@ -102,7 +102,8 @@ router.get("/get/:userId/:characterId", async (req, res) => {
     try {
         const authUser = await auth().verifyIdToken(authToken as string);
         if (authUser.uid !== userId) {
-        res.status(403).json({ error: "Unauthorized" });
+            res.status(403).json({ error: "Unauthorized" });
+            return;
         }
     } catch (e) {
         return res.status(401).json({ error: "Unauthorized" });
@@ -112,6 +113,16 @@ router.get("/get/:userId/:characterId", async (req, res) => {
         const items = await prisma.item.findMany({
             where: {
                 CharacterId: parseInt(characterId),
+            },
+            select: {
+                id: true,
+                name: true,
+                description: true,
+                cost: true,
+                rarity: true,
+                type: true,
+                URL: true,
+                Quantity: true,
             },
         });
         res.status(200).json(items);
