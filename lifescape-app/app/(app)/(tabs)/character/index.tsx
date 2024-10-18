@@ -47,7 +47,7 @@ const Inventory = () => {
       case 2:
         return "#00ff00"; // Uncommon - Green
       case 3:
-        return "#0000ff"; // Rare - Blue
+        return "#ADD8E6"; // Rare - Blue
       case 4:
         return "#800080"; // Epic - Purple
       case 5:
