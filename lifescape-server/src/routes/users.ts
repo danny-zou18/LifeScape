@@ -158,4 +158,44 @@ router.get("/:id", async (req, res) => {
   return res.status(200).json({ message: "User Found", success: true, user });
 });
 
+router.post("/verify-email/:userId", async (req, res) => {
+  const { userId } = req.params;
+  const authToken = req.headers.authorization;
+
+  if (!authToken) {
+    return res.status(400).json({ error: "Authorization token is missing" });
+  }
+
+  try {
+    const authUser = await getAuth().verifyIdToken(authToken.replace('Bearer ', ''));
+    console.log(`User ID verified: ${authUser.uid}`);
+
+    // Find the user
+    const user = await db.users.findUnique({ where: { id: userId } });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Generate email verification link from Firebase Admin
+    const userRecord = await getAuth().getUser(userId);
+    if (!userRecord.email) {
+      return res.status(400).json({ error: "User does not have an email" });
+    }
+
+    const link = await getAuth().generateEmailVerificationLink(userRecord.email);
+    console.log(`Generated email verification link: ${link}`);
+
+    // Optionally: you can send this link via email or return it to the client (for now we'll return it)
+    return res.status(200).json({
+      message: "Verification email sent",
+      success: true,
+      verificationLink: link, // You can send this link via an actual email sending service later
+    });
+
+  } catch (error) {
+    console.error("Error verifying user or sending email:", error);
+    return res.status(400).json({ error: "Failed to verify user or send email" });
+  }
+});
+
 export { router as userRouter };
