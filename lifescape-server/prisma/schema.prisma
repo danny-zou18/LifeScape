@@ -73,7 +73,6 @@ model Character {
   willXp            Float     @default(0)
   Owner             users     @relation(fields: [OwnerId], references: [id])
   Habits            Habit[]
-  Items             Item[]
   Routines          Routine[]
   Tasks             Task[]
   Items             Item[]
@@ -148,19 +147,6 @@ model Routine {
   Character               Character      @relation(fields: [CharacterId], references: [id])
 }
 
-model Item {
-  id          Int       @id @default(autoincrement())
-  name        String
-  description String?
-  cost        Int
-  rarity      Int
-  type        ItemType
-  CharacterId Int
-  URL         String?
-  Quantity    Int       @default(1)
-  Character   Character @relation(fields: [CharacterId], references: [id])
-}
-
 enum Class {
   NONE
   WARRIOR
@@ -223,6 +209,20 @@ enum FriendShipStatus {
   DECLINED
   BLOCKED
   REMOVED
+}
+
+
+model Item {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  cost        Int
+  rarity      Int
+  type        ItemType
+  CharacterId Int
+  URL         String?
+  Quantity    Int       @default(1)
+  Character   Character @relation(fields: [CharacterId], references: [id])
 }
 
 enum ItemType {
