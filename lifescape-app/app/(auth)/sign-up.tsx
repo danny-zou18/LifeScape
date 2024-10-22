@@ -36,6 +36,7 @@ const SignUp: React.FC = () => {
       username: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
@@ -44,9 +45,15 @@ const SignUp: React.FC = () => {
     username,
     email,
     password,
+    confirmPassword,
   }: FieldValues) => {
     // console.log(name, username, email, password)
     setLoading(true);
+    if (confirmPassword !== password) {
+        alert("Passwords do not match!");
+        setLoading(false);
+        return;
+    }
     try {
       const response = await api.post("/auth/register", {
         name: name,
@@ -126,6 +133,17 @@ const SignUp: React.FC = () => {
                 autoCapitalize="none"
                 secureTextEntry={true}
                 onChangeText={(text) => setValue("password", text)}
+                autoComplete="current-password"
+                className="h-[60px] w-[300px] rounded-md bg-black px-3 text-white"
+              />
+            </View>
+            <View>
+              <Text className="pb-1 text-xl text-neutral-700">Re-Enter Password</Text>
+              <TextInput
+                id="confirmPassword"
+                autoCapitalize="none"
+                secureTextEntry={true}
+                onChangeText={(text) => setValue("confirmPassword", text)}
                 autoComplete="current-password"
                 className="h-[60px] w-[300px] rounded-md bg-black px-3 text-white"
               />
