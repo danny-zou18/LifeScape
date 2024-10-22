@@ -81,7 +81,7 @@ const AccountInfo = () => {
           <Text className="text-lg font-semibold">Email:</Text>
           <Text className="text-base">{psqlUser?.email}</Text>
         </View>
-
+        
         <View>
           <Text className="text-lg font-semibold">Email Verification:</Text>
           <Text

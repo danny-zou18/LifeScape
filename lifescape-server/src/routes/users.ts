@@ -4,7 +4,36 @@ import { db } from "../utils/db.server";
 import { getAuth } from "firebase-admin/auth";
 import { auth } from "firebase-admin";
 
+import nodemailer from 'nodemailer';
+
 const router = express.Router();
+
+// Create a Nodemailer transporter
+const transporter = nodemailer.createTransport({
+  service: 'gmail', // or another email service
+  auth: {
+    user: 'your-email@gmail.com', // your email
+    pass: 'your-email-password', // your email password or app-specific password
+  },
+});
+
+// Function to send email with the verification link
+const sendEmail = (toEmail: string, verificationLink: string) => {
+  const mailOptions = {
+    from: 'your-email@gmail.com',
+    to: toEmail,
+    subject: 'Verify your email for LifeScape',
+    text: `Please verify your email by clicking the following link: ${verificationLink}`,
+    html: `<p>Please verify your email by clicking <a href="${verificationLink}">here</a>.</p>`,
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      return console.log(error);
+    }
+    console.log('Email sent: ' + info.response);
+  });
+};
 
 /** @api {post} /users/register Register User
  * @apiName RegisterUser
@@ -182,14 +211,17 @@ router.post("/verify-email/:userId", async (req, res) => {
       return res.status(400).json({ error: "User does not have an email" });
     }
 
-    const link = await getAuth().generateEmailVerificationLink(userRecord.email);
-    console.log(`Generated email verification link: ${link}`);
+    const verificationLink = await getAuth().generateEmailVerificationLink(userRecord.email);
+    console.log(`Generated email verification link: ${verificationLink}`);
 
-    // Optionally: you can send this link via email or return it to the client (for now we'll return it)
+    // Send email with the verification link
+    sendEmail(userRecord.email, verificationLink);
+
+    // Return response to the client
     return res.status(200).json({
       message: "Verification email sent",
       success: true,
-      verificationLink: link, // You can send this link via an actual email sending service later
+      verificationLink: verificationLink, // You can still return the link for testing purposes
     });
 
   } catch (error) {
