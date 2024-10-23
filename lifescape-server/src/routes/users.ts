@@ -29,9 +29,8 @@ const sendEmail = (toEmail: string, verificationLink: string) => {
 
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-      return console.log(error);
+      return console.log('Email failed to sent with error: ' + error);
     }
-    console.log('Email sent: ' + info.response);
   });
 };
 
