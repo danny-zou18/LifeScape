@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import { isAxiosError } from "axios";
 import api from "@/api/axios";
 import { useGlobalContext } from '@/context/GlobalProvider';
@@ -52,11 +52,13 @@ const AccountInfo = () => {
         },
       });
       setMessage('Verification email sent successfully.');
+      Alert.alert("Success", "Verification email sent successfully!");
       console.log('Verification email sent:', response.data.verificationLink);
     } catch (error) {
       console.log("error: ", error);
       console.log("failed to send");
       setMessage('Failed to send verification email.');
+      Alert.alert("Error", "Failed to send verification email.");
       if (isAxiosError(error)) {
         console.log(error.response?.data);
       } else {
@@ -67,7 +69,6 @@ const AccountInfo = () => {
     }
   };
   
-
   return (
     <View>
       <Text className="mb-1 ml-2 font-[600]">ACCOUNT INFO</Text>
@@ -81,7 +82,7 @@ const AccountInfo = () => {
           <Text className="text-lg font-semibold">Email:</Text>
           <Text className="text-base">{psqlUser?.email}</Text>
         </View>
-        
+
         <View>
           <Text className="text-lg font-semibold">Email Verification:</Text>
           <Text
