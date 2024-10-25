@@ -1,6 +1,6 @@
 import React from "react";
 import { Text } from "react-native";
-import { Stack, Link, usePathname } from "expo-router";
+import { Stack, Link } from "expo-router";
 
 export default function CharacterLayout() {
   return (
