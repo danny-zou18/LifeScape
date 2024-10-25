@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { isAxiosError } from "axios";
+import api from "@/api/axios";
 import { useGlobalContext } from '@/context/GlobalProvider';
-import api from '@/api/axios'; // Import your axios instance to handle API calls
 
 const AccountInfo = () => {
   const { user, psqlUser } = useGlobalContext();
   const [loading, setLoading] = useState<boolean>(false);
-  const [polling, setPolling] = useState<boolean>(false); // Polling state
   const [message, setMessage] = useState<string | null>(null);
 
   // Function to refresh user from Firebase and check email verification status
@@ -16,63 +16,57 @@ const AccountInfo = () => {
       if (user.emailVerified) {
         console.log('User is verified');
         setMessage('Your email is now verified!');
-        setPolling(false); // Stop polling when user is verified
       } else {
         setMessage('Your email is not yet verified.');
       }
     }
   };
 
-  // Polling function to periodically check the user's email verification status
-  const startPolling = () => {
-    const interval = setInterval(async () => {
-      await refreshUser();
-      if (user?.emailVerified) {
-        clearInterval(interval); // Stop polling if the user is verified
-      }
-    }, 10000); // Check every 10 seconds
-  };
-
-  // Automatically start polling after sending the verification email
+  // Automatically check email verification when component mounts or psqlUser changes
   useEffect(() => {
-    if (polling) {
-      startPolling();
+    if (psqlUser && !psqlUser?.emailVerified) {
+      refreshUser(); // Check if the user is verified
     }
-    return () => setPolling(false); // Cleanup polling on component unmount
-  }, [polling]);
+  }, [psqlUser]);
 
   const sendVerificationEmail = async () => {
     if (!user) {
-      console.log('User is not authenticated');
+      console.log("User is not authenticated");
       setMessage('User is not authenticated');
       return;
     }
-
+  
+    console.log("sending email verification");
+  
+    const idToken = await user.getIdToken();
+    console.log("ID Token:", idToken);
+    console.log("User ID:", user.uid);
+  
     setLoading(true);
     setMessage(null); // Reset any previous message
-
+  
     try {
-      console.log('Sending email verification');
-      const idToken = await user.getIdToken(); // Ensure the ID token is generated correctly
-
-      // Send request to your backend API to trigger the email
-      await api.post(`/auth/verify-email/${user.uid}`, {}, {
+      const response = await api.post(`/auth/verify-email/${user.uid}`, {}, {
         headers: {
-          Authorization: `Bearer ${idToken}`, // Include Firebase ID token in the request
+          Authorization: `Bearer ${idToken}`,  // Use idToken here
         },
       });
-
-      // Set polling state to true after the email is sent
-      setLoading(false);
       setMessage('Verification email sent successfully.');
-      setPolling(true); // Start polling after the email is sent
-
+      console.log('Verification email sent:', response.data.verificationLink);
     } catch (error) {
-      console.log('Error sending email verification:', error);
+      console.log("error: ", error);
+      console.log("failed to send");
       setMessage('Failed to send verification email.');
+      if (isAxiosError(error)) {
+        console.log(error.response?.data);
+      } else {
+        console.log(error);
+      }
+    } finally {
       setLoading(false);
     }
   };
+  
 
   return (
     <View>
@@ -87,7 +81,7 @@ const AccountInfo = () => {
           <Text className="text-lg font-semibold">Email:</Text>
           <Text className="text-base">{psqlUser?.email}</Text>
         </View>
-
+        
         <View>
           <Text className="text-lg font-semibold">Email Verification:</Text>
           <Text
@@ -102,22 +96,22 @@ const AccountInfo = () => {
         {!user?.emailVerified && (
           <>
             <TouchableOpacity
-              onPress={sendVerificationEmail}
-              disabled={loading}
-              style={{
-                marginTop: 10,
-                backgroundColor: '#4CAF50',
-                borderRadius: 5,
-                paddingVertical: 10,
-                justifyContent: 'center',
-                alignItems: 'center',
+              onPress={async () => {
+                await sendVerificationEmail();
               }}
+              disabled={loading}
+              className="mt-3 bg-blue-500 rounded-lg py-2 px-4"
             >
-              {loading ? (
-                <ActivityIndicator color="#fff" />
-              ) : (
-                <Text style={{ color: '#fff' }}>Send Verification Email</Text>
-              )}
+              <Text className="text-white text-center">
+                {loading ? <ActivityIndicator color="#fff" /> : 'Send Verification Email'}
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={refreshUser}
+              className="mt-3 bg-gray-500 rounded-lg py-2 px-4"
+            >
+              <Text className="text-white text-center">Refresh Verification Status</Text>
             </TouchableOpacity>
           </>
         )}
