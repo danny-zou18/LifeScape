@@ -9,9 +9,9 @@ interface IndividualFriendProps {
 
 const IndividualFriend: React.FC<IndividualFriendProps> = ({ friendData }) => {
   return (
-    <View className="bg-blue-400 rounded-md">
+    <View className="rounded-md bg-blue-400">
       <Link
-        className="p-4 w-full h-full"
+        className="h-full w-full p-4"
         href={`/overview/friends/friend/${friendData.user_id}`}
       >
         <Text>{friendData.user_username}</Text>

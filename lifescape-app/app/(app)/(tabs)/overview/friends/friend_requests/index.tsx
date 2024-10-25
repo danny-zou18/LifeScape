@@ -47,7 +47,7 @@ const FriendRequests = () => {
       {loading ? (
         <ActivityIndicator color="#0000ff" />
       ) : (
-        <ScrollView className="w-full bg-red-400 mt-2 flex flex-col gap-2">
+        <ScrollView className="mt-2 flex w-full flex-col gap-2 bg-red-400">
           {friendRequests.map((friendRequest) => (
             <IndividualFriendRequest
               key={friendRequest.id}

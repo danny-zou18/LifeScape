@@ -70,7 +70,7 @@ const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
           });
           if (response.status === 200) {
             setUserCharacter(response.data);
-          } 
+          }
         } catch (error) {
           if (isAxiosError(error)) {
             // AxiosError type will have a response property
