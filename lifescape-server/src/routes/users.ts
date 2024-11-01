@@ -1,26 +1,27 @@
 import express from "express";
 import { db } from "../utils/db.server";
-
 import { getAuth } from "firebase-admin/auth";
 import { auth } from "firebase-admin";
-
 import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+
+dotenv.config(); // Load environment variables from .env file
 
 const router = express.Router();
 
-// Create a Nodemailer transporter
+// Create a Nodemailer transporter using environment variables
 const transporter = nodemailer.createTransport({
-  service: 'gmail', // or another email service
+  service: 'gmail',
   auth: {
-    user: 'lifescape9@gmail.com',
-    pass: 'uwxb ydxj cole gtju',
+    user: process.env.EMAIL_USERKEY, // Use environment variable
+    pass: process.env.EMAIL_PASSKEYZ, // Use environment variable
   },
 });
 
 // Function to send email with the verification link
 const sendEmail = (toEmail: string, verificationLink: string) => {
   const mailOptions = {
-    from: 'your-email@gmail.com',
+    from: process.env.EMAIL_USERKEY, // Use environment variable for sender email
     to: toEmail,
     subject: 'Verify your email for LifeScape',
     text: `Please verify your email by clicking the following link: ${verificationLink}`,
@@ -29,8 +30,9 @@ const sendEmail = (toEmail: string, verificationLink: string) => {
 
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-      return console.log('Email failed to sent with error: ' + error);
+      return console.log('Email failed to send with error: ' + error);
     }
+    console.log('Email sent: ' + info.response);
   });
 };
 
