@@ -46,7 +46,6 @@ const Character = () => {
       <View className="mx-auto flex w-[90%] flex-col py-2">
         <ImageXpBar />
       </View>
-      <Text className="py-10 text-2xl font-bold">Inventory</Text>
       <Inventory inventoryData={inventoryData} />
     </View>
   );

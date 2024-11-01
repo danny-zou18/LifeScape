@@ -47,8 +47,13 @@ const Inventory: React.FC<InventoryProps> = ({ inventoryData }) => {
   // Render each item in the inventory
   const renderItem = ({ item }: { item: Item }) => (
     <View
-      style={{ backgroundColor: getRarityColor(item.rarity) }}
-      className="w-[48%] flex-row items-center rounded-md p-2"
+      style={{
+        backgroundColor: getRarityColor(item.rarity),
+        flex: 1,
+        margin: 2,
+        aspectRatio: 1,
+      }}
+      className="rounded-md"
     >
       <Image
         source={
@@ -56,26 +61,29 @@ const Inventory: React.FC<InventoryProps> = ({ inventoryData }) => {
             ? itemPaths[Number(item.id)]
             : require("@/assets/Inventory/test.png")
         }
-        className="h-[50px] w-[50px]"
+        className="w-full h-full rounded-md"
+        resizeMode="contain"
       />
-      <View className="ml-2 flex">
-        <Text className="text-sm">
-          {item.name} ({getRarityText(item.rarity)})
-        </Text>
-        <Text className="text-sm">Cost: {item.cost}💸</Text>
-        <Text className="mt-3 text-sm font-bold">Qty: {item.Quantity}</Text>
-      </View>
     </View>
   );
 
   return (
-    <View>
-      <Text>Inventory</Text>
+    <View className="mt-8 h-[60%] bg-red-200">
       <FlatList
-        data={inventoryData}
-        keyExtractor={(item) => item.id.toString()}
+        data={[
+          ...inventoryData,
+          ...Array(102 - inventoryData.length).fill({
+            id: "blank",
+            name: "",
+            rarity: 0,
+            cost: 0,
+            Quantity: 0,
+            path: "",
+          }),
+        ]}
+        keyExtractor={(item, index) => item.id.toString() + index}
         renderItem={renderItem}
-        numColumns={2} // Set the grid with 2 columns
+        numColumns={6}
       />
     </View>
   );
