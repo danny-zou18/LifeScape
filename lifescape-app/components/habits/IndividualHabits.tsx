@@ -36,7 +36,6 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({
         },
       );
       if (response.status === 200) {
-        console.log("Task deleted successfully");
         setHabits((prev) => prev.filter((t) => t.id !== habit.id));
       }
     } catch (error) {
@@ -60,7 +59,6 @@ const IndividualHabits: React.FC<IndividualHabitsProps> = ({
         },
       );
       if (response.status === 200) {
-        console.log("Habit completed successfully");
         try {
           const response = await api.get(`/character/get/${user.uid}`, {
             headers: {

@@ -29,7 +29,6 @@ const Inventory = () => {
             },
           },
         );
-        console.log(response.data);
         setInventoryData(response.data);
       } catch (error) {
         console.error("Failed to fetch inventory data:", error);

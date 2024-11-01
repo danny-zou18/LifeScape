@@ -31,7 +31,6 @@ const CharacterCreationModal: React.FC<CharacterCreationModalProps> = ({
 
   const handle_creation = async () => {
     setIsLoading(true);
-    console.log(characterName);
     try {
       const response = await api.post(
         `/character/create/${user.uid}`,

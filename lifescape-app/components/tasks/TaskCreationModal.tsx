@@ -89,7 +89,6 @@ const TaskCreationModal: React.FC = () => {
         },
       );
       if (response.status === 201) {
-        console.log("Task created successfully");
         setTasks([...tasks, response.data]);
         setTaskCreationOpen(false);
         setShowDatePicker(false);
