@@ -3,34 +3,54 @@ import { db } from "../utils/db.server";
 import { getAuth } from "firebase-admin/auth";
 import { auth } from "firebase-admin";
 import nodemailer from 'nodemailer';
-import dotenv from 'dotenv';
-
-dotenv.config(); // Load environment variables from .env file
 
 const router = express.Router();
 
-// Create a Nodemailer transporter using environment variables
+// Create a Nodemailer transporter
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.EMAIL_USERKEY, // Use environment variable
-    pass: process.env.EMAIL_PASSKEYZ, // Use environment variable
+    user: process.env.EMAIL_USERKEY,
+    pass: process.env.EMAIL_PASSKEY,
   },
 });
 
 // Function to send email with the verification link
 const sendEmail = (toEmail: string, verificationLink: string) => {
   const mailOptions = {
-    from: process.env.EMAIL_USERKEY, // Use environment variable for sender email
+    from: process.env.EMAIL_USERKEY,
     to: toEmail,
     subject: 'Verify your email for LifeScape',
-    text: `Please verify your email by clicking the following link: ${verificationLink}`,
-    html: `<p>Please verify your email by clicking <a href="${verificationLink}">here</a>.</p>`,
+    html: `
+      <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e1e1e1; border-radius: 10px;">
+        <h2 style="text-align: center; color: #4CAF50;">Verify your email for LifeScape</h2>
+        <p style="font-size: 16px; line-height: 1.5;">Hi there,</p>
+        <p style="font-size: 16px; line-height: 1.5;">
+          Thank you for signing up for LifeScape! To complete your registration, please verify your email address by clicking the button below.
+        </p>
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${verificationLink}" 
+             style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; font-size: 16px; border-radius: 5px;">
+            Verify Email
+          </a>
+        </div>
+        <p style="font-size: 14px; line-height: 1.5;">
+          If you didn't request this email, you can safely ignore this message.
+        </p>
+        <p style="font-size: 14px; color: #888;">Cheers, <br> The LifeScape Team</p>
+        <hr style="border: none; border-top: 1px solid #e1e1e1; margin: 20px 0;">
+        <p style="font-size: 12px; color: #999; text-align: center;">
+          You are receiving this email because you registered with LifeScape. 
+          <br>
+          If you have any questions, contact us at <a href="mailto:support@lifescape.com" style="color: #4CAF50; text-decoration: none;">support@lifescape.com</a>.
+        </p>
+      </div>
+    `,
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-      return console.log('Email failed to send with error: ' + error);
+      return console.log('Email failed to sent with error: ' + error);
     }
     console.log('Email sent: ' + info.response);
   });
