@@ -12,7 +12,7 @@ const Friends = () => {
             <Text className="text-white">Add Friend</Text>
             <View className="h-[170%]">
               <Image
-                source={require("../../../../../assets/images/add_friend.png")}
+                source={require("@/assets/images/add_friend.png")}
                 resizeMode="contain"
                 style={{ flex: 1, aspectRatio: 1 }}
               />
@@ -25,7 +25,7 @@ const Friends = () => {
             <Text className="text-white">Friend Requests</Text>
             <View className="h-[170%]">
               <Image
-                source={require("../../../../../assets/images/add_friend.png")}
+                source={require("@/assets/images/add_friend.png")}
                 resizeMode="contain"
                 style={{ flex: 1, aspectRatio: 1 }}
               />

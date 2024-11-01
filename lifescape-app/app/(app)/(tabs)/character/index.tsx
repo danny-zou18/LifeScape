@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import api from "@/api/axios";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import ImageXpBar from "@/components/character/characterOverview/ImageXpBar";
+import { itemPaths } from "@/assets/imagePaths/itemPaths";
 
 const Inventory = () => {
   const [inventoryData, setInventoryData] = useState([]);
@@ -28,6 +29,7 @@ const Inventory = () => {
             },
           },
         );
+        console.log(response.data);
         setInventoryData(response.data);
       } catch (error) {
         console.error("Failed to fetch inventory data:", error);
@@ -83,7 +85,7 @@ const Inventory = () => {
       id: string;
       name: string;
       Quantity: number;
-      URL: string;
+      path: string;
       cost: number;
       rarity: number;
     };
@@ -92,7 +94,14 @@ const Inventory = () => {
       style={{ backgroundColor: getRarityColor(item.rarity) }}
       className="w-[48%] flex-row items-center rounded-md p-2"
     >
-      <Image source={{ uri: item.URL }} />
+      <Image
+        source={
+          item.path
+            ? itemPaths[Number(item.id)]
+            : require("@/assets/Inventory/test.png")
+        }
+        className="h-[50px] w-[50px]"
+      />
       <View className="ml-2 flex">
         <Text className="text-sm">
           {item.name} ({getRarityText(item.rarity)})
