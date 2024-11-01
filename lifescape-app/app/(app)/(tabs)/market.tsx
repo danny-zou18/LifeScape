@@ -1,17 +1,31 @@
-import { View, Text, StyleSheet, FlatList, Image, Dimensions } from "react-native";
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
+  FlatList, 
+  Image, 
+  Dimensions,
+  TouchableOpacity,
+  Modal,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback
+} from "react-native";
 import React from "react";
 import { useState } from "react";
 
 const Market = () => {
   const [currency, setCurrency] = useState(100);
-
-  // Updated test items with image URLs
-  const testItems = [
+  const [modalVisible, setModalVisible] = useState(false);
+  const [newItemName, setNewItemName] = useState('');
+  const [newItemPrice, setNewItemPrice] = useState('');
+  const [items, setItems] = useState([
     { 
       id: '1', 
       name: 'Item 1', 
       price: 10,
-      image: 'https://via.placeholder.com/150'  // Replace with your actual image URLs
+      image: 'https://via.placeholder.com/150'
     },
     { 
       id: '2', 
@@ -31,9 +45,23 @@ const Market = () => {
       price: 40,
       image: 'https://via.placeholder.com/150'
     },
-  ];
+  ]);
 
-  // Calculate the width of each grid item (2 columns with padding)
+  const handleAddItem = () => {
+    if (newItemName && newItemPrice) {
+      const newItem = {
+        id: (items.length + 1).toString(),
+        name: newItemName,
+        price: parseFloat(newItemPrice),
+        image: 'https://via.placeholder.com/150'
+      };
+      setItems([...items, newItem]);
+      setModalVisible(false);
+      setNewItemName('');
+      setNewItemPrice('');
+    }
+  };
+
   const screenWidth = Dimensions.get('window').width;
   const numColumns = 2;
   const itemWidth = (screenWidth - (styles.container.padding * 2) - (numColumns - 1) * 10) / numColumns;
@@ -56,18 +84,81 @@ const Market = () => {
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <View style={styles.headerContent}>
+          <TouchableOpacity 
+            style={styles.sellButton}
+            onPress={() => setModalVisible(true)}
+          >
+            <Text style={styles.sellButtonText}>Sell</Text>
+          </TouchableOpacity>
+          
           <Text style={styles.header}>Market</Text>
+          
           <Text style={styles.currency}>${currency}</Text>
         </View>
       </View>
+      
       <FlatList
-        data={testItems}
+        data={items}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
         numColumns={2}
         columnWrapperStyle={styles.row}
         contentContainerStyle={styles.gridContainer}
       />
+
+      {/* Add Item Modal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+          <View style={styles.modalOverlay}>
+            <TouchableWithoutFeedback>
+              <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                style={styles.modalContainer}
+              >
+                <View style={styles.modalContent}>
+                  <Text style={styles.modalTitle}>Sell New Item</Text>
+                  
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Item Name"
+                    value={newItemName}
+                    onChangeText={setNewItemName}
+                  />
+                  
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Price"
+                    value={newItemPrice}
+                    onChangeText={setNewItemPrice}
+                    keyboardType="numeric"
+                  />
+                  
+                  <View style={styles.modalButtons}>
+                    <TouchableOpacity 
+                      style={[styles.modalButton, styles.cancelButton]}
+                      onPress={() => setModalVisible(false)}
+                    >
+                      <Text style={styles.buttonText}>Cancel</Text>
+                    </TouchableOpacity>
+                    
+                    <TouchableOpacity 
+                      style={[styles.modalButton, styles.addItemButton]}
+                      onPress={handleAddItem}
+                    >
+                      <Text style={styles.buttonText}>Add Item</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </KeyboardAvoidingView>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     </View>
   );
 };
@@ -101,8 +192,21 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#2ecc71',
-    position: 'absolute',
-    right: 0,
+    minWidth: 60,
+    textAlign: 'right',
+  },
+  sellButton: {
+    backgroundColor: '#2ecc71',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 6,
+    minWidth: 60,
+  },
+  sellButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+    textAlign: 'center',
   },
   gridContainer: {
     paddingVertical: 16,
@@ -142,6 +246,66 @@ const styles = StyleSheet.create({
     color: '#2ecc71',
     fontWeight: '500',
   },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    width: '80%',
+    maxWidth: 400,
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 16,
+    fontSize: 16,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  modalButton: {
+    flex: 1,
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginHorizontal: 5,
+  },
+  cancelButton: {
+    backgroundColor: '#ff6b6b',
+  },
+  addItemButton: {
+    backgroundColor: '#2ecc71',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
 });
 
-export default Market;  
+export default Market;
