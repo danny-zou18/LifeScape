@@ -1,4 +1,4 @@
-import { View, Text, ActivityIndicator } from "react-native";
+import { View, ActivityIndicator } from "react-native";
 import React, { useState, useEffect } from "react";
 import api from "@/api/axios";
 import { Friendship } from "@/types/db_types";
@@ -12,6 +12,7 @@ const FriendsList = () => {
   const { user } = useGlobalContext();
   const [friends, setFriends] = useState<Friendship[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [refresh, setRefresh] = useState<boolean>(false);
 
   useEffect(() => {

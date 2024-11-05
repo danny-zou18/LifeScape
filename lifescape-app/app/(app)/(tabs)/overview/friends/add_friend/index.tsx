@@ -17,10 +17,10 @@ const AddFriend = () => {
   const { user } = useGlobalContext();
 
   const {
-    setValue,
     handleSubmit,
     control,
     reset,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {

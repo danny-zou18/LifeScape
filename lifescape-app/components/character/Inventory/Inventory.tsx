@@ -1,4 +1,4 @@
-import { View, Text, FlatList } from "react-native";
+import { View, FlatList } from "react-native";
 import React, { useEffect } from "react";
 import IndividualItem from "./IndividualItem";
 import { Item } from "@/types/db_types";

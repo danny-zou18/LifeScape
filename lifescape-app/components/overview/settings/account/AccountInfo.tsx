@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect } from "react";
+import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 import { isAxiosError } from "axios";
 import api from "@/api/axios";
-import { useGlobalContext } from '@/context/GlobalProvider';
+import { useGlobalContext } from "@/context/GlobalProvider";
 
 const AccountInfo = () => {
   const { user, psqlUser } = useGlobalContext();
@@ -14,10 +14,10 @@ const AccountInfo = () => {
     if (user) {
       await user.reload(); // Reload user information from Firebase
       if (user.emailVerified) {
-        console.log('User is verified');
-        setMessage('Your email is now verified!');
+        console.log("User is verified");
+        setMessage("Your email is now verified!");
       } else {
-        setMessage('Your email is not yet verified.');
+        setMessage("Your email is not yet verified.");
       }
     }
   };
@@ -27,36 +27,40 @@ const AccountInfo = () => {
     if (psqlUser && !psqlUser?.emailVerified) {
       refreshUser(); // Check if the user is verified
     }
-  }, [psqlUser]);
+  });
 
   const sendVerificationEmail = async () => {
     if (!user) {
       console.log("User is not authenticated");
-      setMessage('User is not authenticated');
+      setMessage("User is not authenticated");
       return;
     }
-  
+
     console.log("sending email verification");
-  
+
     const idToken = await user.getIdToken();
     console.log("ID Token:", idToken);
     console.log("User ID:", user.uid);
-  
+
     setLoading(true);
     setMessage(null); // Reset any previous message
-  
+
     try {
-      const response = await api.post(`/auth/verify-email/${user.uid}`, {}, {
-        headers: {
-          Authorization: `Bearer ${idToken}`,  // Use idToken here
+      const response = await api.post(
+        `/auth/verify-email/${user.uid}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${idToken}`, // Use idToken here
+          },
         },
-      });
-      setMessage('Verification email sent successfully.');
-      console.log('Verification email sent:', response.data.verificationLink);
+      );
+      setMessage("Verification email sent successfully.");
+      console.log("Verification email sent:", response.data.verificationLink);
     } catch (error) {
       console.log("error: ", error);
       console.log("failed to send");
-      setMessage('Failed to send verification email.');
+      setMessage("Failed to send verification email.");
       if (isAxiosError(error)) {
         console.log(error.response?.data);
       } else {
@@ -66,7 +70,6 @@ const AccountInfo = () => {
       setLoading(false);
     }
   };
-  
 
   return (
     <View>
@@ -86,10 +89,10 @@ const AccountInfo = () => {
           <Text className="text-lg font-semibold">Email Verification:</Text>
           <Text
             className={`text-base ${
-              user?.emailVerified ? 'text-green-600' : 'text-red-600'
+              user?.emailVerified ? "text-green-600" : "text-red-600"
             }`}
           >
-            {user?.emailVerified ? 'Verified' : 'Not Verified'}
+            {user?.emailVerified ? "Verified" : "Not Verified"}
           </Text>
         </View>
 
@@ -100,23 +103,33 @@ const AccountInfo = () => {
                 await sendVerificationEmail();
               }}
               disabled={loading}
-              className="mt-3 bg-blue-500 rounded-lg py-2 px-4"
+              className="mt-3 rounded-lg bg-blue-500 px-4 py-2"
             >
-              <Text className="text-white text-center">
-                {loading ? <ActivityIndicator color="#fff" /> : 'Send Verification Email'}
+              <Text className="text-center text-white">
+                {loading ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  "Send Verification Email"
+                )}
               </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               onPress={refreshUser}
-              className="mt-3 bg-gray-500 rounded-lg py-2 px-4"
+              className="mt-3 rounded-lg bg-gray-500 px-4 py-2"
             >
-              <Text className="text-white text-center">Refresh Verification Status</Text>
+              <Text className="text-center text-white">
+                Refresh Verification Status
+              </Text>
             </TouchableOpacity>
           </>
         )}
 
-        {message && <Text className="mt-2 text-center text-sm text-blue-500">{message}</Text>}
+        {message && (
+          <Text className="mt-2 text-center text-sm text-blue-500">
+            {message}
+          </Text>
+        )}
       </View>
     </View>
   );
