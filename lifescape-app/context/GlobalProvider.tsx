@@ -57,7 +57,6 @@ const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const router = useRouter();
 
   useEffect(() => {
-    console.log("Setting up onAuthStateChanged listener");
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, async (user) => {
       if (user) {
         setLoggedIn(true);
@@ -70,7 +69,7 @@ const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
           });
           if (response.status === 200) {
             setUserCharacter(response.data);
-          } 
+          }
         } catch (error) {
           if (isAxiosError(error)) {
             // AxiosError type will have a response property
@@ -103,7 +102,6 @@ const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
           SplashScreen.hideAsync();
         }
       } else {
-        console.log("User logged out");
         setLoggedIn(false);
         setUser(null);
         setUserCharacter(null);
@@ -114,7 +112,6 @@ const GlobalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     // Cleanup subscription on unmount
     return () => {
-      console.log("Cleaning up onAuthStateChanged listener");
       unsubscribe();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

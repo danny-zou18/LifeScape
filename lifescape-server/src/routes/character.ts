@@ -61,7 +61,6 @@ router.get("/get/:userId", async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
     const character = userWithCharacter.character;
-    console.log(character);
     if (!character) {
       return res.status(200).json(null);
     }

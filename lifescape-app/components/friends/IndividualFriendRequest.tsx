@@ -91,14 +91,14 @@ const IndividualFriendRequest: React.FC<IndividualFriendRequestProps> = ({
           <>
             <TouchableHighlight
               onPress={acceptFriendRequest}
-              className="p-2 bg-green-400 rounded-full"
+              className="rounded-full bg-green-400 p-2"
               underlayColor="#278a3e"
             >
               <Ionicons name="checkmark-sharp" size={24} color="black" />
             </TouchableHighlight>
             <TouchableHighlight
               onPress={rejectFriendRequest}
-              className="p-2 bg-red-500 rounded-full"
+              className="rounded-full bg-red-500 p-2"
               underlayColor="#8a2424"
             >
               <Ionicons name="close" size={24} color="black" />

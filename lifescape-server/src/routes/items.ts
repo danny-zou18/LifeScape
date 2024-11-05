@@ -45,17 +45,17 @@ const prisma = new PrismaClient();
  */
 router.post("/create/:characterId", async (req, res) => {
     const { characterId } = req.params;
-    const { name, description, cost, rarity, type, URL, Quantity } = req.body;
+    const { name, description, cost, rarity, type, path, Quantity } = req.body;
 
     try {
-        const item = await db.item.create({
+        const item = await db.items.create({
             data: {
                 name,
                 description,
                 cost,
                 rarity,
                 type,
-                URL,
+                path,
                 Quantity,
                 CharacterId: parseInt(characterId),
             },
@@ -110,7 +110,7 @@ router.get("/get/:userId/:characterId", async (req, res) => {
     }
 
     try {
-        const items = await prisma.item.findMany({
+        const items = await prisma.items.findMany({
             where: {
                 CharacterId: parseInt(characterId),
             },
@@ -121,7 +121,7 @@ router.get("/get/:userId/:characterId", async (req, res) => {
                 cost: true,
                 rarity: true,
                 type: true,
-                URL: true,
+                path: true,
                 Quantity: true,
             },
         });
@@ -170,10 +170,10 @@ router.get("/get/:userId/:characterId", async (req, res) => {
  */
 router.put("/update/:itemId", async (req, res) => {
     const { itemId } = req.params;
-    const { name, description, cost, rarity, type, URL, Quantity } = req.body;
+    const { name, description, cost, rarity, type, path, Quantity } = req.body;
 
     try {
-        const item = await prisma.item.update({
+        const item = await prisma.items.update({
             where: { id: parseInt(itemId) },
             data: {
                 name,
@@ -181,7 +181,7 @@ router.put("/update/:itemId", async (req, res) => {
                 cost,
                 rarity,
                 type,
-                URL,
+                path,
                 Quantity,
             },
         });
@@ -224,7 +224,7 @@ router.delete("/delete/:itemId", async (req, res) => {
     const { itemId } = req.params;
 
     try {
-        await prisma.item.delete({
+        await prisma.items.delete({
             where: { id: parseInt(itemId) },
         });
         res.status(200).json({ success: "Item deleted" });

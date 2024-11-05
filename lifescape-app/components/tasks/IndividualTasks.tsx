@@ -36,7 +36,6 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({
         },
       );
       if (response.status === 200) {
-        console.log("Task deleted successfully");
         setTasks((prev) => prev.filter((t) => t.id !== task.id));
       }
     } catch (error) {
@@ -60,7 +59,6 @@ const IndividualTasks: React.FC<IndividualTasksProps> = ({
         },
       );
       if (response.status === 200) {
-        console.log("Task completed successfully");
         setTasks((prev) => prev.filter((t) => t.id !== task.id));
         try {
           const response = await api.get(`/character/get/${user.uid}`, {

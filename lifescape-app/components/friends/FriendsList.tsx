@@ -38,7 +38,7 @@ const FriendsList = () => {
   }, [user, refresh]);
 
   return (
-    <View className="w-full  mt-5">
+    <View className="mt-5  w-full">
       {loading ? (
         <ActivityIndicator size="large" color="white" />
       ) : (

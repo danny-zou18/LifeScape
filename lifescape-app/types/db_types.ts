@@ -149,6 +149,29 @@ interface Routine {
   Character: Character; // Assuming Character is another type/interface
   CharacterId: number;
 }
+interface Item {
+  id: number;
+  name: string;
+  description?: string | null;
+  cost: number;
+  rarity: number;
+  type: ItemType;
+  CharacterId: number;
+  path?: string | null;
+  Quantity: number;
+  Character: Character; // Assuming Character is another type/interface
+}
+
+enum ItemType {
+  WEAPON = "WEAPON",
+  ARMOR = "ARMOR",
+  CHEST = "CHEST",
+  CONSUMABLE = "CONSUMABLE",
+  MATERIAL = "MATERIAL",
+  QUEST = "QUEST",
+  KEY = "KEY",
+  MISC = "MISC",
+}
 
 enum Class {
   NONE = "NONE",
@@ -227,8 +250,10 @@ export {
   Task,
   Habit,
   Routine,
+  Item,
   Class,
   Subclass,
   DifficultyRank,
   Repeat,
+  ItemType,
 };

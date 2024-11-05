@@ -75,7 +75,7 @@ model Character {
   Habits            Habit[]
   Routines          Routine[]
   Tasks             Task[]
-  Items             Item[]
+  Items             items[]
 }
 
 model Task {
@@ -211,8 +211,7 @@ enum FriendShipStatus {
   REMOVED
 }
 
-
-model Item {
+model items {
   id          Int       @id @default(autoincrement())
   name        String
   description String?
@@ -220,7 +219,7 @@ model Item {
   rarity      Int
   type        ItemType
   CharacterId Int
-  URL         String?
+  path        String?
   Quantity    Int       @default(1)
   Character   Character @relation(fields: [CharacterId], references: [id])
 }
