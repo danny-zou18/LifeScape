@@ -17,11 +17,17 @@ import { FIREBASE_AUTH } from "@/FirebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 import { Link } from "expo-router";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const SignIn: React.FC = () => {
   // const [email, set_email] = useState<string>("");
   // const [password, set_password] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  }
 
   const auth = FIREBASE_AUTH;
   const win = Dimensions.get("window");
@@ -76,14 +82,23 @@ const SignIn: React.FC = () => {
             </View>
             <View>
               <Text className="pb-1 text-xl text-neutral-700">Password</Text>
-              <TextInput
-                id="password"
-                autoCapitalize="none"
-                secureTextEntry={true}
-                onChangeText={(text) => setValue("password", text)}
-                autoComplete="current-password"
-                className="h-[60px] w-[300px] rounded-md bg-black px-3 text-white"
-              />
+              <View className="flex flex-row items-center h-[60px] w-[300px] rounded-md bg-black">
+                <TextInput
+                  id="password"
+                  autoCapitalize="none"
+                  secureTextEntry={!showPassword}
+                  onChangeText={(text) => setValue("password", text)}
+                  autoComplete="current-password"
+                  className="flex-1 px-3 text-white"
+                />
+                <MaterialCommunityIcons
+                  name={showPassword ? 'eye' : 'eye-off'}
+                  size={24}
+                  color="white"
+                  onPress={toggleShowPassword}
+                  style={{ paddingRight: 15 }}
+                />
+              </View>
             </View>
 
             {loading ? (
