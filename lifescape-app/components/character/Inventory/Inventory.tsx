@@ -32,6 +32,7 @@ const Inventory: React.FC<InventoryProps> = ({ inventoryData }) => {
           return <IndividualItem item={item} />;
         }}
         numColumns={6}
+        bounces={false}
       />
     </View>
   );
