@@ -1,4 +1,4 @@
-import { View, Text, ActivityIndicator } from "react-native";
+import { View, ActivityIndicator } from "react-native";
 import React, { useEffect, useState } from "react";
 import api from "@/api/axios";
 import { useGlobalContext } from "@/context/GlobalProvider";

@@ -29,6 +29,7 @@ const SignUp: React.FC = () => {
   const {
     setValue,
     handleSubmit,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
@@ -50,9 +51,9 @@ const SignUp: React.FC = () => {
     // console.log(name, username, email, password)
     setLoading(true);
     if (confirmPassword !== password) {
-        alert("Passwords do not match!");
-        setLoading(false);
-        return;
+      alert("Passwords do not match!");
+      setLoading(false);
+      return;
     }
     try {
       const response = await api.post("/auth/register", {
@@ -138,7 +139,9 @@ const SignUp: React.FC = () => {
               />
             </View>
             <View>
-              <Text className="pb-1 text-xl text-neutral-700">Re-Enter Password</Text>
+              <Text className="pb-1 text-xl text-neutral-700">
+                Re-Enter Password
+              </Text>
               <TextInput
                 id="confirmPassword"
                 autoCapitalize="none"

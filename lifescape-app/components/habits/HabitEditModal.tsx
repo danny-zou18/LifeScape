@@ -50,6 +50,7 @@ const HabitEditModal = () => {
     handleSubmit,
     control,
     reset,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {

@@ -1,4 +1,4 @@
-import { View, Text, Image } from "react-native";
+import { View, Image } from "react-native";
 import React from "react";
 import { itemPaths } from "@/assets/imagePaths/itemPaths";
 import { Item } from "@/types/db_types";

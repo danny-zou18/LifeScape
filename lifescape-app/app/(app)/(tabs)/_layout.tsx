@@ -4,6 +4,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs } from "expo-router";
 import TabBar from "@/components/general/TabBar";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
   color: string;
