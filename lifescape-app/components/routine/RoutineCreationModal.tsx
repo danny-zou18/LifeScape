@@ -56,7 +56,7 @@ const RoutineCreationModal = () => {
     DifficultyRank.E,
   );
 
-  const [showTimeError, setShowTimeError] = useState<boolean>(false);
+  const [showTimeError, setShowTimeError] = useState<string | null>(null);
 
   const {
     setValue,
@@ -75,11 +75,6 @@ const RoutineCreationModal = () => {
 
     let startTimeOfDayInMinutes: number = timeToMinutes(startTimeOfDay);
     let endTimeOfDayInMinutes: number = timeToMinutes(endTimeOfDay);
-
-    if (endTimeOfDayInMinutes < startTimeOfDayInMinutes) {
-      setShowTimeError(true);
-      return;
-    }
 
     try {
       const response = await api.post(
@@ -166,7 +161,7 @@ const RoutineCreationModal = () => {
       }
     } catch (error) {
       if (isAxiosError(error)) {
-        console.log(error.response?.data);
+        setShowTimeError(error.response?.data.error);
       } else {
         console.log(error);
       }
@@ -379,6 +374,13 @@ const RoutineCreationModal = () => {
                   </View>
                 ) : null}
               </View>
+              {showTimeError ? (
+                <View className="flex w-full flex-row justify-center bg-white">
+                  <Text className=" text-lg font-semibold text-red-600">
+                    {showTimeError}
+                  </Text>
+                </View>
+              ) : null}
             </View>
             <DifficultySelection
               difficulty={difficulty}
