@@ -18,6 +18,18 @@ import { useState } from "react";
 const Market = () => {
   const [currency, setCurrency] = useState(100);
   const [modalVisible, setModalVisible] = useState(false);
+  const [detailsModalVisible, setDetailsModalVisible] = useState(false);
+  interface Item {
+    id: string;
+    name: string;
+    price: number;
+    image: string;
+    description: string;
+    condition: string;
+    seller: string;
+  }
+  
+  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [newItemName, setNewItemName] = useState('');
   const [newItemPrice, setNewItemPrice] = useState('');
   const [items, setItems] = useState([
@@ -25,25 +37,37 @@ const Market = () => {
       id: '1', 
       name: 'Item 1', 
       price: 10,
-      image: 'https://via.placeholder.com/150'
+      image: 'https://via.placeholder.com/150',
+      description: 'A detailed description of Item 1. This item is perfect for your needs!',
+      condition: 'New',
+      seller: 'John Doe'
     },
     { 
       id: '2', 
       name: 'Item 2', 
       price: 20,
-      image: 'https://via.placeholder.com/150'
+      image: 'https://via.placeholder.com/150',
+      description: 'A detailed description of Item 2. Great value for money!',
+      condition: 'Used - Like New',
+      seller: 'Jane Smith'
     },
     { 
       id: '3', 
       name: 'Item 3', 
       price: 30,
-      image: 'https://via.placeholder.com/150'
+      image: 'https://via.placeholder.com/150',
+      description: 'A detailed description of Item 3. Don\'t miss this amazing deal!',
+      condition: 'Used - Good',
+      seller: 'Mike Johnson'
     },
     { 
       id: '4', 
       name: 'Item 4', 
       price: 40,
-      image: 'https://via.placeholder.com/150'
+      image: 'https://via.placeholder.com/150',
+      description: 'A detailed description of Item 4. Limited time offer!',
+      condition: 'New',
+      seller: 'Sarah Wilson'
     },
   ]);
 
@@ -53,7 +77,10 @@ const Market = () => {
         id: (items.length + 1).toString(),
         name: newItemName,
         price: parseFloat(newItemPrice),
-        image: 'https://via.placeholder.com/150'
+        image: 'https://via.placeholder.com/150',
+        description: 'No description provided',
+        condition: 'New',
+        seller: 'Anonymous'
       };
       setItems([...items, newItem]);
       setModalVisible(false);
@@ -62,12 +89,20 @@ const Market = () => {
     }
   };
 
+  const handleItemPress = (item: Item) => {
+    setSelectedItem(item);
+    setDetailsModalVisible(true);
+  };
+
   const screenWidth = Dimensions.get('window').width;
   const numColumns = 2;
   const itemWidth = (screenWidth - (styles.container.padding * 2) - (numColumns - 1) * 10) / numColumns;
 
-  const renderItem = ({ item }) => (
-    <View style={[styles.gridItem, { width: itemWidth }]}>
+  const renderItem = ({ item }: { item: Item }) => (
+    <TouchableOpacity 
+      style={[styles.gridItem, { width: itemWidth }]}
+      onPress={() => handleItemPress(item)}
+    >
       <Image 
         source={{ uri: item.image }} 
         style={styles.itemImage}
@@ -77,7 +112,7 @@ const Market = () => {
         <Text style={styles.itemName}>{item.name}</Text>
         <Text style={styles.itemPrice}>${item.price}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
@@ -159,11 +194,114 @@ const Market = () => {
           </View>
         </TouchableWithoutFeedback>
       </Modal>
+
+      {/* Item Details Modal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={detailsModalVisible}
+        onRequestClose={() => setDetailsModalVisible(false)}
+      >
+        <TouchableWithoutFeedback onPress={() => setDetailsModalVisible(false)}>
+          <View style={styles.modalOverlay}>
+            <TouchableWithoutFeedback>
+              <View style={[styles.modalContainer, styles.detailsModalContainer]}>
+                <View style={styles.modalContent}>
+                  {selectedItem && (
+                    <>
+                      <Image 
+                        source={{ uri: selectedItem.image }} 
+                        style={styles.detailsImage}
+                        resizeMode="cover"
+                      />
+                      <Text style={styles.detailsTitle}>{selectedItem.name}</Text>
+                      <Text style={styles.detailsPrice}>${selectedItem.price}</Text>
+                      
+                      <View style={styles.detailsSection}>
+                        <Text style={styles.detailsLabel}>Condition</Text>
+                        <Text style={styles.detailsText}>{selectedItem.condition}</Text>
+                      </View>
+                      
+                      <View style={styles.detailsSection}>
+                        <Text style={styles.detailsLabel}>Seller</Text>
+                        <Text style={styles.detailsText}>{selectedItem.seller}</Text>
+                      </View>
+                      
+                      <View style={styles.detailsSection}>
+                        <Text style={styles.detailsLabel}>Description</Text>
+                        <Text style={styles.detailsDescription}>
+                          {selectedItem.description}
+                        </Text>
+                      </View>
+
+                      <TouchableOpacity 
+                        style={styles.buyButton}
+                        onPress={() => {
+                          // Add purchase logic here
+                          setDetailsModalVisible(false);
+                        }}
+                      >
+                        <Text style={styles.buttonText}>Buy Now</Text>
+                      </TouchableOpacity>
+                    </>
+                  )}
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  detailsModalContainer: {
+    width: '90%',
+    maxWidth: 500,
+  },
+  detailsImage: {
+    width: '100%',
+    height: 200,
+    borderRadius: 8,
+    marginBottom: 16,
+  },
+  detailsTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  detailsPrice: {
+    fontSize: 22,
+    color: '#2ecc71',
+    fontWeight: 'bold',
+    marginBottom: 16,
+  },
+  detailsSection: {
+    marginBottom: 16,
+  },
+  detailsLabel: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#666',
+    marginBottom: 4,
+  },
+  detailsText: {
+    fontSize: 16,
+    color: '#333',
+  },
+  detailsDescription: {
+    fontSize: 16,
+    color: '#333',
+    lineHeight: 24,
+  },
+  buyButton: {
+    backgroundColor: '#2ecc71',
+    padding: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 16,
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
