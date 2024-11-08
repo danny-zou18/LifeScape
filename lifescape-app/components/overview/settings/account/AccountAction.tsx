@@ -16,9 +16,35 @@ const AccountAction = () => {
       "Are you sure you want to delete your account? This action cannot be undone.",
       [
         { text: "Cancel", style: "cancel" },
-        { text: "Delete", style: "destructive"},
+        { text: "Delete", style: "destructive", onPress: handleDeleteAccount },
       ]
     );
+  };
+
+  const handleDeleteAccount = async () => {
+    if (!user) {
+      console.log("No user logged in");
+      return;
+    }
+
+    try {
+      // API call to delete account
+      const idToken = await user.getIdToken(); // Get user ID token for authorization
+      await api.delete(`/auth/delete-account/${user.uid}`, {
+        headers: { Authorization: `Bearer ${idToken}` },
+      });
+
+      // Sign the user out
+      await auth.signOut();
+      
+      // Clear user context and navigate to SignIn screen
+      setUser(null);
+      Alert.alert("Account Deleted", "Your account has been successfully deleted.");
+      
+    } catch (error) {
+      console.error("Error deleting account:", error);
+      Alert.alert("Error", "Failed to delete account. Please try again.");
+    }
   };
 
   return (
