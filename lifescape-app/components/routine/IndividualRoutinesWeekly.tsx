@@ -56,9 +56,12 @@ const IndividualRoutinesWeekly: EventRenderer<CustomEventType> = (
     ]);
   };
 
+  const { key, ...otherProps } = touchableOpacityProps;
+
   return (
     <TouchableOpacity
-      {...touchableOpacityProps}
+      key={key}
+      {...otherProps}
       onPress={onPressEvent}
       onLongPress={confirmDeletionAlert}
       className="relative p-4"

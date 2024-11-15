@@ -1,5 +1,5 @@
 // https://docs.expo.dev/guides/using-eslint/
-module.exports = {
+export default {
   root: true,
   extends: [
     "expo",
@@ -15,5 +15,7 @@ module.exports = {
   rules: {
     "import/no-unresolved": "off",
     "prettier/prettier": "error", // Treats Prettier issues as ESLint errors
+    "@typescript-eslint/no-empty-object-type": "off",
+    "@typescript-eslint/no-wrapper-object-types": "off",
   },
 };

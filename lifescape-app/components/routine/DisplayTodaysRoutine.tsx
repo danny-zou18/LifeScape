@@ -7,7 +7,6 @@ import { useRoutineContext } from "@/context/RoutineProvider";
 
 const DisplayTodaysRoutine = () => {
   const { todaysRoutine } = useRoutineContext();
-
   return (
     <Calendar
       events={todaysRoutine}
@@ -17,9 +16,6 @@ const DisplayTodaysRoutine = () => {
       swipeEnabled={false}
       dayHeaderStyle={{ display: "none" }}
       headerContainerStyle={{ display: "none" }}
-      onPressEvent={(event) => {
-        console.log(event);
-      }}
       hourRowHeight={80}
     />
   );

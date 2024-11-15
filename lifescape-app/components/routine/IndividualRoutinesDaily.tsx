@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Alert } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { EventRenderer } from "react-native-big-calendar";
 import { useRoutineContext, CustomEventType } from "@/context/RoutineProvider";
 import api from "@/api/axios";
@@ -120,9 +120,12 @@ const IndividualRoutinesDaily: EventRenderer<CustomEventType> = (
     ]);
   };
 
+  const { key, ...otherProps } = touchableOpacityProps;
+
   return (
     <TouchableOpacity
-      {...touchableOpacityProps}
+      key={key}
+      {...otherProps}
       onPress={onPressEvent}
       onLongPress={confirmDeletionAlert}
       className="flex flex-row p-0"
