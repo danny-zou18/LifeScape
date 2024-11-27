@@ -226,11 +226,12 @@ model items {
 
 enum ItemType {
   WEAPON
-  ARMOR
-  Chest
-  CONSUMABLE
-  MATERIAL
+  HEADGEAR
+  CHESTGEAR
+  LEGGEAR
+  FOOTGEAR
   QUEST
   KEY
   MISC
+  ACCESSORY
 }
