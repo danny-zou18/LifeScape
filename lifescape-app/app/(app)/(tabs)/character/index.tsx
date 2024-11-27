@@ -2,8 +2,8 @@ import { View, ActivityIndicator } from "react-native";
 import React, { useEffect, useState } from "react";
 import api from "@/api/axios";
 import { useGlobalContext } from "@/context/GlobalProvider";
-import ImageXpBar from "@/components/character/characterOverview/ImageXpBar";
 import Inventory from "@/components/character/Inventory/Inventory";
+import CharacterEquippedItems from "@/components/character/characterEquippedItems/CharacterEquippedItems";
 
 const Character = () => {
   const [inventoryData, setInventoryData] = useState([]);
@@ -43,9 +43,7 @@ const Character = () => {
 
   return (
     <View className="flex-1 bg-[#f8f8f8] p-4">
-      <View className="mx-auto flex w-[90%] flex-col py-2">
-        <ImageXpBar />
-      </View>
+      <CharacterEquippedItems />
       <Inventory inventoryData={inventoryData} />
     </View>
   );

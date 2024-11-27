@@ -1,5 +1,5 @@
 // https://docs.expo.dev/guides/using-eslint/
-export default {
+module.exports = {
   root: true,
   extends: [
     "expo",
