@@ -147,6 +147,20 @@ model Routine {
   Character               Character      @relation(fields: [CharacterId], references: [id])
 }
 
+model items {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  cost        Int
+  rarity      Int
+  type        ItemType
+  CharacterId Int
+  path        String?
+  Quantity    Int       @default(1)
+  Character   Character @relation(fields: [CharacterId], references: [id])
+  Equipped    Boolean   @default(false)
+}
+
 enum Class {
   NONE
   WARRIOR
@@ -209,19 +223,6 @@ enum FriendShipStatus {
   DECLINED
   BLOCKED
   REMOVED
-}
-
-model items {
-  id          Int       @id @default(autoincrement())
-  name        String
-  description String?
-  cost        Int
-  rarity      Int
-  type        ItemType
-  CharacterId Int
-  path        String?
-  Quantity    Int       @default(1)
-  Character   Character @relation(fields: [CharacterId], references: [id])
 }
 
 enum ItemType {

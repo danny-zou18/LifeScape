@@ -164,13 +164,14 @@ interface Item {
 
 enum ItemType {
   WEAPON = "WEAPON",
-  ARMOR = "ARMOR",
-  CHEST = "CHEST",
-  CONSUMABLE = "CONSUMABLE",
-  MATERIAL = "MATERIAL",
+  HEADGEAR = "HEADGEAR",
+  CHESTGEAR = "CHESTGEAR",
+  LEGGEAR = "LEGGEAR",
+  FOOTGEAR = "FOOTGEAR",
   QUEST = "QUEST",
   KEY = "KEY",
   MISC = "MISC",
+  ACCESSORY = "ACCESSORY",
 }
 
 enum Class {
