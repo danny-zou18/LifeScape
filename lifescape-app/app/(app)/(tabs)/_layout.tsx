@@ -1,4 +1,6 @@
 import React from "react";
+import { View, Text, Image } from "react-native";
+import { useGlobalContext } from "@/context/GlobalProvider";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 import { Tabs } from "expo-router";
@@ -12,6 +14,8 @@ function TabBarIcon(props: {
 }
 
 export default function TabLayout() {
+  const { userCharacter } = useGlobalContext();
+
   return (
     <Tabs tabBar={(props) => <TabBar {...props} />}>
       <Tabs.Screen
@@ -39,7 +43,19 @@ export default function TabLayout() {
         name="market"
         options={{
           title: "Market",
-          headerShown: false,
+          headerShown: true,
+          headerRight: () => (
+            <View className="mr-5 flex w-full flex-row items-center justify-end">
+              <View className="h-8">
+                <Image
+                  source={require("@/assets/images/pixil-frame-0.png")}
+                  resizeMode="contain"
+                  style={{ flex: 1, aspectRatio: 1 }}
+                />
+              </View>
+              <Text>{userCharacter?.gold}</Text>
+            </View>
+          ),
         }}
       />
       <Tabs.Screen
