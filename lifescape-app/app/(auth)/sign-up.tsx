@@ -19,12 +19,23 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 
 import { Link } from "expo-router";
 import { FieldValues, useForm } from "react-hook-form";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const SignUp: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const auth = FIREBASE_AUTH;
   const win = Dimensions.get("window");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  }
+
+  const toggleShowConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  }
 
   const {
     setValue,
@@ -50,9 +61,9 @@ const SignUp: React.FC = () => {
     // console.log(name, username, email, password)
     setLoading(true);
     if (confirmPassword !== password) {
-        alert("Passwords do not match!");
-        setLoading(false);
-        return;
+      alert("Passwords do not match!");
+      setLoading(false);
+      return;
     }
     try {
       const response = await api.post("/auth/register", {
@@ -63,7 +74,7 @@ const SignUp: React.FC = () => {
       });
       if (response.status === 200) {
         await signInWithEmailAndPassword(auth, email, password)
-          .then(() => {})
+          .then(() => { })
           .catch((error) => {
             console.log(error);
           });
@@ -128,25 +139,43 @@ const SignUp: React.FC = () => {
             </View>
             <View>
               <Text className="pb-1 text-xl text-neutral-700">Password</Text>
-              <TextInput
-                id="password"
-                autoCapitalize="none"
-                secureTextEntry={true}
-                onChangeText={(text) => setValue("password", text)}
-                autoComplete="current-password"
-                className="h-[60px] w-[300px] rounded-md bg-black px-3 text-white"
-              />
+              <View className="flex flex-row items-center h-[60px] w-[300px] rounded-md bg-black px-3">
+                <TextInput
+                  id="password"
+                  autoCapitalize="none"
+                  secureTextEntry={!showPassword}
+                  onChangeText={(text) => setValue("password", text)}
+                  autoComplete="current-password"
+                  className="flex-1 text-white"
+                />
+                <MaterialCommunityIcons
+                  name={showPassword ? 'eye' : 'eye-off'}
+                  size={24}
+                  color="white"
+                  onPress={toggleShowPassword}
+                  style={{ paddingRight: 15 }}
+                />
+              </View>
             </View>
             <View>
               <Text className="pb-1 text-xl text-neutral-700">Re-Enter Password</Text>
-              <TextInput
-                id="confirmPassword"
-                autoCapitalize="none"
-                secureTextEntry={true}
-                onChangeText={(text) => setValue("confirmPassword", text)}
-                autoComplete="current-password"
-                className="h-[60px] w-[300px] rounded-md bg-black px-3 text-white"
-              />
+              <View className="flex flex-row items-center h-[60px] w-[300px] rounded-md bg-black px-3">
+                <TextInput
+                  id="confirmPassword"
+                  autoCapitalize="none"
+                  secureTextEntry={!showConfirmPassword}
+                  onChangeText={(text) => setValue("confirmPassword", text)}
+                  autoComplete="current-password"
+                  className="flex-1 text-white"
+                />
+                <MaterialCommunityIcons
+                  name={showPassword ? 'eye' : 'eye-off'}
+                  size={24}
+                  color="white"
+                  onPress={toggleShowConfirmPassword}
+                  style={{ paddingRight: 15 }}
+                />
+              </View>
             </View>
 
             {loading ? (
