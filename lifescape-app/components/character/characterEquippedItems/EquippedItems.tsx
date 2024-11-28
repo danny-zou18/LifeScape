@@ -5,9 +5,15 @@ import { Item } from "@/types/db_types";
 
 const EquippedItems = () => {
   return (
-    <View className="flex flex-row gap-2 bg-blue-400">
+    <View className="flex flex-row gap-5 ">
       <View className="flex flex-col gap-2">
-        <EquippedItem type="headgear" item={null} />
+        <View className="h-[50px] w-[50px] rounded-md bg-gray-500">
+          <Image
+            source={require("@/assets/Inventory/test.png")}
+            className="h-full w-full rounded-md"
+            resizeMode="contain"
+          />
+        </View>
         <EquippedItem type="chestgeat" item={null} />
         <EquippedItem type="leggear" item={null} />
         <EquippedItem type="footgear" item={null} />
@@ -29,7 +35,7 @@ interface EquippedItemProps {
 
 const EquippedItem: React.FC<EquippedItemProps> = ({ type, item }) => {
   return (
-    <View className="h-[50px] w-[50px] rounded-md bg-white">
+    <View className="h-[50px] w-[50px] rounded-md bg-gray-500">
       <Image
         source={item ? (item.path ? itemPaths[Number(item.id)] : null) : null}
         className="h-full w-full rounded-md"

@@ -45,9 +45,7 @@ const CharacterOverview = () => {
         </View>
         <Image
           className="z-0 h-full w-full rounded-md"
-          source={{
-            uri: "https://media1.tenor.com/m/sepKXIenuG0AAAAC/cat-meme-cat-meme-face.gif",
-          }}
+          source={require("@/assets/images/cat.jpg")}
         />
         <View
           className={`absolute bottom-[-.5rem] z-10 flex flex-row bg-transparent ${
