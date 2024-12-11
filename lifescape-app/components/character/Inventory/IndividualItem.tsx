@@ -1,4 +1,4 @@
-import { View, Image } from "react-native";
+import { View, Image, Text } from "react-native";
 import React from "react";
 import { itemPaths } from "@/assets/imagePaths/itemPaths";
 import { Item } from "@/types/db_types";
@@ -27,20 +27,27 @@ const IndividualItem: React.FC<IndividualItemProps> = ({ item }) => {
 
   return (
     <View
-      style={{
-        backgroundColor:
-          item.rarity === 0 ? "gray" : getRarityColor(item.rarity),
-        flex: 1,
-        margin: 2,
-        aspectRatio: 1,
-      }}
-      className="rounded-md"
+      className={`flex-1 m-2 aspect-square rounded-md ${
+        item.rarity === 0 ? "bg-gray-500" : `bg-[${getRarityColor(item.rarity)}]`
+      }`}
     >
       <Image
         source={item.path ? itemPaths[Number(item.id)] : null}
         className="h-full w-full rounded-md"
         resizeMode="contain"
       />
+      
+      {/* Displaying Quantity and Item Name */}
+      {item.name && (
+        <View className="absolute bottom-0 left-0 bg-black bg-opacity-60 w-full text-white text-xs p-2 rounded-b-md">
+          <Text className="text-white text-center">{item.name}</Text>
+          {item.Quantity > 0 && (
+            <Text className="text-white text-center text-sm">
+              Quantity: {item.Quantity}
+            </Text>
+          )}
+        </View>
+      )}
     </View>
   );
 };
