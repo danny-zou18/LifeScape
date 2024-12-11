@@ -56,6 +56,9 @@ const RoutineCreationModal = () => {
     DifficultyRank.E,
   );
 
+  const [showStartPicker, setShowStartPicker] = useState(false);
+  const [showEndPicker, setShowEndPicker] = useState(false);
+
   const [showTimeError, setShowTimeError] = useState<string | null>(null);
 
   const {
@@ -179,20 +182,28 @@ const RoutineCreationModal = () => {
     setDifficulty(DifficultyRank.E);
   };
 
-  const onStartTimeChange = (
-    event: DateTimePickerEvent,
-    selectedDate?: Date,
-  ) => {
-    if (selectedDate) {
+  const clearFields = () => {
+    reset();
+    setDaysOfWeek([]);
+    setStartTimeOfDay(new Date());
+    setEndTimeOfDay(new Date());
+    setDifficulty(DifficultyRank.E);
+    setShowTimeError(null);
+  };
+
+  const onStartTimeChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
+    setShowStartPicker(false); // Close the picker
+    if (event.type === "set" && selectedDate) {
       setStartTimeOfDay(selectedDate);
     }
   };
+
   const onEndTimeChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
-    if (selectedDate) {
+    setShowEndPicker(false); // Close the picker
+    if (event.type === "set" && selectedDate) {
       setEndTimeOfDay(selectedDate);
     }
   };
-
   const BoxWidth = (screenWidth * 81) / 100;
 
   const calculatedWidth = (BoxWidth * 13.3) / 100;
@@ -205,6 +216,7 @@ const RoutineCreationModal = () => {
       <SafeAreaView>
         <View className="flex flex-row">
           <Button title="Cancel" onPress={() => onCancel()}></Button>
+          <Button title="Clear All Fields" onPress={clearFields} />
         </View>
         <ScrollView>
           <View className="mt-5 flex items-center justify-center">
@@ -236,9 +248,8 @@ const RoutineCreationModal = () => {
               <View className="w-full overflow-hidden rounded-lg bg-gray-400">
                 <View className="flex w-full flex-row justify-between p-1 py-2">
                   <TouchableHighlight
-                    className={`flex w-[13.3%] items-center justify-center bg-${
-                      daysOfWeek.includes(1) ? "[#b93df2]" : "[#e1abf740]"
-                    } rounded-full`}
+                    className={`flex w-[13.3%] items-center justify-center bg-${daysOfWeek.includes(1) ? "[#b93df2]" : "[#e1abf740]"
+                      } rounded-full`}
                     style={{ height: calculatedWidth }}
                     onPress={() =>
                       setDaysOfWeek(
@@ -252,9 +263,8 @@ const RoutineCreationModal = () => {
                     <Text>Sun</Text>
                   </TouchableHighlight>
                   <TouchableHighlight
-                    className={`flex w-[13.3%] items-center justify-center bg-${
-                      daysOfWeek.includes(2) ? "[#b93df2]" : "[#e1abf740]"
-                    } rounded-full`}
+                    className={`flex w-[13.3%] items-center justify-center bg-${daysOfWeek.includes(2) ? "[#b93df2]" : "[#e1abf740]"
+                      } rounded-full`}
                     style={{ height: calculatedWidth }}
                     onPress={() =>
                       setDaysOfWeek(
@@ -268,9 +278,8 @@ const RoutineCreationModal = () => {
                     <Text>M</Text>
                   </TouchableHighlight>
                   <TouchableHighlight
-                    className={`flex w-[13.3%] items-center justify-center bg-${
-                      daysOfWeek.includes(3) ? "[#b93df2]" : "[#e1abf740]"
-                    } rounded-full`}
+                    className={`flex w-[13.3%] items-center justify-center bg-${daysOfWeek.includes(3) ? "[#b93df2]" : "[#e1abf740]"
+                      } rounded-full`}
                     style={{ height: calculatedWidth }}
                     onPress={() =>
                       setDaysOfWeek(
@@ -284,9 +293,8 @@ const RoutineCreationModal = () => {
                     <Text>T</Text>
                   </TouchableHighlight>
                   <TouchableHighlight
-                    className={`flex w-[13.3%] items-center justify-center bg-${
-                      daysOfWeek.includes(4) ? "[#b93df2]" : "[#e1abf740]"
-                    } rounded-full`}
+                    className={`flex w-[13.3%] items-center justify-center bg-${daysOfWeek.includes(4) ? "[#b93df2]" : "[#e1abf740]"
+                      } rounded-full`}
                     style={{ height: calculatedWidth }}
                     onPress={() =>
                       setDaysOfWeek(
@@ -300,9 +308,8 @@ const RoutineCreationModal = () => {
                     <Text>W</Text>
                   </TouchableHighlight>
                   <TouchableHighlight
-                    className={`flex w-[13.3%] items-center justify-center bg-${
-                      daysOfWeek.includes(5) ? "[#b93df2]" : "[#e1abf740]"
-                    } rounded-full`}
+                    className={`flex w-[13.3%] items-center justify-center bg-${daysOfWeek.includes(5) ? "[#b93df2]" : "[#e1abf740]"
+                      } rounded-full`}
                     style={{ height: calculatedWidth }}
                     onPress={() =>
                       setDaysOfWeek(
@@ -316,9 +323,8 @@ const RoutineCreationModal = () => {
                     <Text>T</Text>
                   </TouchableHighlight>
                   <TouchableHighlight
-                    className={`flex w-[13.3%] items-center justify-center bg-${
-                      daysOfWeek.includes(6) ? "[#b93df2]" : "[#e1abf740]"
-                    } rounded-full`}
+                    className={`flex w-[13.3%] items-center justify-center bg-${daysOfWeek.includes(6) ? "[#b93df2]" : "[#e1abf740]"
+                      } rounded-full`}
                     style={{ height: calculatedWidth }}
                     onPress={() =>
                       setDaysOfWeek(
@@ -332,9 +338,8 @@ const RoutineCreationModal = () => {
                     <Text>F</Text>
                   </TouchableHighlight>
                   <TouchableHighlight
-                    className={`flex w-[13.3%] items-center justify-center bg-${
-                      daysOfWeek.includes(7) ? "[#b93df2]" : "[#e1abf740]"
-                    } rounded-full`}
+                    className={`flex w-[13.3%] items-center justify-center bg-${daysOfWeek.includes(7) ? "[#b93df2]" : "[#e1abf740]"
+                      } rounded-full`}
                     style={{ height: calculatedWidth }}
                     onPress={() =>
                       setDaysOfWeek(
@@ -352,25 +357,32 @@ const RoutineCreationModal = () => {
                   <View>
                     <View className="flex h-[45px] flex-row items-center justify-between border-b-[1px] border-t-[1px] bg-red-400 p-2">
                       <Text>Start Time</Text>
-                      <DateTimePicker
-                        mode="time"
-                        display="default"
-                        value={startTimeOfDay}
-                        onChange={onStartTimeChange}
-                        minuteInterval={5}
-                      />
+                      <Button title="Select Start Time" onPress={() => setShowStartPicker(true)} />
+                      {showStartPicker && (
+                        <DateTimePicker
+                          mode="time"
+                          display="default"
+                          value={startTimeOfDay}
+                          onChange={onStartTimeChange}
+                          minuteInterval={5}
+                        />
+                      )}
                     </View>
                     <View className="flex h-[45px] flex-row items-center justify-between bg-red-400 p-2">
                       <Text>End Time</Text>
-                      <DateTimePicker
-                        mode="time"
-                        display="default"
-                        value={endTimeOfDay}
-                        minimumDate={startTimeOfDay}
-                        onChange={onEndTimeChange}
-                        minuteInterval={5}
-                      />
+                      <Button title="Select End Time" onPress={() => setShowEndPicker(true)} />
+                      {showEndPicker && (
+                        <DateTimePicker
+                          mode="time"
+                          display="default"
+                          value={endTimeOfDay}
+                          onChange={onEndTimeChange}
+                          minimumDate={startTimeOfDay}
+                          minuteInterval={5}
+                        />
+                      )}
                     </View>
+
                   </View>
                 ) : null}
               </View>
